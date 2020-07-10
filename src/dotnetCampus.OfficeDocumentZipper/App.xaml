@@ -1,7 +1,6 @@
-﻿<Application x:Class="dotnetCampus.OfficeDocumentZiper.App"
+﻿<Application x:Class="dotnetCampus.OfficeDocumentZipper.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:dotnetCampus.OfficeDocumentZiper"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
