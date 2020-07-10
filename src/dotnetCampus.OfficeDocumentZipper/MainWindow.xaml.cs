@@ -151,9 +151,13 @@ namespace dotnetCampus.OfficeDocumentZipper
                 file = CreateFileName(file);
             }
 
-            ZipFile.CreateFromDirectory(OfficeFolder.Text, file, CompressionLevel.NoCompression, false);
+            var directory = OfficeFolder.Text;
+
+            ZipFile.CreateFromDirectory(directory, file, CompressionLevel.NoCompression, false);
+
 
             OfficeFile.Text = file;
+            OfficeFolder.Text = directory;
 
             Warn("");
         }
