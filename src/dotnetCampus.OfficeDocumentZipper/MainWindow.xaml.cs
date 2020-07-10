@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Printing;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -161,10 +162,27 @@ namespace dotnetCampus.OfficeDocumentZipper
         {
             var name = Path.GetFileNameWithoutExtension(file);
             var extension = Path.GetExtension(file);
+            var regex = new Regex(@"\((\d+)\)");
+
+            int i = 0;
+            var matchCollection = regex.Matches(name);
+            foreach (Match match in matchCollection)
+            {
+                var value = match.Groups[1].Value;
+                var str = $"({value})";
+                if (name.EndsWith(str))
+                {
+                    name = name.Remove(name.Length - str.Length);
+
+                    int.TryParse(value, out i);
+
+                    break;
+                }
+            }
 
             string directory = Path.GetDirectoryName(file)!;
 
-            for (int i = 0; true; i++)
+            for (; true; i++)
             {
                 var fileName = Path.Combine(directory!, $"{name}({i}){extension}");
 
