@@ -4,7 +4,7 @@
 |--|--|
 |![](https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper/workflows/.NET%20Core/badge.svg)|[![](https://img.shields.io/nuget/v/dotnetCampus.OfficeDocumentZipper.svg)](https://www.nuget.org/packages/dotnetCampus.OfficeDocumentZipper)|
 
-A tool to assist in editing Office document files
+A dotnet tool to assist in editing Office document files
 
 # Usage
 
