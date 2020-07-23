@@ -251,5 +251,11 @@ namespace dotnetCampus.OfficeDocumentZipper
             file = Path.GetFullPath(file);
             return file;
         }
+
+        private void ZipAndOpen_OnClick(object sender, RoutedEventArgs e)
+        {
+            Zip_OnClick(sender, e);
+            OpenOfficeFile_OnClick(sender, e);
+        }
     }
 }
