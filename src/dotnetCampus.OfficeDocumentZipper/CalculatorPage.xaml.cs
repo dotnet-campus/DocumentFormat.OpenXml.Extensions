@@ -55,6 +55,9 @@ namespace dotnetCampus.OfficeDocumentZipper
             SetEmuInner(EmuText, emu.Value);
             SetEmuInner(PixelText, emu.ToPixel().Value);
             SetEmuInner(PoundText, emu.ToPixel().ToPound().Value);
+            SetEmuInner(InchText, emu.ToInch().Value);
+            SetEmuInner(HalfPointText, emu.ToPt().ToHalfPoint().Value);
+            SetEmuInner(PointText, emu.ToPt().Value);
 
             void SetEmuInner(TextBox textBox, double value)
             {
@@ -76,6 +79,9 @@ namespace dotnetCampus.OfficeDocumentZipper
             SetInvalidateInner(EmuText);
             SetInvalidateInner(PixelText);
             SetInvalidateInner(PoundText);
+            SetInvalidateInner(InchText);
+            SetInvalidateInner(HalfPointText);
+            SetInvalidateInner(PointText);
 
             void SetInvalidateInner(TextBox textBox)
             {
@@ -106,6 +112,21 @@ namespace dotnetCampus.OfficeDocumentZipper
         private void PoundText_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             Convert((TextBox)sender, value => new Pound(value).ToPixel().ToEmu());
+        }
+
+        private void InchText_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            Convert((TextBox)sender, value => new Inch(value).ToEmu());
+        }
+
+        private void HalfPointText_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            Convert((TextBox)sender, value => new HalfPoint(value).ToPt().ToEmu());
+        }
+
+        private void PointText_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            Convert((TextBox)sender, value => new Pt(value).ToEmu());
         }
     }
 }
