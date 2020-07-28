@@ -3,9 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:officeDocumentZipper="clr-namespace:dotnetCampus.OfficeDocumentZipper"
         mc:Ignorable="d"
         Title="OfficeDocumentZipper" Height="300" Width="700">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
@@ -42,6 +47,10 @@
                     Click="ZipAndOpen_OnClick"></Button>
 
             <TextBlock x:Name="Warning" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" Margin="10,10,10,10"></TextBlock>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <officeDocumentZipper:CalculatorPage></officeDocumentZipper:CalculatorPage>
         </Grid>
     </Grid>
 </Window>
