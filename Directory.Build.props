@@ -6,8 +6,8 @@
     <Company>dotnet campus（.NET 职业技术学院）</Company>
  
     <Authors>dotnet-campus</Authors>
-    <RepositoryUrl>https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZiper</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZiper</PackageProjectUrl>
     <Description>A dotnet tool to assist in editing Office document files</Description>
 
     <RepositoryType>git</RepositoryType>
