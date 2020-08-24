@@ -1,4 +1,6 @@
-﻿namespace dotnetCampus.OpenXmlUnitConverter
+﻿#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
+
+namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
     /// 数值转换辅助类
@@ -6,13 +8,12 @@
     /// http://lcorneliussen.de/raw/dashboards/ooxml/
     public static class UnitConverter
     {
-#pragma warning disable 1591
         public const double DefaultDpi = 96;
 
         #region EmuPercentage
 
         public static PixelPercentage ToPixelPercentage(this EmuPercentage emuPercentage) =>
-            new PixelPercentage((int) new Emu(emuPercentage.Value).ToPixel().Value);
+            new PixelPercentage((int)new Emu(emuPercentage.Value).ToPixel().Value);
 
         #endregion
 
@@ -20,11 +21,11 @@
 
         public static Pound ToPound(this PoundHundredfold poundHundredfold) => new Pound(poundHundredfold.Value / 100);
 
+        public static Pound ToPound(this Pixel pixel) => new Pound(pixel.Value / 96 * 72);
+
         public static PoundHundredfold ToPoundHundredfold(this Pound pound) => new PoundHundredfold(pound.Value * 100);
 
         public static Pixel ToPixel(this Pound pound) => new Pixel(pound.Value * 96 / 72);
-
-        public static Pound ToPound(this Pixel pixel) => new Pound(pixel.Value / 96 * 72);
 
         public static Pixel ToPixel(this PoundHundredfold pound) => pound.ToPound().ToPixel();
 
@@ -48,6 +49,9 @@
 
         #region Dxa
 
+        /// <summary>
+        /// 将 <see cref="Dxa"/> 单位转换为 <see cref="Pt"/> 单位。
+        /// </summary>
         public static Pt ToPt(this Dxa dxa)
         {
             return new Pt(dxa.Value / 20);
@@ -193,6 +197,5 @@
         }
 
         #endregion
-#pragma warning restore 1591
     }
 }
