@@ -14,8 +14,4 @@
         <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.0" />
         <PackageReference Include="DotNetZip" Version="1.13.8" />
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\dotnetCampus.OpenXMLUnitConverter\dotnetCampus.OpenXMLUnitConverter.csproj" />
-    </ItemGroup>
 </Project>
