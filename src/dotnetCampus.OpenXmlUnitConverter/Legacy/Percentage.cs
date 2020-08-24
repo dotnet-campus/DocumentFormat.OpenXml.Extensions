@@ -1,53 +1,28 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace dotnetCampus.OpenXMLUnitConverter
 {
-    /// <summary>
-    /// 表示一个百分比数值
-    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never), Obsolete("请使用 dotnetCampus.OpenXmlUnitConverter 命名空间下的同名类型。")]
     public class Percentage
     {
         private const double Precision = 100000.0;
 
-        /// <summary>
-        /// 将一个openxml表示的百分比int值转换
-        /// 每1000个单位代表1%
-        /// <param name="value"></param>
-        /// </summary>
         public Percentage(int value)
         {
             IntValue = value;
         }
 
-        /// <summary>
-        /// 将从一个double数值构建openxml表示的百分比
-        /// 每0.01个double数值代表1%
-        /// 会丢失精度
-        /// <param name="value"></param>
-        /// </summary>
         public static Percentage FromDouble(double value)
         {
             int v = (int) (value * Precision);
             return new Percentage(v);
         }
 
-        /// <summary>
-        /// openxml表示的百分比int值
-        /// </summary>
         public int IntValue { get; }
 
-        /// <summary>
-        /// openxml表示的百分比double值
-        /// 0-1
-        /// </summary>
         public double DoubleValue => IntValue / Precision;
 
-        /// <summary>
-        /// 获取在指定范围内的double值
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <returns></returns>
         public double DoubleValueWithRange(double min, double max)
         {
             if (min > max)

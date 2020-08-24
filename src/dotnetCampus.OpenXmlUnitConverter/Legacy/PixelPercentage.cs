@@ -1,11 +1,11 @@
-﻿namespace dotnetCampus.OpenXMLUnitConverter
+﻿using System;
+using System.ComponentModel;
+
+namespace dotnetCampus.OpenXMLUnitConverter
 {
-    /// <summary>
-    /// 像素百分数
-    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never), Obsolete("请使用 dotnetCampus.OpenXmlUnitConverter 命名空间下的同名类型。")]
     public class PixelPercentage : Percentage
     {
-        /// <inheritdoc />
         public PixelPercentage(int value) : base(value)
         {
         }
