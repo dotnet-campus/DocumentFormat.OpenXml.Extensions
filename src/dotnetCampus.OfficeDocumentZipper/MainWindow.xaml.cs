@@ -314,7 +314,7 @@ namespace dotnetCampus.OfficeDocumentZipper
 
         private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
         {
-            Process.Start(@"explorer", "https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZiper");
+            Process.Start(@"explorer", "https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper");
         }
     }
 }
