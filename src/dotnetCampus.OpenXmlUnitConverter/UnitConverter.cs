@@ -1,4 +1,4 @@
-﻿namespace dotnetCampus.OpenXMLUnitConverter
+﻿namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
     /// 数值转换辅助类

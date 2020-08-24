@@ -1,4 +1,4 @@
-﻿namespace dotnetCampus.OpenXMLUnitConverter
+﻿namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
     /// 表示dxa单位 二十分之一点 ，这是默认单位，是像素的20倍
