@@ -115,5 +115,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         {
             return new dotnetCampus.OpenXmlUnitConverter.Percentage(legacyUnit.IntValue);
         }
+
+        public static implicit operator Percentage(dotnetCampus.OpenXmlUnitConverter.Percentage newUnit)
+        {
+            return new Percentage(newUnit.IntValue);
+        }
     }
 }

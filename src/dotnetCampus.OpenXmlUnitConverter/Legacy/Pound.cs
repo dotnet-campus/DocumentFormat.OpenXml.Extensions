@@ -12,5 +12,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         }
 
         public double Value { get; }
+
+        public static implicit operator Pound(dotnetCampus.OpenXmlUnitConverter.Pound newUnit)
+        {
+            return new Pound(newUnit.Value);
+        }
     }
 }

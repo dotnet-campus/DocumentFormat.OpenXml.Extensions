@@ -14,5 +14,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         public double Value { get; }
 
         public static readonly Pixel ZeroPixel = new Pixel(0);
+
+        public static implicit operator Pixel(dotnetCampus.OpenXmlUnitConverter.Pixel newUnit)
+        {
+            return new Pixel(newUnit.Value);
+        }
     }
 }

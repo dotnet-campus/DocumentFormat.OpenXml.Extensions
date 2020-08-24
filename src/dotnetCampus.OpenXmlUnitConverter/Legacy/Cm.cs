@@ -12,5 +12,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         }
 
         public double Value { get; }
+
+        public static implicit operator Cm(dotnetCampus.OpenXmlUnitConverter.Cm newUnit)
+        {
+            return new Cm(newUnit.Value);
+        }
     }
 }

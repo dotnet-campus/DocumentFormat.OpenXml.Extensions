@@ -9,5 +9,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         public Dxa(double value) => Value = value;
 
         public double Value { get; }
+
+        public static implicit operator Dxa(dotnetCampus.OpenXmlUnitConverter.Dxa newUnit)
+        {
+            return new Dxa(newUnit.Value);
+        }
     }
 }

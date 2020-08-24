@@ -12,5 +12,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         }
 
         public double Value { get; }
+
+        public static implicit operator HalfPoint(dotnetCampus.OpenXmlUnitConverter.HalfPoint newUnit)
+        {
+            return new HalfPoint(newUnit.Value);
+        }
     }
 }

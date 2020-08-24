@@ -12,5 +12,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         }
 
         public double Value { get; }
+
+        public static implicit operator EmuPercentage(dotnetCampus.OpenXmlUnitConverter.EmuPercentage newUnit)
+        {
+            return new EmuPercentage(newUnit.Value);
+        }
     }
 }

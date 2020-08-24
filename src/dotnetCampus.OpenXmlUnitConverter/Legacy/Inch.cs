@@ -12,5 +12,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         }
 
         public double Value { get; }
+
+        public static implicit operator Inch(dotnetCampus.OpenXmlUnitConverter.Inch newUnit)
+        {
+            return new Inch(newUnit.Value);
+        }
     }
 }

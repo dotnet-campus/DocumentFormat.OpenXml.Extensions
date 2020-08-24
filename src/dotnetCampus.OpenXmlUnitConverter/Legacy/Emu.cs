@@ -14,5 +14,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         public double Value { get; }
 
         public static readonly Emu Zero = new Emu(0);
+
+        public static implicit operator Emu(dotnetCampus.OpenXmlUnitConverter.Emu newUnit)
+        {
+            return new Emu(newUnit.Value);
+        }
     }
 }

@@ -109,5 +109,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
         {
             return new dotnetCampus.OpenXmlUnitConverter.Degree(legacyUnit.IntValue);
         }
+
+        public static implicit operator Degree(dotnetCampus.OpenXmlUnitConverter.Degree newUnit)
+        {
+            return new Degree(newUnit.IntValue);
+        }
     }
 }
