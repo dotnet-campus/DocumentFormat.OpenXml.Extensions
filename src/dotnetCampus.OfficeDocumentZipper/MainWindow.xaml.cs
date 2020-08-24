@@ -7,6 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
 
 namespace dotnetCampus.OfficeDocumentZipper
 {
@@ -38,7 +39,34 @@ namespace dotnetCampus.OfficeDocumentZipper
             });
         }
 
-        private void UnZip_OnClick(object sender, RoutedEventArgs e)
+        private void Unzip_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UnzipFile();
+            }
+            catch (Exception exception)
+            {
+                Warn(exception.ToString());
+            }
+        }
+
+        private void UnzipAndFormatFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UnzipFile();
+
+                var directory = OfficeFolder.Text;
+                FormatXml(directory);
+            }
+            catch (Exception exception)
+            {
+                Warn(exception.ToString());
+            }
+        }
+
+        private void UnzipFile()
         {
             if (!CheckFileExists())
             {
@@ -73,6 +101,32 @@ namespace dotnetCampus.OfficeDocumentZipper
             ZipFile.ExtractToDirectory(file, directory, true);
 
             Warn("");
+        }
+
+        private static void FormatXml(string directory)
+        {
+            foreach (var xmlFile in Directory.GetFiles(directory, "*.xml", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    var xmlString = File.ReadAllText(xmlFile);
+                    XmlDocument document = new XmlDocument();
+                    document.LoadXml(xmlString);
+
+                    using var fileStream = new FileStream(xmlFile, FileMode.Create, FileAccess.Write);
+                    fileStream.SetLength(0);
+
+                    using var xmlWriter = XmlWriter.Create(fileStream, new XmlWriterSettings()
+                    {
+                        Indent = true
+                    });
+                    document.WriteTo(xmlWriter);
+                }
+                catch (Exception exception)
+                {
+                    Debug.WriteLine(exception);
+                }
+            }
         }
 
         private bool CheckFileExists()
@@ -256,6 +310,11 @@ namespace dotnetCampus.OfficeDocumentZipper
         {
             Zip_OnClick(sender, e);
             OpenOfficeFile_OnClick(sender, e);
+        }
+
+        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start(@"explorer", "https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper");
         }
     }
 }
