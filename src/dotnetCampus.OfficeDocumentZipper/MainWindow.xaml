@@ -33,12 +33,12 @@
                      TextChanged="OfficeFile_OnTextChanged"></TextBox>
             <Button Grid.Row="0" Grid.Column="2" Margin="10,10,10,10" Content="Open"
                     Click="OpenOfficeFile_OnClick"></Button>
-            <Button Grid.Row="0" Grid.Column="3" Margin="10,10,10,10" Content="UnZip"
-                    Click="UnZip_OnClick"></Button>
-            <Button Grid.Row="0" Grid.Column="4" Margin="10,10,10,10" Content="UnZipAndFormat"
-                    Click="UnZipAndFormatFile_OnClick"></Button>
+            <Button Grid.Row="0" Grid.Column="3" Margin="10,10,10,10" Content="Unzip"
+                    Click="Unzip_OnClick"></Button>
+            <Button Grid.Row="0" Grid.Column="4" Margin="10,10,10,10" Content="UnzipAndFormat"
+                    Click="UnzipAndFormatFile_OnClick"></Button>
 
-            <TextBlock Text="UnZip Folder:" Grid.Row="1" Grid.Column="0" Margin="10,10,10,10"
+            <TextBlock Text="Unzip Folder:" Grid.Row="1" Grid.Column="0" Margin="10,10,10,10"
                        VerticalAlignment="Center"></TextBlock>
             <TextBox x:Name="OfficeFolder"  Grid.Row="1" Grid.Column="1" 
                      VerticalAlignment="Center"></TextBox>

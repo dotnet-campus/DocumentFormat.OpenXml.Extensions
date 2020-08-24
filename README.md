@@ -16,8 +16,8 @@ OfficeDocumentZipper
 
 # Feature
 
-- UnZip pptx docx xlsx file
+- Unzip pptx docx xlsx file
 - Zip directory to pptx docx xlsx file
 - Convert OpenXML unit
 
-![](https://user-images.githubusercontent.com/16054566/91013170-ddeba400-e619-11ea-9711-d56c28269d6e.png)
+![](https://user-images.githubusercontent.com/16054566/91013976-2b1c4580-e61b-11ea-8ef2-044ea79ef31b.png)

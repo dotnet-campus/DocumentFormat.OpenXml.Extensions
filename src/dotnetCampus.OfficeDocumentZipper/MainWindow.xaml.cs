@@ -39,11 +39,11 @@ namespace dotnetCampus.OfficeDocumentZipper
             });
         }
 
-        private void UnZip_OnClick(object sender, RoutedEventArgs e)
+        private void Unzip_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                UnZipFile();
+                UnzipFile();
             }
             catch (Exception exception)
             {
@@ -51,11 +51,11 @@ namespace dotnetCampus.OfficeDocumentZipper
             }
         }
 
-        private void UnZipAndFormatFile_OnClick(object sender, RoutedEventArgs e)
+        private void UnzipAndFormatFile_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                UnZipFile();
+                UnzipFile();
 
                 var directory = OfficeFolder.Text;
                 FormatXml(directory);
@@ -66,7 +66,7 @@ namespace dotnetCampus.OfficeDocumentZipper
             }
         }
 
-        private void UnZipFile()
+        private void UnzipFile()
         {
             if (!CheckFileExists())
             {
