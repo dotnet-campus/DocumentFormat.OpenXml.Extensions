@@ -58,7 +58,7 @@
 
         <Grid Grid.Row="2">
             <TextBlock Margin="10,10,10,10">
-                <Hyperlink Click="Hyperlink_OnClick">https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZiper</Hyperlink>
+                <Hyperlink Click="Hyperlink_OnClick">https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper</Hyperlink>
             </TextBlock>
         </Grid>
     </Grid>
