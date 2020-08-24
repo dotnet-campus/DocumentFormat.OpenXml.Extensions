@@ -257,5 +257,10 @@ namespace dotnetCampus.OfficeDocumentZipper
             Zip_OnClick(sender, e);
             OpenOfficeFile_OnClick(sender, e);
         }
+
+        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start(@"explorer", "https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZiper");
+        }
     }
 }

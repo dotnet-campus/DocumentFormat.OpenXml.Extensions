@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.RowDefinitions>
@@ -51,6 +52,12 @@
 
         <Grid Grid.Row="1">
             <officeDocumentZipper:CalculatorPage></officeDocumentZipper:CalculatorPage>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <TextBlock Margin="10,10,10,10">
+                <Hyperlink Click="Hyperlink_OnClick">https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZiper</Hyperlink>
+            </TextBlock>
         </Grid>
     </Grid>
 </Window>
