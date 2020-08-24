@@ -35,6 +35,8 @@
                     Click="OpenOfficeFile_OnClick"></Button>
             <Button Grid.Row="0" Grid.Column="3" Margin="10,10,10,10" Content="UnZip"
                     Click="UnZip_OnClick"></Button>
+            <Button Grid.Row="0" Grid.Column="4" Margin="10,10,10,10" Content="UnZipAndFormat"
+                    Click="UnZipAndFormatFile_OnClick"></Button>
 
             <TextBlock Text="UnZip Folder:" Grid.Row="1" Grid.Column="0" Margin="10,10,10,10"
                        VerticalAlignment="Center"></TextBlock>
