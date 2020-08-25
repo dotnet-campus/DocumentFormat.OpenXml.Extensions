@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace dotnetCampus.OpenXMLUnitConverter
+namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
     /// 表示openxml中的角度数值

@@ -16,6 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\dotnetCampus.OpenXMLUnitConverter\dotnetCampus.OpenXMLUnitConverter.csproj" />
+      <ProjectReference Include="..\dotnetCampus.OpenXmlUnitConverter\dotnetCampus.OpenXmlUnitConverter.csproj" />
     </ItemGroup>
 </Project>
