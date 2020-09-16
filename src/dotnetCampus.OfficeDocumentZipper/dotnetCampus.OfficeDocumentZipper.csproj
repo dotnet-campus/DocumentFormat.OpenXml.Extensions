@@ -11,6 +11,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Icon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Icon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.0" />
         <PackageReference Include="DotNetZip" Version="1.13.8" />
     </ItemGroup>
