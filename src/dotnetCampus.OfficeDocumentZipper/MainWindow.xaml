@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:officeDocumentZipper="clr-namespace:dotnetCampus.OfficeDocumentZipper"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Icon="/Icon.png"
         Title="OfficeDocumentZipper" Height="300" Width="700">
     <Grid>
         <Grid.RowDefinitions>
