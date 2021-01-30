@@ -7,7 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5D196596-756
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.OfficeDocumentZipper", "src\dotnetCampus.OfficeDocumentZipper\dotnetCampus.OfficeDocumentZipper.csproj", "{EF60ACE4-91B3-4731-8530-F3CD922E922D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetCampus.OpenXMLUnitConverter", "src\dotnetCampus.OpenXMLUnitConverter\dotnetCampus.OpenXMLUnitConverter.csproj", "{1166BF59-BE0C-4BEA-A3B1-110189323A59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.OpenXMLUnitConverter", "src\dotnetCampus.OpenXMLUnitConverter\dotnetCampus.OpenXMLUnitConverter.csproj", "{1166BF59-BE0C-4BEA-A3B1-110189323A59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6F7E5257-0F07-4640-BC94-C1DE11523BF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetCampus.OpenXMLUnitConverter.Tests", "tests\dotnetCampus.OpenXMLUnitConverter.Tests\dotnetCampus.OpenXMLUnitConverter.Tests.csproj", "{228819DA-CFC0-410F-99D8-45BD48D3BD4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,10 @@ Global
 		{1166BF59-BE0C-4BEA-A3B1-110189323A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1166BF59-BE0C-4BEA-A3B1-110189323A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1166BF59-BE0C-4BEA-A3B1-110189323A59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{228819DA-CFC0-410F-99D8-45BD48D3BD4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{228819DA-CFC0-410F-99D8-45BD48D3BD4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{228819DA-CFC0-410F-99D8-45BD48D3BD4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{228819DA-CFC0-410F-99D8-45BD48D3BD4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{EF60ACE4-91B3-4731-8530-F3CD922E922D} = {5D196596-756D-45C2-8A05-C8E4AB8A36E6}
 		{1166BF59-BE0C-4BEA-A3B1-110189323A59} = {5D196596-756D-45C2-8A05-C8E4AB8A36E6}
+		{228819DA-CFC0-410F-99D8-45BD48D3BD4D} = {6F7E5257-0F07-4640-BC94-C1DE11523BF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {90F871FB-EAC2-449B-8601-3562C03CC566}
