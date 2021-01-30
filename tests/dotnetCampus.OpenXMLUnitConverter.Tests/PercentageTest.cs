@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
 
-namespace dotnetCampus.OpenXMLUnitConverter.Tests
+namespace dotnetCampus.OpenXmlUnitConverter.Tests
 {
     [TestClass]
     public class PercentageTest

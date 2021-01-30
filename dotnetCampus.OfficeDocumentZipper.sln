@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.OpenXmlUnitConverter", "src\dotnetCampus.OpenXmlUnitConverter\dotnetCampus.OpenXmlUnitConverter.csproj", "{DFF5A479-FCEE-431D-85C6-8E0D03E64F46}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{66E18386-803A-464D-9006-2EFD364FE97C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.OpenXMLUnitConverter.Tests", "tests\dotnetCampus.OpenXMLUnitConverter.Tests\dotnetCampus.OpenXMLUnitConverter.Tests.csproj", "{86010F5E-F7FD-40C9-96D7-491356A90139}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,10 @@ Global
 		{DFF5A479-FCEE-431D-85C6-8E0D03E64F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFF5A479-FCEE-431D-85C6-8E0D03E64F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFF5A479-FCEE-431D-85C6-8E0D03E64F46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86010F5E-F7FD-40C9-96D7-491356A90139}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86010F5E-F7FD-40C9-96D7-491356A90139}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86010F5E-F7FD-40C9-96D7-491356A90139}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86010F5E-F7FD-40C9-96D7-491356A90139}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -40,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{EF60ACE4-91B3-4731-8530-F3CD922E922D} = {5D196596-756D-45C2-8A05-C8E4AB8A36E6}
 		{DFF5A479-FCEE-431D-85C6-8E0D03E64F46} = {5D196596-756D-45C2-8A05-C8E4AB8A36E6}
+		{86010F5E-F7FD-40C9-96D7-491356A90139} = {66E18386-803A-464D-9006-2EFD364FE97C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {90F871FB-EAC2-449B-8601-3562C03CC566}
