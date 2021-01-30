@@ -1,21 +1,21 @@
-﻿namespace dotnetCampus.OpenXMLUnitConverter
+﻿namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
-    /// 100 倍的点
+    /// 磅
     /// </summary>
-    public readonly struct PtHundredfold
+    public readonly struct Pound
     {
         /// <summary>
-        /// 100 倍的点
+        /// 磅
         /// </summary>
         /// <param name="value"></param>
-        public PtHundredfold(double value)
+        public Pound(double value)
         {
             Value = value;
         }
 
         /// <summary>
-        /// 100 倍的点
+        /// 磅
         /// </summary>
         public double Value { get; }
     }

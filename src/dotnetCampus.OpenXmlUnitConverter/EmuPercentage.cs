@@ -1,21 +1,21 @@
-﻿namespace dotnetCampus.OpenXMLUnitConverter
+﻿namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
-    /// 磅
+    /// 用 Emu 表示的百分数
     /// </summary>
-    public readonly struct Pound
+    public readonly struct EmuPercentage
     {
         /// <summary>
-        /// 磅
+        /// 用 Emu 表示的百分数
         /// </summary>
         /// <param name="value"></param>
-        public Pound(double value)
+        public EmuPercentage(double value)
         {
             Value = value;
         }
 
         /// <summary>
-        /// 磅
+        /// 用 Emu 表示的百分数
         /// </summary>
         public double Value { get; }
     }

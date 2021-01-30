@@ -1,21 +1,21 @@
-﻿namespace dotnetCampus.OpenXMLUnitConverter
+﻿namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
-    /// 英寸
+    /// 100 倍的点
     /// </summary>
-    public readonly struct Inch
+    public readonly struct PtHundredfold
     {
         /// <summary>
-        /// 英寸
+        /// 100 倍的点
         /// </summary>
         /// <param name="value"></param>
-        public Inch(double value)
+        public PtHundredfold(double value)
         {
             Value = value;
         }
 
         /// <summary>
-        /// 英寸
+        /// 100 倍的点
         /// </summary>
         public double Value { get; }
     }

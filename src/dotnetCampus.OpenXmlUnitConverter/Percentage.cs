@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace dotnetCampus.OpenXMLUnitConverter
+namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
     /// 表示一个百分比数值

@@ -1,4 +1,4 @@
-﻿namespace dotnetCampus.OpenXMLUnitConverter
+﻿namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
     /// 像素百分数
