@@ -13,6 +13,36 @@ namespace dotnetCampus.OpenXMLUnitConverter
             IntValue = value;
         }
 
+        /// <summary>
+        /// 从一个 OpenXML 的数值转换为百分比
+        /// </summary>
+        /// <param name="percentageText"></param>
+        public Percentage(string percentageText)
+        {
+            if (int.TryParse(percentageText, out var intValue))
+            {
+                IntValue = intValue;
+                return;
+            }
+            else
+            {
+                // 如果是带了百分比的
+                if (percentageText.Length > 1 && percentageText.EndsWith("%"))
+                {
+                    var newPercentageText = percentageText.Substring(0, percentageText.Length - 1);
+                    if (double.TryParse(newPercentageText, out var doubleValue))
+                    {
+                        IntValue = (int)Math.Round(doubleValue * 1000);
+
+                        return;
+                    }
+                }
+            }
+
+            throw new ArgumentException(
+                $"Can not convert PercentageText={percentageText} to {nameof(OpenXmlUnitConverter.Percentage)} value.");
+        }
+
         public static Percentage FromDouble(double value)
         {
             int v = (int) (value * Precision);
