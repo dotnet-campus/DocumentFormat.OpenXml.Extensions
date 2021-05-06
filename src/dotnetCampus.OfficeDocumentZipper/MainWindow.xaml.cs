@@ -105,8 +105,14 @@ namespace dotnetCampus.OfficeDocumentZipper
 
         private static void FormatXml(string directory)
         {
-            foreach (var xmlFile in Directory.GetFiles(directory, "*.xml", SearchOption.AllDirectories))
+            foreach (var xmlFile in Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories))
             {
+                if (!xmlFile.EndsWith(".xml.rels", StringComparison.OrdinalIgnoreCase) &&
+                    !xmlFile.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 try
                 {
                     var xmlString = File.ReadAllText(xmlFile);
