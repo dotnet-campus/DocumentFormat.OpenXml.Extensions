@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using DocumentFormat.OpenXml;
 
 namespace dotnetCampus.OpenXmlUnitConverter
 {
@@ -10,11 +12,21 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <summary>
         ///     将一个OpenXml表示的百分比int值转换
         ///     每1000个单位代表1%
-        ///     <param name="value"></param>
+        ///     更推荐使用 <see cref="Percentage(Int32Value)"/> 构造函数，解决百分比内容包含百分号
         /// </summary>
+        /// <param name="value"></param>
         public Percentage(int value)
         {
             IntValue = value;
+        }
+
+        /// <summary>
+        /// 从一个 OpenXML 的数值转换为百分比
+        /// </summary>
+        /// [dotnet OpenXML 修复 Office 文档里面的百分比内容包含百分号](https://blog.lindexi.com/post/dotnet-OpenXML-%E4%BF%AE%E5%A4%8D-Office-%E6%96%87%E6%A1%A3%E9%87%8C%E9%9D%A2%E7%9A%84%E7%99%BE%E5%88%86%E6%AF%94%E5%86%85%E5%AE%B9%E5%8C%85%E5%90%AB%E7%99%BE%E5%88%86%E5%8F%B7.html )
+
+        public Percentage(Int32Value int32Value) : this(int32Value.InnerText)
+        {
         }
 
         /// <summary>
