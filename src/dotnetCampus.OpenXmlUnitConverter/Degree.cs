@@ -3,14 +3,14 @@
 namespace dotnetCampus.OpenXmlUnitConverter
 {
     /// <summary>
-    /// 表示 OpenXml 中的角度数值
+    /// 表示 OpenXml 中的角度数值，表示 0-360 度的角度值
     /// </summary>
     public sealed class Degree
     {
         /// <summary>
         /// 每个单位数值对应1/60000度
         /// </summary>
-        /// <param name="value">范围 0-21600000,超过会被取模</param>
+        /// <param name="value">范围 0-21600000 超过会被取模</param>
         public Degree(int value)
         {
             IntValue = value;
