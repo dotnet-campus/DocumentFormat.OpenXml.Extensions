@@ -13,6 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+ 
     - name: Install dotnet tool
       run: dotnet tool install -g dotnetCampus.TagToVersion
 
@@ -20,7 +21,10 @@ jobs:
       run: dotnet TagToVersion -t ${{ github.ref }}
 
     - name: Build with dotnet
-      run: dotnet pack --configuration Release
+      run: dotnet build --configuration Release
+
+    - name: Pack with dotnet
+      run: dotnet pack --configuration Release --no-build
 
     - name: Install Nuget
       uses: nuget/setup-nuget@v1
