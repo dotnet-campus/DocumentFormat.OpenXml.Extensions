@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
  
     - name: Install dotnet tool
       run: dotnet tool install -g dotnetCampus.TagToVersion
