@@ -18,18 +18,18 @@ namespace dotnetCampus.OpenXmlUnitConverter
         {
             if (millisecond is null)
             {
-                Millisecond = long.MaxValue;
+                Milliseconds = long.MaxValue;
                 IsIndefinite = true;
             }
             else if (long.TryParse(millisecond, out var value))
             {
-                Millisecond = value;
+                Milliseconds = value;
                 IsIndefinite = false;
             }
             else if (Enum.TryParse<IndefiniteTimeDeclarationValues>(millisecond, true, out var result)
                      && result == IndefiniteTimeDeclarationValues.Indefinite)
             {
-                Millisecond = long.MaxValue;
+                Milliseconds = long.MaxValue;
                 IsIndefinite = true;
             }
             else
@@ -40,7 +40,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
                 }
                 else
                 {
-                    Millisecond = long.MaxValue;
+                    Milliseconds = long.MaxValue;
                     IsIndefinite = false;
                 }
             }
@@ -54,7 +54,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <summary>
         /// 以毫秒形式表示
         /// </summary>
-        public long Millisecond { get; }
+        public long Milliseconds { get; }
 
         /// <summary>
         /// 以ticks形式表示的时间 10000 Tick 是 1 毫秒
@@ -62,7 +62,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         public long ToTicks() => IsIndefinite
             ? throw new InvalidOperationException(
                 $"The {nameof(MillisecondTime)} is indefinite. Can not convert to Tick.")
-            : Millisecond * TicksPerMillisecond;
+            : Milliseconds * TicksPerMillisecond;
 
         /// <summary>
         /// 返回使用 <see cref="TimeSpan"/> 表示的时间
@@ -70,7 +70,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         public TimeSpan ToTimeSpan() => IsIndefinite
             ? throw new InvalidOperationException(
                 $"The {nameof(MillisecondTime)} is indefinite. Can not convert to {nameof(TimeSpan)}.")
-            : TimeSpan.FromMilliseconds(Millisecond);
+            : TimeSpan.FromMilliseconds(Milliseconds);
 
         private const int TicksPerMillisecond = 10000;
     }
