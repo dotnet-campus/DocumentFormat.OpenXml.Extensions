@@ -31,9 +31,9 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
                 var n = 123;
                 var stringValue = new StringValue(n.ToString());
                 var millisecondTime = new MillisecondTime(stringValue);
-                Assert.AreEqual(n, millisecondTime.ToMillisecond);
-                Assert.AreEqual(1230000, millisecondTime.ToTicks);
-                Assert.AreEqual(TimeSpan.FromMilliseconds(n), millisecondTime.ToTimeSpan);
+                Assert.AreEqual(n, millisecondTime.Millisecond);
+                Assert.AreEqual(1230000, millisecondTime.ToTicks());
+                Assert.AreEqual(TimeSpan.FromMilliseconds(n), millisecondTime.ToTimeSpan());
             });
         }
     }
