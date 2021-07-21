@@ -10,6 +10,17 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
     public class MillisecondTimeTest
     {
         [ContractTestCase]
+        public void FromMilliseconds()
+        {
+            "提供从毫秒创建的方法，可以从给定的毫秒进行创建 MillisecondTime 结构体".Test(() =>
+            {
+                var milliseconds = 300;
+                var millisecondTime = MillisecondTime.FromMilliseconds(milliseconds);
+                Assert.AreEqual(TimeSpan.FromMilliseconds(milliseconds), millisecondTime.ToTimeSpan());
+            });
+        }
+
+        [ContractTestCase]
         public void ParseMillisecondTimeText()
         {
             "传入 null 的 OpenXML 字符串，可以说明未解析".Test(() =>

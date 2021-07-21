@@ -46,6 +46,12 @@ namespace dotnetCampus.OpenXmlUnitConverter
             }
         }
 
+        private MillisecondTime(long milliseconds)
+        {
+            Milliseconds = milliseconds;
+            IsIndefinite = false;
+        }
+
         /// <summary>
         /// 是否未定义（相当于无穷，也相当于空值）具体按照业务决定
         /// </summary>
@@ -55,6 +61,16 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// 以毫秒形式表示
         /// </summary>
         public long Milliseconds { get; }
+
+        /// <summary>
+        /// 从 <paramref name="milliseconds"/> 毫秒创建
+        /// </summary>
+        /// <param name="milliseconds"></param>
+        /// <returns></returns>
+        public static MillisecondTime FromMilliseconds(long milliseconds)
+        {
+            return new MillisecondTime(milliseconds);
+        }
 
         /// <summary>
         /// 以ticks形式表示的时间 10000 Tick 是 1 毫秒
