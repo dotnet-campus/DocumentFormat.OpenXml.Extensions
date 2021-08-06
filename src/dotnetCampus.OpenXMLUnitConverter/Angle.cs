@@ -61,6 +61,13 @@ namespace dotnetCampus.OpenXmlUnitConverter
         public static Angle FromDegreeValue(double value) => new Angle(value);
 
         /// <summary>
+        /// 从 OpenXML 的角度单位进行创建，传入的参数是 OpenXML 的角度单位，值是 0-360 度角度的 60000 倍
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Angle FromOpenXmlDegree(double value) => new Angle(value / Precision);
+
+        /// <summary>
         /// 采用范围是 0-2π 范围的值创建角度
         /// </summary>
         /// <param name="value"></param>
