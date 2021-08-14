@@ -4,10 +4,15 @@
     <TargetFrameworks>net45;net46;netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
+  </PropertyGroup>
 
+  <PropertyGroup>
     <!-- 将源代码嵌入到 PDB 符号文件中方便开发者调试 -->
     <EmbedAllSources>true</EmbedAllSources>
+    <!-- 将 PDB 符号文件放在相同的 NuGet 包里面 -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19099-alpha" Condition="'$(TargetFramework)'=='net45'">
