@@ -5,7 +5,6 @@ namespace dotnetCampus.OpenXmlUnitConverter
     /// <summary>
     /// 数值转换辅助类
     /// </summary>
-    /// http://lcorneliussen.de/raw/dashboards/ooxml/
     public static class UnitConverter
     {
         public const double DefaultDpi = 96;
