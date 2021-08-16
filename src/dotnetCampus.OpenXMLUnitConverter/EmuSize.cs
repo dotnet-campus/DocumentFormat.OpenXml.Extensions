@@ -5,7 +5,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
     /// <summary>
     /// 采用 <see cref="Emu"/> 表示的尺寸
     /// </summary>
-    public readonly struct EmuSize:IEquatable<EmuSize>
+    public readonly struct EmuSize : IEquatable<EmuSize>
     {
         /// <summary>
         /// 创建使用 EMU 单位表示的 Size 尺寸
@@ -48,5 +48,24 @@ namespace dotnetCampus.OpenXmlUnitConverter
                 return (Width.GetHashCode() * 397) ^ Height.GetHashCode();
             }
         }
+
+        /// <summary>
+        /// 判断相等
+        /// </summary>
+        public static bool operator ==(in EmuSize left, in EmuSize right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// 判断不相等
+        /// </summary>
+        public static bool operator !=(in EmuSize left, in EmuSize right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <inheritdoc />
+        public override string ToString() => $"W={Width} ;H={Height}";
     }
 }

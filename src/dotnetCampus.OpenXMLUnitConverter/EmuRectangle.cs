@@ -68,5 +68,25 @@ namespace dotnetCampus.OpenXmlUnitConverter
                 return hashCode;
             }
         }
+
+        /// <summary>
+        /// 判断相等
+        /// </summary>
+        public static bool operator ==(in EmuRectangle left,in EmuRectangle right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// 判断不相等
+        /// </summary>
+        public static bool operator !=(in EmuRectangle left, in EmuRectangle right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <inheritdoc />
+        public override string ToString() =>
+            $"{LeftTop} ;{Size}";
     }
 }
