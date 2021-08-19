@@ -89,5 +89,8 @@ namespace dotnetCampus.OpenXmlUnitConverter
             : TimeSpan.FromMilliseconds(Milliseconds);
 
         private const int TicksPerMillisecond = 10000;
+
+        /// <inheritdoc />
+        public override string ToString() => $"Millisecond:{Milliseconds}";
     }
 }
