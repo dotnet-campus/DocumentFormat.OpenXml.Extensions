@@ -31,7 +31,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <inheritdoc />
         public bool Equals(EmuPoint other)
         {
-            return X.Equals(other.X);
+            return X.Equals(other.X) && Y.Equals(other.Y);
         }
 
         /// <inheritdoc />
@@ -43,13 +43,19 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            return X.GetHashCode();
+            unchecked
+            {
+                return (X.GetHashCode() * 397) ^ Y.GetHashCode();
+            }
         }
 
         /// <summary>
         /// 判断相等
         /// </summary>
-        public static bool operator ==(in EmuPoint left, in EmuPoint right)
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(EmuPoint left, EmuPoint right)
         {
             return left.Equals(right);
         }
@@ -57,7 +63,10 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <summary>
         /// 判断不相等
         /// </summary>
-        public static bool operator !=(in EmuPoint left, in EmuPoint right)
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(EmuPoint left, EmuPoint right)
         {
             return !left.Equals(right);
         }
