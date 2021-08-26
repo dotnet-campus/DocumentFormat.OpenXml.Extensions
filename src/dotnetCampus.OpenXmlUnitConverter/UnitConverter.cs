@@ -196,5 +196,15 @@ namespace dotnetCampus.OpenXmlUnitConverter
         }
 
         #endregion
+
+        #region PixelPoint
+
+        public static PixelPoint ToPixelPoint(this EmuPoint emuPoint) =>
+            new PixelPoint(emuPoint.X.ToPixel(), emuPoint.Y.ToPixel());
+
+        public static EmuPoint ToEmuPoint(this PixelPoint pixelPoint) =>
+            new EmuPoint(pixelPoint.X.ToEmu(), pixelPoint.Y.ToEmu());
+
+        #endregion
     }
 }
