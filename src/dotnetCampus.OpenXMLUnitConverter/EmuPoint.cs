@@ -19,6 +19,15 @@ namespace dotnetCampus.OpenXmlUnitConverter
         }
 
         /// <summary>
+        /// 创建 <see cref="Emu"/> 表示的点
+        /// </summary>
+        /// <param name="xEmu">用EMU单位的 X 坐标</param>
+        /// <param name="yEmu">用EMU单位的 Y 坐标</param>
+        public EmuPoint(double xEmu, double yEmu) : this(new Emu(xEmu), new Emu(yEmu))
+        {
+        }
+
+        /// <summary>
         /// 表示 X 坐标
         /// </summary>
         public Emu X { get; }
