@@ -66,6 +66,6 @@ namespace dotnetCampus.OpenXmlUnitConverter
         }
 
         /// <inheritdoc />
-        public override string ToString() => $"W={Width} ;H={Height}";
+        public override string ToString() => $"W={Width}; H={Height}";
     }
 }
