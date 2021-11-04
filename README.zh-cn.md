@@ -84,3 +84,11 @@ void Foo(DocumentFormat.OpenXml.Drawing.Point2DType point)
 
 - [OfficeDev/Open-XML-SDK: Open XML SDK by Microsoft](https://github.com/OfficeDev/Open-XML-SDK/ )
 - [ironfede/openmcdf: Microsoft Compound File .net component - pure C# - NET Standard 2.0](https://github.com/ironfede/openmcdf )
+
+# 开源社区
+
+如果你希望参与贡献，欢迎 [Pull Request](https://github.com/dotnet-campus/DocumentFormat.OpenXml.Extensions/pulls)，或给我们 [报告 Bug](https://github.com/dotnet-campus/DocumentFormat.OpenXml.Extensions/issues/new)
+
+# 授权协议
+
+[![](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)

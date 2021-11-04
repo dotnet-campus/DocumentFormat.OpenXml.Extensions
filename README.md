@@ -76,3 +76,13 @@ void Foo(DocumentFormat.OpenXml.Drawing.Point2DType point)
 
 - [OfficeDev/Open-XML-SDK: Open XML SDK by Microsoft](https://github.com/OfficeDev/Open-XML-SDK/ )
 - [ironfede/openmcdf: Microsoft Compound File .net component - pure C# - NET Standard 2.0](https://github.com/ironfede/openmcdf )
+
+# Contributing
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/dotnet-campus/DocumentFormat.OpenXml.Extensions/pulls)
+
+If you would like to contribute, feel free to create a [Pull Request](https://github.com/dotnet-campus/DocumentFormat.OpenXml.Extensions/pulls), or give us [Bug Report](https://github.com/dotnet-campus/DocumentFormat.OpenXml.Extensions/issues/new).
+
+# License
+
+[![](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
