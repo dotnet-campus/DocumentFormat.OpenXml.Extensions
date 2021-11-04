@@ -101,5 +101,107 @@ namespace dotnetCampus.OpenXmlUnitConverter
         {
             return Degree.GetHashCode();
         }
+
+        /// <summary>
+        /// 表示正数的角度
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static Angle operator +(Angle a) => a;
+
+        /// <summary>
+        /// 表示负数的角度
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static Angle operator -(Angle a) => Angle.FromDegreeValue(-a.Degree);
+
+        /// <summary>
+        /// 两个角度的相加
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Angle operator +(Angle a, Angle b)
+            => Angle.FromDegreeValue(a.Degree + b.Degree);
+
+        /// <summary>
+        /// 两个角度的相减
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Angle operator -(Angle a, Angle b)
+            => a + (-b);
+
+        /// <summary>
+        /// 角度乘以倍数
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Angle operator *(Angle a, double b)
+            => Angle.FromDegreeValue(a.Degree * b);
+
+        /// <summary>
+        /// 倍数乘以角度，效果和角度乘以倍数相同
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Angle operator *(double a, Angle b) => b * a;
+
+        /// <summary>
+        /// 角度除以倍数
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Angle operator /(Angle a, double b)
+        {
+            if (b == 0)
+            {
+                throw new DivideByZeroException();
+            }
+
+            return Angle.FromDegreeValue(a.Degree / b);
+        }
+
+        /// <summary>
+        /// 判断两个角度的大于
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator >(Angle a, Angle b)
+            => a.Degree > b.Degree;
+
+        /// <summary>
+        /// 判断两个角度的小于
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator <(Angle a, Angle b)
+            => b > a;
+
+        /// <summary>
+        /// 判断两个角度相等
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator ==(Angle a, Angle b) => a.Equals(b);
+
+        /// <summary>
+        /// 判断两个角度不相等
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator !=(Angle a, Angle b) => !a.Equals(b);
+
+        /// <inheritdoc />
+        public override string ToString() => $"{Degree:0.000}°";
     }
 }
