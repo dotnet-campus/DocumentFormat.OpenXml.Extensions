@@ -71,3 +71,8 @@ void Foo(DocumentFormat.OpenXml.Drawing.Point2DType point)
     var cmValue = x.ToCm();
 }
 ```
+
+# Thanks
+
+- [OfficeDev/Open-XML-SDK: Open XML SDK by Microsoft](https://github.com/OfficeDev/Open-XML-SDK/ )
+- [ironfede/openmcdf: Microsoft Compound File .net component - pure C# - NET Standard 2.0](https://github.com/ironfede/openmcdf )
