@@ -1,6 +1,6 @@
 # DocumentFormat.OpenXml.Extensions
 
-[中文](README_zh-cn.md)|[English](README.md)
+[中文](README_zh-cn.md) | [English](README.md)
 
 The OpenXML SDK extensions. Including libraries and tools.
 
