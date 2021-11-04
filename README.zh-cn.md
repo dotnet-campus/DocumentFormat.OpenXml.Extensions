@@ -1,6 +1,6 @@
 # DocumentFormat.OpenXml.Extensions
 
-[中文](README_zh-cn.md) | [English](README.md)
+[中文](README.zh-cn.md) | [English](README.md)
 
 OpenXML SDK 的扩展集，包括扩展库和辅助开发工具
 
