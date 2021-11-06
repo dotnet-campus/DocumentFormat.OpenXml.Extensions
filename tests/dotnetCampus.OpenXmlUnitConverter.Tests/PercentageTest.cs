@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+ï»¿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
 
 namespace dotnetCampus.OpenXmlUnitConverter.Tests
@@ -9,14 +9,14 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
         [ContractTestCase]
         public void ParsePercentageText()
         {
-            "´«Èë´ø°Ù·ÖºÅµÄÊıÖµ£¬¿ÉÒÔ×ª»»Îª°Ù·ÖºÅ".Test(() =>
+            "ä¼ å…¥å¸¦ç™¾åˆ†å·çš„æ•°å€¼ï¼Œå¯ä»¥è½¬æ¢ä¸ºç™¾åˆ†å·".Test(() =>
             {
                 var percentageText = "100%";
                 var percentage = new Percentage(percentageText);
                 Assert.AreEqual(100000, percentage.IntValue);
             });
 
-            "´«Èë°Ù·ÖºÅ´øĞ¡ÊıµãµÄÊıÖµ£¬ÄÜ×ª»»³ö OpenXML µ¥Î»µÄÕûÊı".Test(() =>
+            "ä¼ å…¥ç™¾åˆ†å·å¸¦å°æ•°ç‚¹çš„æ•°å€¼ï¼Œèƒ½è½¬æ¢å‡º OpenXML å•ä½çš„æ•´æ•°".Test(() =>
             {
                 var percentageText = "99.999%";
                 var percentage = new Percentage(percentageText);

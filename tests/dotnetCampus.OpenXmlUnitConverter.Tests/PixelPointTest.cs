@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+锘縰sing Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
 
 namespace dotnetCampus.OpenXmlUnitConverter.Tests
@@ -9,7 +9,7 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
         [ContractTestCase]
         public void Convert()
         {
-            "传入 Emu 表示的点，可以转换为像素表示的点".Test(() =>
+            "浼犲叆 Emu 琛ㄧず鐨勭偣锛屽彲浠ヨ浆鎹负鍍忕礌琛ㄧず鐨勭偣".Test(() =>
             {
                 var emuPoint = new EmuPoint(new Emu(952500), new Emu(952500));
                 var pixelPoint = emuPoint.ToPixelPoint();

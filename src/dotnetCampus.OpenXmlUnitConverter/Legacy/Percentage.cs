@@ -45,7 +45,7 @@ namespace dotnetCampus.OpenXMLUnitConverter
 
         public static Percentage FromDouble(double value)
         {
-            int v = (int) (value * Precision);
+            int v = (int)(value * Precision);
             return new Percentage(v);
         }
 
@@ -74,7 +74,7 @@ namespace dotnetCampus.OpenXMLUnitConverter
             }
             else
             {
-                Percentage p = (Percentage) obj;
+                Percentage p = (Percentage)obj;
                 return IntValue == p.IntValue;
             }
         }

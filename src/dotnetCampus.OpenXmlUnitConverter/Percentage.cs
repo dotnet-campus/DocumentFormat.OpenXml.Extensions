@@ -48,7 +48,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
                     var newPercentageText = percentageText.Substring(0, percentageText.Length - 1);
                     if (double.TryParse(newPercentageText, out var doubleValue))
                     {
-                        IntValue = (int) Math.Round(doubleValue * 1000);
+                        IntValue = (int)Math.Round(doubleValue * 1000);
 
                         return;
                     }
@@ -88,7 +88,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// </summary>
         public static Percentage FromDouble(double value)
         {
-            var v = (int) (value * Precision);
+            var v = (int)(value * Precision);
             return new Percentage(v);
         }
 
@@ -118,7 +118,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
 
             if (GetType() != obj.GetType()) return false;
 
-            var p = (Percentage) obj;
+            var p = (Percentage)obj;
             return IntValue == p.IntValue;
         }
 

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Presentation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,7 +12,7 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
         [ContractTestCase]
         public void FromMilliseconds()
         {
-            "Ìá¹©´ÓºÁÃë´´½¨µÄ·½·¨£¬¿ÉÒÔ´Ó¸ø¶¨µÄºÁÃë½øÐÐ´´½¨ MillisecondTime ½á¹¹Ìå".Test(() =>
+            "æä¾›ä»Žæ¯«ç§’åˆ›å»ºçš„æ–¹æ³•ï¼Œå¯ä»¥ä»Žç»™å®šçš„æ¯«ç§’è¿›è¡Œåˆ›å»º MillisecondTime ç»“æž„ä½“".Test(() =>
             {
                 var milliseconds = 300;
                 var millisecondTime = MillisecondTime.FromMilliseconds(milliseconds);
@@ -23,21 +23,21 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
         [ContractTestCase]
         public void ParseMillisecondTimeText()
         {
-            "´«Èë null µÄ OpenXML ×Ö·û´®£¬¿ÉÒÔËµÃ÷Î´½âÎö".Test(() =>
+            "ä¼ å…¥ null çš„ OpenXML å­—ç¬¦ä¸²ï¼Œå¯ä»¥è¯´æ˜Žæœªè§£æž".Test(() =>
             {
                 StringValue stringValue = null!;
                 var millisecondTime = new MillisecondTime(stringValue);
                 Assert.AreEqual(true, millisecondTime.IsIndefinite);
             });
 
-            "´«ÈëÎ´¶¨ÒåµÄ OpenXML ×Ö·û´®£¬¿ÉÒÔËµÃ÷Î´½âÎö".Test(() =>
+            "ä¼ å…¥æœªå®šä¹‰çš„ OpenXML å­—ç¬¦ä¸²ï¼Œå¯ä»¥è¯´æ˜Žæœªè§£æž".Test(() =>
             {
                 var stringValue = new StringValue(IndefiniteTimeDeclarationValues.Indefinite.ToString());
                 var millisecondTime = new MillisecondTime(stringValue);
                 Assert.AreEqual(true, millisecondTime.IsIndefinite);
             });
 
-            "´«ÈëÊýÖµ±íÊ¾µÄºÁÃëÊ±¼äµÄ OpenXML ×Ö·û´®£¬¿ÉÒÔ½âÎö³öºÁÃëÊ±¼ä".Test(() =>
+            "ä¼ å…¥æ•°å€¼è¡¨ç¤ºçš„æ¯«ç§’æ—¶é—´çš„ OpenXML å­—ç¬¦ä¸²ï¼Œå¯ä»¥è§£æžå‡ºæ¯«ç§’æ—¶é—´".Test(() =>
             {
                 var n = 123;
                 var stringValue = new StringValue(n.ToString());

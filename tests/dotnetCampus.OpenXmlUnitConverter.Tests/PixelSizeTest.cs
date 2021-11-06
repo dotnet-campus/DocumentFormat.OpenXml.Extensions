@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+ï»¿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
 
 namespace dotnetCampus.OpenXmlUnitConverter.Tests
@@ -9,7 +9,7 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
         [ContractTestCase]
         public void Convert()
         {
-            "´«Èë EMU ±íÊ¾µÄ³ß´ç£¬¿ÉÒÔ×ª»»ÎªÏñËØ±íÊ¾µÄ³ß´ç£¬·´Ïò»¥×ªÖµÏàÍ¬".Test(() =>
+            "ä¼ å…¥ EMU è¡¨ç¤ºçš„å°ºå¯¸ï¼Œå¯ä»¥è½¬æ¢ä¸ºåƒç´ è¡¨ç¤ºçš„å°ºå¯¸ï¼Œåå‘äº’è½¬å€¼ç›¸åŒ".Test(() =>
             {
                 var emuSize = new EmuSize(new Emu(952500), new Emu(95250));
                 var pixelSize = emuSize.ToPixelSize();

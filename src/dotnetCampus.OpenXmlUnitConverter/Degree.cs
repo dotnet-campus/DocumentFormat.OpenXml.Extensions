@@ -79,7 +79,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
             }
             else
             {
-                Degree p = (Degree) obj;
+                Degree p = (Degree)obj;
                 return IntValue == p.IntValue;
             }
         }
@@ -129,7 +129,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <param name="b"></param>
         /// <returns></returns>
         public static Degree operator *(Degree a, double b)
-            => new Degree(((int) (a.IntValue * b)));
+            => new Degree(((int)(a.IntValue * b)));
 
         /// <summary>
         /// 倍数乘以角度，效果和角度乘以倍数相同
@@ -138,7 +138,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <param name="b"></param>
         /// <returns></returns>
         public static Degree operator *(double a, Degree b)
-            => new Degree(((int) (a * b.IntValue)));
+            => new Degree(((int)(a * b.IntValue)));
 
         /// <summary>
         /// 角度除以倍数
@@ -153,7 +153,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
                 throw new DivideByZeroException();
             }
 
-            return new Degree((int) (a.IntValue / b));
+            return new Degree((int)(a.IntValue / b));
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <returns></returns>
         public static Degree FromDouble(double value)
         {
-            int v = (int) (value * Precision);
+            int v = (int)(value * Precision);
             return new Degree(v);
         }
     }
