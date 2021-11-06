@@ -50,7 +50,7 @@ namespace dotnetCampus.OpenXMLUnitConverter
             }
             else
             {
-                Degree p = (Degree) obj;
+                Degree p = (Degree)obj;
                 return IntValue == p.IntValue;
             }
         }
@@ -70,10 +70,10 @@ namespace dotnetCampus.OpenXMLUnitConverter
             => a + (-b);
 
         public static Degree operator *(Degree a, double b)
-            => new Degree(((int) (a.IntValue * b)));
+            => new Degree(((int)(a.IntValue * b)));
 
         public static Degree operator *(double a, Degree b)
-            => new Degree(((int) (a * b.IntValue)));
+            => new Degree(((int)(a * b.IntValue)));
 
         public static Degree operator /(Degree a, double b)
         {
@@ -82,7 +82,7 @@ namespace dotnetCampus.OpenXMLUnitConverter
                 throw new DivideByZeroException();
             }
 
-            return new Degree((int) (a.IntValue / b));
+            return new Degree((int)(a.IntValue / b));
         }
 
         public static bool operator >(Degree a, Degree b)
@@ -103,7 +103,7 @@ namespace dotnetCampus.OpenXMLUnitConverter
 
         public static Degree FromDouble(double value)
         {
-            int v = (int) (value * Precision);
+            int v = (int)(value * Precision);
             return new Degree(v);
         }
 

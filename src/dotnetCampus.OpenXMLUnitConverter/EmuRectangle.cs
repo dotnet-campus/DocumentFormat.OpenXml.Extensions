@@ -72,7 +72,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <summary>
         /// 判断相等
         /// </summary>
-        public static bool operator ==(in EmuRectangle left,in EmuRectangle right)
+        public static bool operator ==(in EmuRectangle left, in EmuRectangle right)
         {
             return left.Equals(right);
         }

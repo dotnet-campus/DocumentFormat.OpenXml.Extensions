@@ -15,7 +15,7 @@ namespace dotnetCampus.OpenXMLUnitConverter
         public static implicit operator T(LegacyUnit<T, TLegacy> legacyUnit)
         {
             var legacyValue = legacyUnit.GetType().GetProperty("Value", typeof(double))!.GetValue(legacyUnit);
-            return (T) typeof(T).GetConstructor(new[] {typeof(double)})!.Invoke(null, new object[] {legacyValue});
+            return (T)typeof(T).GetConstructor(new[] { typeof(double) })!.Invoke(null, new object[] { legacyValue });
         }
     }
 }

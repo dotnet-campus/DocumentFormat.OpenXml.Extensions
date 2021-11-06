@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+ï»¿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
 
 namespace dotnetCampus.OpenXmlUnitConverter.Tests
@@ -9,7 +9,7 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
         [ContractTestCase]
         public void CreateEmuRectangle()
         {
-            "¸ø¶¨¾ØÐÎ¸÷¸ö±ß½ÇµÄÖµ£¬¿ÉÒÔ¼ÆËã³ö¾ØÐÎµÄ¿í¶ÈºÍ¸ß¶È".Test(() =>
+            "ç»™å®šçŸ©å½¢å„ä¸ªè¾¹è§’çš„å€¼ï¼Œå¯ä»¥è®¡ç®—å‡ºçŸ©å½¢çš„å®½åº¦å’Œé«˜åº¦".Test(() =>
             {
                 // Arrange
                 var emuRectangle = new EmuRectangle(new Emu(0), new Emu(0), new Emu(100), new Emu(100));
