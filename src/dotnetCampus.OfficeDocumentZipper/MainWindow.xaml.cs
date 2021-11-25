@@ -19,13 +19,6 @@ namespace dotnetCampus.OfficeDocumentZipper
         public MainWindow()
         {
             InitializeComponent();
-
-            Loaded += MainWindow_Loaded;
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            OfficeFile.Text = @"C:\Users\LanXiaofang\Desktop\表格业务相关\PPT表格测试\内嵌Excel表格.pptx";
         }
 
         private void OpenOfficeFile_OnClick(object sender, RoutedEventArgs e)
