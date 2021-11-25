@@ -106,8 +106,16 @@ namespace dotnetCampus.OfficeDocumentZipper
             Directory.CreateDirectory(directory);
             ZipFile.ExtractToDirectory(file, directory, true);
 
-            // 这个方法对嵌入excel表格的PPT文件进行处理。
-            UnZipOleObjectFile();
+            // 涉及IO操作，最好捕获一下异常。
+            try
+            {
+                // 这个方法对嵌入excel表格的PPT文件进行处理。
+                UnZipOleObjectFile();
+            }catch(Exception exception)
+            {
+                Warn(exception.ToString());
+            }
+            
 
             Warn("");
         }
@@ -245,18 +253,38 @@ namespace dotnetCampus.OfficeDocumentZipper
 
             var directory = OfficeFolder.Text;
 
-            // 这个步骤是查找问价夹里是否存在oleObj元素映射的xlsx文件，并进行压缩处理。
-            var directoryInfos = ZipOleObjectFile();
+            DirectoryInfo[] directoryInfos = null;
+
+            // 涉及IO操作，最好捕获一下异常。
+            try
+            {
+                // 这个步骤是查找问价夹里是否存在oleObj元素映射的xlsx文件，并进行压缩处理。
+                directoryInfos = ZipOleObjectFile();
+            }
+            catch (Exception exception)
+            {
+                Warn(exception.ToString());
+            }
+
             ZipFile.CreateFromDirectory(directory, file, CompressionLevel.NoCompression, false);
 
-            if (directoryInfos is not null)
+            // 涉及IO操作，最好捕获一下异常。
+            try
             {
-                foreach (var directoryInfo in directoryInfos)
+                if (directoryInfos is not null)
                 {
-                    // 进行恢复现场。
-                    directoryInfo.Create();
+                    foreach (var directoryInfo in directoryInfos)
+                    {
+                        // 进行恢复现场。
+                        directoryInfo.Create();
+                    }
                 }
             }
+            catch (Exception exception)
+            {
+                Warn(exception.ToString());
+            }
+
 
             OfficeFile.Text = file;
             OfficeFolder.Text = directory;
