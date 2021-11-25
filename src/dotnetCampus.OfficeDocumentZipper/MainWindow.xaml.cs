@@ -246,13 +246,11 @@ namespace dotnetCampus.OfficeDocumentZipper
 
             var directory = OfficeFolder.Text;
 
-            DirectoryInfo[] directoryInfos = null;
-
             // 涉及IO操作，最好捕获一下异常。
             try
             {
-                // 这个步骤是查找问价夹里是否存在oleObj元素映射的xlsx文件，并进行压缩处理。
-                directoryInfos = ZipOleObjectFile();
+                // 这个步骤是查找文件夹里是否存在oleObj元素映射的xlsx文件，并进行压缩处理。
+                ZipOleObjectFile();
             }
             catch (Exception exception)
             {
@@ -264,14 +262,8 @@ namespace dotnetCampus.OfficeDocumentZipper
             // 涉及IO操作，最好捕获一下异常。
             try
             {
-                if (directoryInfos is not null)
-                {
-                    foreach (var directoryInfo in directoryInfos)
-                    {
-                        // 进行恢复现场。
-                        directoryInfo.Create();
-                    }
-                }
+                // 还原ZipOleObjectFile方法删除的Excel文件解压出来的问价夹。
+                UnZipOleObjectFile();
             }
             catch (Exception exception)
             {
@@ -292,7 +284,7 @@ namespace dotnetCampus.OfficeDocumentZipper
         /// </summary>
         /// <returns>返回删除的文件夹的集合。</returns>
 
-        private DirectoryInfo[] ZipOleObjectFile()
+        private void ZipOleObjectFile()
         {
             // 获取OleObj的映射的xlsx文件。
             var oleObjDirectory = Path.Combine(OfficeFolder.Text, "ppt\\embeddings\\");
@@ -316,13 +308,7 @@ namespace dotnetCampus.OfficeDocumentZipper
                         deleteDirectories.Add(directoryInfo);
                     }
                 }
-
-                if (deleteDirectories.Count > 0)
-                {
-                    return deleteDirectories.ToArray();
-                }
             }
-            return null;
         }
 
         private string CreateFileName(string file)
