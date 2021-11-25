@@ -104,11 +104,12 @@ namespace dotnetCampus.OfficeDocumentZipper
             {
                 // 这个方法对嵌入excel表格的PPT文件进行处理。
                 UnZipOleObjectFile();
-            }catch(Exception exception)
+            }
+            catch (Exception exception)
             {
                 Warn(exception.ToString());
             }
-            
+
 
             Warn("");
         }
