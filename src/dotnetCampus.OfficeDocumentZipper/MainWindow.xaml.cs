@@ -280,7 +280,6 @@ namespace dotnetCampus.OfficeDocumentZipper
             {
                 var oleFileInfo = new DirectoryInfo(oleObjDirectory);
                 var fileInfos = oleFileInfo.GetFiles();
-                var deleteDirectories = new List<DirectoryInfo>();
                 foreach (var directoryInfo in oleFileInfo.GetDirectories())
                 {
                     // 如果xlsx文件去掉后缀后与文件夹同名，那我们将认为该文件夹是由xlsx文件解压缩而来的，此时需要替换原有的 xlsx 文件并删除 xlsx 对应的文件夹。
@@ -293,7 +292,6 @@ namespace dotnetCampus.OfficeDocumentZipper
 
                         // 必须要删除原目录，否则PPT打开错误。
                         directoryInfo.Delete(true);
-                        deleteDirectories.Add(directoryInfo);
                     }
                 }
             }
