@@ -118,7 +118,7 @@ namespace dotnetCampus.OfficeDocumentZipper
                 var oleFileInfo = new DirectoryInfo(oleObjDirectory);
                 foreach (var fileInfo in oleFileInfo.GetFiles())
                 {
-                    if (fileInfo.Extension.Equals(".xlsx"))
+                    if (fileInfo.Extension.Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
                     {
                         var directoryName = Path.Combine(fileInfo.DirectoryName, Path.GetFileNameWithoutExtension(fileInfo.Name));
                         Directory.CreateDirectory(directoryName);
@@ -246,7 +246,7 @@ namespace dotnetCampus.OfficeDocumentZipper
 
             System.IO.Compression.ZipFile.CreateFromDirectory(directory, file, CompressionLevel.NoCompression, false);
 
-            // 还原ZipOleObjectFile方法删除的Excel文件解压出来的问价夹。
+            // 还原ZipOleObjectFile方法删除的Excel文件解压出来的文件夹。
             UnZipOleObjectFile();
 
             OfficeFile.Text = file;
@@ -270,11 +270,8 @@ namespace dotnetCampus.OfficeDocumentZipper
 
         /// <summary>
         /// 这个方法对嵌入excel表格的PPT文件进行处理。
-        ///  如果OleObj映射的xlsx文件被解压缩，则将解压缩的问价夹压缩为xlsx文件，并删除原有文件夹。
-        ///  如果需要恢复，使用返回值进行恢复。
+        ///  如果OleObj映射的xlsx文件被解压缩，则将解压缩的文件夹压缩为xlsx文件，并删除原有文件夹。
         /// </summary>
-        /// <returns>返回删除的文件夹的集合。</returns>
-
         private void ZipOleObjectFile()
         {
             // 获取OleObj的映射的xlsx文件。
@@ -286,9 +283,9 @@ namespace dotnetCampus.OfficeDocumentZipper
                 var deleteDirectories = new List<DirectoryInfo>();
                 foreach (var directoryInfo in oleFileInfo.GetDirectories())
                 {
-                    // 如果xlsx文件去掉后缀后与文件夹同名，那我们将认为该文件夹是由xlsx文件解压缩而来的，此时需要删除原有的xlsx文件。
+                    // 如果xlsx文件去掉后缀后与文件夹同名，那我们将认为该文件夹是由xlsx文件解压缩而来的，此时需要替换原有的 xlsx 文件并删除 xlsx 对应的文件夹。
                     if (fileInfos.Any(fileInfo => Path.GetFileNameWithoutExtension(fileInfo.Name).Equals(directoryInfo.Name)
-                        && fileInfo.Extension.Equals(".xlsx")))
+                        && fileInfo.Extension.Equals(".xlsx", StringComparison.OrdinalIgnoreCase)))
                     {
                         var fileName = Path.ChangeExtension(directoryInfo.FullName, ".xlsx");
                         File.Delete(fileName);
