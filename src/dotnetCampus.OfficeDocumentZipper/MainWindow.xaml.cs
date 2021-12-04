@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Printing;
-using System.Reflection.Metadata.Ecma335;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -97,10 +97,35 @@ namespace dotnetCampus.OfficeDocumentZipper
             }
 
             Directory.CreateDirectory(directory);
+            System.IO.Compression.ZipFile.ExtractToDirectory(file, directory, true);
 
-            ZipFile.ExtractToDirectory(file, directory, true);
+            // 这个方法对嵌入excel表格的PPT文件进行处理。
+            UnZipOleObjectFile();
 
             Warn("");
+        }
+
+        /// <summary>
+        /// 这个方法对嵌入excel表格的PPT文件进行处理。
+        /// 如果PPT文件中嵌入了Excel表格，则调用该方法对OleObj映射的xlsx文件进行解压缩。
+        /// </summary>
+        private void UnZipOleObjectFile()
+        {
+            // 获取OleObj的映射的xlsx文件。
+            var oleObjDirectory = Path.Combine(OfficeFolder.Text, "ppt\\embeddings\\");
+            if (Directory.Exists(oleObjDirectory))
+            {
+                var oleFileInfo = new DirectoryInfo(oleObjDirectory);
+                foreach (var fileInfo in oleFileInfo.GetFiles())
+                {
+                    if (fileInfo.Extension.Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var directoryName = Path.Combine(fileInfo.DirectoryName, Path.GetFileNameWithoutExtension(fileInfo.Name));
+                        Directory.CreateDirectory(directoryName);
+                        System.IO.Compression.ZipFile.ExtractToDirectory(fileInfo.FullName, directoryName, true);
+                    }
+                }
+            }
         }
 
         private static void FormatXml(string directory)
@@ -191,7 +216,10 @@ namespace dotnetCampus.OfficeDocumentZipper
             Warn("");
         }
 
-        private void Zip_OnClick(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 压缩PPT文件。
+        /// </summary>
+        private void ZipFile()
         {
             if (!CheckFolderExists())
             {
@@ -213,13 +241,60 @@ namespace dotnetCampus.OfficeDocumentZipper
 
             var directory = OfficeFolder.Text;
 
-            ZipFile.CreateFromDirectory(directory, file, CompressionLevel.NoCompression, false);
+            // 这个步骤是查找文件夹里是否存在oleObj元素映射的xlsx文件，并进行压缩处理。
+            ZipOleObjectFile();
 
+            System.IO.Compression.ZipFile.CreateFromDirectory(directory, file, CompressionLevel.NoCompression, false);
+
+            // 还原ZipOleObjectFile方法删除的Excel文件解压出来的文件夹。
+            UnZipOleObjectFile();
 
             OfficeFile.Text = file;
             OfficeFolder.Text = directory;
 
             Warn("");
+        }
+
+        private void Zip_OnClick(object sender, RoutedEventArgs e)
+        {
+            // 涉及IO操作，最好捕获一下异常。
+            try
+            {
+                ZipFile();
+            }
+            catch (Exception exception)
+            {
+                Warn(exception.ToString());
+            }
+        }
+
+        /// <summary>
+        /// 这个方法对嵌入excel表格的PPT文件进行处理。
+        ///  如果OleObj映射的xlsx文件被解压缩，则将解压缩的文件夹压缩为xlsx文件，并删除原有文件夹。
+        /// </summary>
+        private void ZipOleObjectFile()
+        {
+            // 获取OleObj的映射的xlsx文件。
+            var oleObjDirectory = Path.Combine(OfficeFolder.Text, "ppt\\embeddings\\");
+            if (Directory.Exists(oleObjDirectory))
+            {
+                var oleFileInfo = new DirectoryInfo(oleObjDirectory);
+                var fileInfos = oleFileInfo.GetFiles();
+                foreach (var directoryInfo in oleFileInfo.GetDirectories())
+                {
+                    // 如果xlsx文件去掉后缀后与文件夹同名，那我们将认为该文件夹是由xlsx文件解压缩而来的，此时需要替换原有的 xlsx 文件并删除 xlsx 对应的文件夹。
+                    if (fileInfos.Any(fileInfo => Path.GetFileNameWithoutExtension(fileInfo.Name).Equals(directoryInfo.Name)
+                        && fileInfo.Extension.Equals(".xlsx", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var fileName = Path.ChangeExtension(directoryInfo.FullName, ".xlsx");
+                        File.Delete(fileName);
+                        System.IO.Compression.ZipFile.CreateFromDirectory(directoryInfo.FullName, fileName, CompressionLevel.NoCompression, false);
+
+                        // 必须要删除原目录，否则PPT打开错误。
+                        directoryInfo.Delete(true);
+                    }
+                }
+            }
         }
 
         private string CreateFileName(string file)
@@ -314,7 +389,19 @@ namespace dotnetCampus.OfficeDocumentZipper
 
         private void ZipAndOpen_OnClick(object sender, RoutedEventArgs e)
         {
-            Zip_OnClick(sender, e);
+            // 涉及IO操作，最好捕获一下异常。
+            try
+            {
+                ZipFile();
+            }
+            catch (Exception exception)
+            {
+                Warn(exception.ToString());
+
+                // 异常了就没必要打开PPT文件了。
+                return;
+            }
+
             OpenOfficeFile_OnClick(sender, e);
         }
 
