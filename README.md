@@ -36,7 +36,8 @@ OfficeDocumentZipper
 |--|--|
 |dotnetCampus.OpenXMLUnitConverter|[![](https://img.shields.io/nuget/v/dotnetCampus.OpenXMLUnitConverter.svg)](https://www.nuget.org/packages/dotnetCampus.OpenXMLUnitConverter)|
 |dotnetCampus.OpenXMLUnitConverter.Source|[![](https://img.shields.io/nuget/v/dotnetCampus.OpenXMLUnitConverter.Source.svg)](https://www.nuget.org/packages/dotnetCampus.OpenXMLUnitConverter.Source)|
-
+|dotnetCampus.DocumentFormat.OpenXml.Flatten|[![](https://img.shields.io/nuget/v/dotnetCampus.DocumentFormat.OpenXml.Flatten.svg)](https://www.nuget.org/packages/dotnetCampus.DocumentFormat.OpenXml.Flatten)|
+|dotnetCampus.DocumentFormat.OpenXml.Flatten.Source|[![](https://img.shields.io/nuget/v/dotnetCampus.DocumentFormat.OpenXml.Flatten.Source.svg)](https://www.nuget.org/packages/dotnetCampus.DocumentFormat.OpenXml.Flatten.Source)|
 
 ## dotnetCampus.OpenXMLUnitConverter
 
@@ -47,13 +48,13 @@ Defining units for OpenXml properties and the unit conversion function.
 DLL Pakcage:
 
 ```xml
-<PackageReference Include="dotnetCampus.OpenXmlUnitConverter" Version="1.8.0" />
+<PackageReference Include="dotnetCampus.OpenXmlUnitConverter" Version="1.9.0" />
 ```
 
 [SouceYard](https://github.com/dotnet-campus/SourceYard) Package:
 
 ```xml
-<PackageReference Include="dotnetCampus.OpenXmlUnitConverter.Source" Version="1.8.0">
+<PackageReference Include="dotnetCampus.OpenXmlUnitConverter.Source" Version="1.9.0">
   <PrivateAssets>all</PrivateAssets>
   <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 </PackageReference>
@@ -71,6 +72,30 @@ void Foo(DocumentFormat.OpenXml.Drawing.Point2DType point)
     var cmValue = x.ToCm();
 }
 ```
+
+## DocumentFormat.OpenXml.Flatten
+
+### Install
+
+DLL Pakcage:
+
+```xml
+<PackageReference Include="dotnetCampus.DocumentFormat.OpenXml.Flatten" Version="2.0.0" />
+```
+
+[SouceYard](https://github.com/dotnet-campus/SourceYard) Package:
+
+```xml
+<PackageReference Include="dotnetCampus.DocumentFormat.OpenXml.Flatten.Source" Version="2.0.0">
+  <PrivateAssets>all</PrivateAssets>
+  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+</PackageReference>
+```
+
+### Usage
+
+See [DocumentFormat.OpenXml.Flatten README.md](src/DocumentFormat.OpenXml.Flatten/README.md)
+
 
 # Thanks
 
