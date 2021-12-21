@@ -46,7 +46,7 @@
         <!-- 源代码包项目里面依然可以用dotnetCampus.OpenXmlUnitConverter.Source源代码包，因此不加上引用 -->
         <SourceYardExcludePackageReference Include="dotnetCampus.OpenXmlUnitConverter" />
 
-        <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19371-alpha" Condition="'$(TargetFramework)'=='net45'">
+        <PackageReference Include="dotnetCampus.SourceYard" Version="1.0.0-alpha01" Condition="'$(TargetFramework)'=='net45'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
