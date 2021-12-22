@@ -2,9 +2,14 @@
 
 将 OpenXML 里面的 PPT 元素继承的属性拍平，让元素可以获取到最终的属性值。属性继承顺序是，先找元素本身，再找 SlideLayout 再找 SlideMaster 再找 Theme 如果依然找不到，就使用放在 App 里面的默认值
 
-| Build | NuGet |
+| Build |
+|--|
+|![](https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper/workflows/.NET%20Core/badge.svg)|
+
+| Name | NuGet|
 |--|--|
-|![](https://github.com/dotnet-campus/DocumentFormat.OpenXml.Flatten/workflows/.NET%20Build/badge.svg)|[![](https://img.shields.io/nuget/v/DocumentFormat.OpenXml.Flatten.svg)](https://www.nuget.org/packages/DocumentFormat.OpenXml.Flatten)|
+|dotnetCampus.DocumentFormat.OpenXml.Flatten|[![](https://img.shields.io/nuget/v/dotnetCampus.DocumentFormat.OpenXml.Flatten.svg)](https://www.nuget.org/packages/dotnetCampus.DocumentFormat.OpenXml.Flatten)|
+|dotnetCampus.DocumentFormat.OpenXml.Flatten.Source|[![](https://img.shields.io/nuget/v/dotnetCampus.DocumentFormat.OpenXml.Flatten.Source.svg)](https://www.nuget.org/packages/dotnetCampus.DocumentFormat.OpenXml.Flatten.Source)|
 
 ## 功能
 
