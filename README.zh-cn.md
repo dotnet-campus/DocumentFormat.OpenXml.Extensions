@@ -53,13 +53,13 @@ OfficeDocumentZipper
 DLL 包:
 
 ```xml
-<PackageReference Include="dotnetCampus.OpenXmlUnitConverter" Version="1.8.0" />
+<PackageReference Include="dotnetCampus.OpenXmlUnitConverter" Version="1.9.0" />
 ```
 
 [SouceYard](https://github.com/dotnet-campus/SourceYard) 源代码包:
 
 ```xml
-<PackageReference Include="dotnetCampus.OpenXmlUnitConverter.Source" Version="1.8.0">
+<PackageReference Include="dotnetCampus.OpenXmlUnitConverter.Source" Version="1.9.0">
   <PrivateAssets>all</PrivateAssets>
   <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 </PackageReference>
@@ -79,6 +79,31 @@ void Foo(DocumentFormat.OpenXml.Drawing.Point2DType point)
 ```
 
 详细请看 [Office Open XML 的测量单位](https://blog.lindexi.com/post/Office-Open-XML-%E7%9A%84%E6%B5%8B%E9%87%8F%E5%8D%95%E4%BD%8D.html )
+
+## DocumentFormat.OpenXml.Flatten
+
+提供继承的属性拍平的功能的库，包含常用处理逻辑和计算逻辑
+
+### 安装方法
+
+DLL 包:
+
+```xml
+<PackageReference Include="dotnetCampus.DocumentFormat.OpenXml.Flatten" Version="2.0.0" />
+```
+
+[SouceYard](https://github.com/dotnet-campus/SourceYard) 源代码包:
+
+```xml
+<PackageReference Include="dotnetCampus.DocumentFormat.OpenXml.Flatten.Source" Version="2.0.0">
+  <PrivateAssets>all</PrivateAssets>
+  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+</PackageReference>
+```
+
+### 使用方法
+
+具体使用方法请参阅 [DocumentFormat.OpenXml.Flatten 使用文档](src/DocumentFormat.OpenXml.Flatten/README.md)
 
 # 感谢
 

@@ -11,6 +11,7 @@
     <EmbedAllSources>true</EmbedAllSources>
     <!-- 将 PDB 符号文件放在相同的 NuGet 包里面 -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <Description>Defining units for OpenXml properties and the unit conversion function. 提供继承的属性拍平的功能的库，包含常用处理逻辑和计算逻辑</Description>
   </PropertyGroup>
 
 
@@ -42,7 +43,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

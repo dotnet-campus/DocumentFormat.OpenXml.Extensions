@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5D196596-756D-45C2-8A05-C8E4AB8A36E6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.OfficeDocumentZipper", "src\dotnetCampus.OfficeDocumentZipper\dotnetCampus.OfficeDocumentZipper.csproj", "{EF60ACE4-91B3-4731-8530-F3CD922E922D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A80DBE61-A86F-4F1E-B638-999F15ED9EE3}"
@@ -14,14 +12,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CHANGELOG.md = CHANGELOG.md
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
+		README.zh-cn.md = README.zh-cn.md
 		build\Version.props = build\Version.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.OpenXmlUnitConverter", "src\dotnetCampus.OpenXmlUnitConverter\dotnetCampus.OpenXmlUnitConverter.csproj", "{DFF5A479-FCEE-431D-85C6-8E0D03E64F46}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{66E18386-803A-464D-9006-2EFD364FE97C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.OpenXMLUnitConverter.Tests", "tests\dotnetCampus.OpenXMLUnitConverter.Tests\dotnetCampus.OpenXMLUnitConverter.Tests.csproj", "{86010F5E-F7FD-40C9-96D7-491356A90139}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentFormat.OpenXml.Flatten", "DocumentFormat.OpenXml.Flatten", "{1DCDA9B1-ED7A-4825-BBA3-E3561006E4AF}"
+	ProjectSection(SolutionItems) = preProject
+		src\DocumentFormat.OpenXml.Flatten\README.md = src\DocumentFormat.OpenXml.Flatten\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.DocumentFormat.OpenXml.Flatten", "src\DocumentFormat.OpenXml.Flatten\DocumentFormat.OpenXml.Flatten\dotnetCampus.DocumentFormat.OpenXml.Flatten.csproj", "{6003FD01-7DC7-4F99-8878-7AE3ABF40BE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{8A1ED232-9A93-4D88-AC6D-3E3D4EA98FAD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenXmlUnitConverter", "OpenXmlUnitConverter", "{D0552FF1-B2AE-4878-B6B7-F792C326371C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,14 +49,19 @@ Global
 		{86010F5E-F7FD-40C9-96D7-491356A90139}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86010F5E-F7FD-40C9-96D7-491356A90139}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86010F5E-F7FD-40C9-96D7-491356A90139}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6003FD01-7DC7-4F99-8878-7AE3ABF40BE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6003FD01-7DC7-4F99-8878-7AE3ABF40BE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6003FD01-7DC7-4F99-8878-7AE3ABF40BE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6003FD01-7DC7-4F99-8878-7AE3ABF40BE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EF60ACE4-91B3-4731-8530-F3CD922E922D} = {5D196596-756D-45C2-8A05-C8E4AB8A36E6}
-		{DFF5A479-FCEE-431D-85C6-8E0D03E64F46} = {5D196596-756D-45C2-8A05-C8E4AB8A36E6}
-		{86010F5E-F7FD-40C9-96D7-491356A90139} = {66E18386-803A-464D-9006-2EFD364FE97C}
+		{EF60ACE4-91B3-4731-8530-F3CD922E922D} = {8A1ED232-9A93-4D88-AC6D-3E3D4EA98FAD}
+		{DFF5A479-FCEE-431D-85C6-8E0D03E64F46} = {D0552FF1-B2AE-4878-B6B7-F792C326371C}
+		{86010F5E-F7FD-40C9-96D7-491356A90139} = {D0552FF1-B2AE-4878-B6B7-F792C326371C}
+		{6003FD01-7DC7-4F99-8878-7AE3ABF40BE6} = {1DCDA9B1-ED7A-4825-BBA3-E3561006E4AF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {90F871FB-EAC2-449B-8601-3562C03CC566}
