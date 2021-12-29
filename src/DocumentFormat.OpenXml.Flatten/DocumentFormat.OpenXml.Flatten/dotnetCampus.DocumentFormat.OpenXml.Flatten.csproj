@@ -10,7 +10,7 @@
 
         <RootNamespace>DocumentFormat.OpenXml.Flatten</RootNamespace>
 
-        <Description>将 OpenXML 里面的 PPT 元素继承的属性拍平</Description>
+        <Description>提供继承的属性拍平的功能的库，包含常用处理逻辑和计算逻辑</Description>
     </PropertyGroup>
 
     <!-- 在 GitHub 的 Action 构建会添加 GITHUB_ACTIONS 变量 -->
