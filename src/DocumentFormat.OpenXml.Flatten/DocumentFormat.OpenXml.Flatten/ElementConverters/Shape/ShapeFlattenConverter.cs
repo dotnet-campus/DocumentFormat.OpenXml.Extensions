@@ -65,6 +65,10 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
                             masterPlaceholderShape?.NonVisualShapeProperties?.NonVisualShapeDrawingProperties!);
 
                     FlattenTransformData(shapeProperties, layoutPlaceholderShape, masterPlaceholderShape, context);
+
+
+                    FlattenPresetGeometryFormData(shapeProperties, layoutPlaceholderShape, masterPlaceholderShape, context);
+
                 }
             }
 
@@ -72,6 +76,33 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
             FillShapeBackgroundBrush(element, context);
 
             return element;
+        }
+
+        private void FlattenPresetGeometryFormData(ShapeProperties shapeProperties, Shape? layoutPlaceholderShape, Shape? masterPlaceholderShape, ElementContext context)
+        {
+            var layoutPresetGeometry = layoutPlaceholderShape?.ShapeProperties?.GetFirstChild<PresetGeometry>();
+            var masterPresetGeometry = masterPlaceholderShape?.ShapeProperties?.GetFirstChild<PresetGeometry>();
+            var geometry = shapeProperties.GetFirstChild<PresetGeometry>();
+            if (geometry is null && layoutPresetGeometry is null && masterPresetGeometry is null)
+            {
+                // 对于草绘的形状，尽管也是逻辑上也是 PresetGeometry 对象
+                // 但是在 XML 里面，使用 CustomGeometry 存放
+                // 不能在拍平加上 PresetGeometry 的值，否则将会丢失
+                return;
+            }
+
+            var provider = new OpenXmlCompositeElementFlattenProvider<PresetGeometry>
+            (
+                shapeProperties.GetOrCreateElement<PresetGeometry>(),
+                layoutPresetGeometry,
+                masterPresetGeometry
+            );
+
+            provider.FlattenMainElementProperty(presetGeometry => presetGeometry.AdjustValueList!);
+
+            var elementPresetGeometry = provider.Main;
+            elementPresetGeometry.Preset = provider.GetFlattenProperty(presetGeometry => presetGeometry.Preset);
+            elementPresetGeometry.AdjustValueList = provider.GetFlattenProperty(presetGeometry => presetGeometry.AdjustValueList);
         }
 
         private void FlattenTransformData(ShapeProperties shapeProperties, Shape? layoutPlaceholderShape, Shape? masterPlaceholderShape, ElementContext context)

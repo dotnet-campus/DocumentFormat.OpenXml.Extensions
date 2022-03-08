@@ -18,15 +18,15 @@ namespace DocumentFormat.OpenXml.Flatten.Contexts
         /// <param name="isExtrusionOk">指定使用 3D 拉伸可能在此路径</param>
         /// <param name="emuWidth">指定的宽度或在路径坐标系统中应在使用的最大的 x 坐标</param>
         /// <param name="emuHeight">指定框架的高度或在路径坐标系统中应在使用的最大的 y 坐标</param>
-        public ShapePath(string path, PathFillModeValues fillMode = PathFillModeValues.Norm, bool isStroke = true, bool isExtrusionOk = false, double emuWidth = 0, double emuHeight = 0)
+        public ShapePath(string path, PathFillModeValues fillMode = PathFillModeValues.Norm, bool isStroke = true, bool isExtrusionOk = false, double? emuWidth = null, double? emuHeight = null)
         {
             Path = path;
             IsStroke = isStroke;
             FillMode = fillMode;
             IsFilled = fillMode is not PathFillModeValues.None;
             IsExtrusionOk = isExtrusionOk;
-            Width = new Emu(emuWidth);
-            Height = new Emu(emuHeight);
+            Width = emuWidth.HasValue ? new Emu(emuWidth.Value) : null;
+            Height = emuHeight.HasValue ? new Emu(emuHeight.Value) : null;
         }
 
         /// <summary>
@@ -68,11 +68,11 @@ namespace DocumentFormat.OpenXml.Flatten.Contexts
         /// <summary>
         /// 指定的宽度或在路径坐标系统中应在使用的最大的 x 坐标。默认是 0 的值
         /// </summary>
-        public Emu Width { get; }
+        public Emu? Width { get; }
 
         /// <summary>
         /// 指定框架的高度或在路径坐标系统中应在使用的最大的 y 坐标。默认是 0 的值
         /// </summary>
-        public Emu Height { get; }
+        public Emu? Height { get; }
     }
 }

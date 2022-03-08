@@ -363,19 +363,28 @@ namespace DocumentFormat.OpenXml.Flatten.Utils
         /// </summary>
         /// 这个规则通过 文本占位符没有type和id的值，获取第一个占位符作为坐标 和 WPS 对比测试拿到
         /// 测试课件：文本占位符没有type和id的值.pptx
-        /// <param name="placeholder1"></param>
+        /// <param name="placeholder1">Shape的PlaceholderShape</param>
         /// <param name="placeholder2"></param>
         /// <returns></returns>
         private static bool Equals(PlaceholderShape? placeholder1, PlaceholderShape? placeholder2)
         {
-            // 如果 placeholder1.Type 存在值，要求 2 一定存在值
-            if (placeholder1?.Type != null &&
-                placeholder1.Type.Value != placeholder2?.Type?.Value)
-                return false;
+            //目前摸到的逻辑是：
+            //Side假如存在PlaceholderShape，优先级是idx，假如PlaceholderShape存在idx，SlideLayout和SlideMaster找不到对应的值，则不匹配
+            //假如Side的PlaceholderShape不存在idx，只要SlideLayout和SlideMaster存在PlaceholderShape就行，跟type关系不大，假如SlideLayout和SlideMaster存在多个PlaceholderShape，取第一个
+            //假如SlideLayout和SlideMaster的PlaceholderShape存在idx，且在Side的PlaceholderShape找不到对应idx，则不匹配
 
-            if (placeholder1?.Index is not null && placeholder1.Index.Value !=
-                placeholder2?.Index?.Value)
+            //先判断idx
+            //假如Shape的PlaceholderShape的idx有值，则查找SlideLayout和SlideMaster是否对应其值,查找不到则不匹配
+            if (placeholder1?.Index is not null && placeholder1.Index.Value != placeholder2?.Index?.Value)
+            {
                 return false;
+            }
+
+            //假如Shape的PlaceholderShape的idx没值,且SlideLayout和SlideMaster有值，则不匹配
+            if (placeholder1?.Index is null && placeholder2?.Index is not null)
+            {
+                return false;
+            }
 
             return true;
         }
