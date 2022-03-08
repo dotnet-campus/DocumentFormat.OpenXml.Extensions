@@ -5,8 +5,16 @@ using System.Linq;
 
 namespace DocumentFormat.OpenXml.Flatten.Framework
 {
+    /// <summary>
+    /// 提供 OpenXML 元素拍平的辅助功能
+    /// </summary>
+    /// <typeparam name="TElement"></typeparam>
     class ElementFlattenProvider<TElement> where TElement : OpenXmlElement
     {
+        /// <summary>
+        /// 创建 OpenXML 元素拍平的辅助功能类
+        /// </summary>
+        /// <param name="elementList">要求首个元素为主元素，主元素是待继承的元素</param>
         public ElementFlattenProvider(params TElement?[] elementList)
         {
             if (elementList[0] is null)
@@ -17,14 +25,23 @@ namespace DocumentFormat.OpenXml.Flatten.Framework
             ElementList = elementList;
         }
 
+        /// <summary>
+        /// 获取主元素，主元素是待继承的元素，主元素是传入列表的首个元素
+        /// </summary>
         public TElement Main => ElementList[0]!;
 
+        /// <summary>
+        /// 获取继承后的主元素的属性，此属性可以继续进行多级继承
+        /// </summary>
         public ElementFlattenProvider<TElement> FlattenMainElementProperty<TProperty>()
             where TProperty : OpenXmlElement
         {
             return FlattenMainElementProperty(e => e.GetFirstChild<TProperty>());
         }
 
+        /// <summary>
+        /// 获取继承后的主元素的属性，此属性可以继续进行多级继承
+        /// </summary>
         public ElementFlattenProvider<TElement> FlattenMainElementProperty<TProperty>(Func<TElement, TProperty?> func) where TProperty : OpenXmlElement
         {
             return FlattenMainElementProperty(e =>
@@ -39,6 +56,9 @@ namespace DocumentFormat.OpenXml.Flatten.Framework
             });
         }
 
+        /// <summary>
+        /// 获取继承后的主元素的属性，此属性可以继续进行多级继承
+        /// </summary>
         public ElementFlattenProvider<TElement> FlattenMainElementProperty<TProperty>(Func<TElement, (bool success, TProperty result)> func) where TProperty : OpenXmlElement
         {
             var mainResult = func(Main);
@@ -69,12 +89,21 @@ namespace DocumentFormat.OpenXml.Flatten.Framework
             return this;
         }
 
+        /// <summary>
+        /// 获取基础的继承属性值
+        /// </summary>
+        /// <typeparam name="TProperty"></typeparam>
+        /// <param name="func"></param>
+        /// <returns></returns>
         [return: MaybeNull]
         public TProperty GetFlattenProperty<TProperty>(Func<TElement, (bool success, TProperty result)> func)
         {
             return ElementFlattenExtension.GetFlattenProperty<TElement, TProperty>(func, ElementList!);
         }
 
+        /// <summary>
+        /// 获取继承后的主元素的属性，此属性可以继续进行多级继承
+        /// </summary>
         public ElementFlattenProvider<TProperty>? GetSubFlattenProperty<TProperty>(
             Func<TElement, TProperty> func) where TProperty : OpenXmlElement
             => GetSubFlattenProperty(e =>
@@ -90,6 +119,9 @@ namespace DocumentFormat.OpenXml.Flatten.Framework
                 }
             });
 
+        /// <summary>
+        /// 获取继承后的主元素的属性，此属性可以继续进行多级继承
+        /// </summary>
         public ElementFlattenProvider<TProperty>? GetSubFlattenProperty<TProperty>(
             Func<TElement, (bool success, TProperty result)> func) where TProperty : OpenXmlElement
         {
@@ -116,12 +148,18 @@ namespace DocumentFormat.OpenXml.Flatten.Framework
             }
         }
 
+        /// <summary>
+        /// 获取基础的继承属性值
+        /// </summary>
         [return: MaybeNull]
         public TProperty GetFlattenProperty<TProperty>(Func<TElement, TProperty> func)
         {
             return ElementFlattenExtension.GetFlattenProperty<TElement, TProperty>(func, ElementList!);
         }
 
+        /// <summary>
+        /// 继承的元素列表
+        /// </summary>
         protected TElement?[] ElementList { get; }
     }
 }

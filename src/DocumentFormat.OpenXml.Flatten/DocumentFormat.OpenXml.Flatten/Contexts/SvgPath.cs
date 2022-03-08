@@ -14,12 +14,14 @@ namespace DocumentFormat.OpenXml.Flatten.Contexts
         /// <param name="svgPathString">Svg Path字符串</param>
         /// <param name="shapeTextRectangle">形状文本框</param>
         /// <param name="multiShapePaths">Svg 多路径</param>
-        public SvgPath(ShapeTypeValues? geometryShapeType, string? svgPathString, EmuShapeTextRectangle shapeTextRectangle, ShapePath[]? multiShapePaths)
+        /// <param name="customGeometryInfo">自定义形状上下文信息</param>
+        public SvgPath(ShapeTypeValues? geometryShapeType, string? svgPathString, EmuShapeTextRectangle shapeTextRectangle, ShapePath[]? multiShapePaths, CustomGeometryInfo? customGeometryInfo = null)
         {
             ShapeType = geometryShapeType;
             SvgPathString = svgPathString;
             ShapeTextRectangle = shapeTextRectangle;
             MultiShapePaths = multiShapePaths;
+            CustomGeometryInfo = customGeometryInfo;
         }
 
         /// <summary>
@@ -41,5 +43,10 @@ namespace DocumentFormat.OpenXml.Flatten.Contexts
         ///Shape Path 多路径
         /// </summary>
         public ShapePath[]? MultiShapePaths { get; }
+
+        /// <summary>
+        /// 自定义形状上下文信息
+        /// </summary>
+        public CustomGeometryInfo? CustomGeometryInfo { get; }
     }
 }

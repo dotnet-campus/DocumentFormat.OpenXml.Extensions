@@ -51,41 +51,43 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
             //  </path>
             //</pathLst>
 
+            //设置Emu转Pixel的精度为小数点4位，防止精度不够被转为0
+            UnitPrecision = 4;
             var shapePaths = new ShapePath[1];
             //  <path w="20" h="20">
             //    <moveTo>
             //      <pt x="0" y="2" />
             //    </moveTo>
-            var widthFactor = w / 20;
-            var heightFactor = h / 20;
-            var currentPoint = new EmuPoint(0, heightFactor * 2);
+            var shapePathWidth = 20d;
+            var shapePathHeight = 20d;
+            var currentPoint = new EmuPoint(0, 2);
             var stringPath = new StringBuilder();
             stringPath.Append($"M {EmuToPixelString(currentPoint.X)},{EmuToPixelString(currentPoint.Y)} ");
             //    <arcTo wR="5" hR="2" stAng="cd2" swAng="-10800000" />
-            var wR = widthFactor * 5;
-            var hR = heightFactor * 2;
+            var wR = 5;
+            var hR = 2;
             var stAng = cd2;
             var swAng = -10800000d;
             currentPoint = ArcToToString(stringPath, currentPoint, wR, hR, stAng, swAng);
             //    <arcTo wR="5" hR="2" stAng="cd2" swAng="cd2" />
-            wR = widthFactor * 5;
-            hR = heightFactor * 2;
+            wR = 5;
+            hR = 2;
             stAng = cd2;
             swAng = cd2;
             currentPoint = ArcToToString(stringPath, currentPoint, wR, hR, stAng, swAng);
             //    <lnTo>
             //      <pt x="20" y="18" />
             //    </lnTo>
-            currentPoint = LineToToString(stringPath, widthFactor * 20, heightFactor * 18);
+            currentPoint = LineToToString(stringPath, 20, 18);
             //    <arcTo wR="5" hR="2" stAng="0" swAng="-10800000" />
-            wR = widthFactor * 5;
-            hR = heightFactor * 2;
+            wR = 5;
+            hR = 2;
             stAng = 0;
             swAng = -10800000;
             currentPoint = ArcToToString(stringPath, currentPoint, wR, hR, stAng, swAng);
             //    <arcTo wR="5" hR="2" stAng="0" swAng="cd2" />
-            wR = widthFactor * 5;
-            hR = heightFactor * 2;
+            wR = 5;
+            hR = 2;
             stAng = 0;
             swAng = cd2;
             currentPoint = ArcToToString(stringPath, currentPoint, wR, hR, stAng, swAng);
@@ -93,7 +95,7 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
             //  </path>
             stringPath.Append("z ");
 
-            shapePaths[0] = new ShapePath(stringPath.ToString());
+            shapePaths[0] = new ShapePath(stringPath.ToString(), emuWidth: shapePathWidth, emuHeight: shapePathHeight);
 
             //<rect l="l" t="hd5" r="r" b="ib" xmlns="http://schemas.openxmlformats.org/drawingml/2006/main" />
             InitializeShapeTextRectangle(l, hd5, r, ib);

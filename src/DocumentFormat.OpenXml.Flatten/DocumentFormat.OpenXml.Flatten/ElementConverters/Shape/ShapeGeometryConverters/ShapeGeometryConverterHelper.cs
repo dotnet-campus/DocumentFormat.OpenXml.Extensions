@@ -240,6 +240,18 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
                 ShapeTypeValues.MathDivide => CreateShapeGeometry<MathDivideGeometry>(),
                 ShapeTypeValues.MathEqual => CreateShapeGeometry<MathEqualGeometry>(),
                 ShapeTypeValues.MathNotEqual => CreateShapeGeometry<MathNotEqualGeometry>(),
+                ShapeTypeValues.ActionButtonBackPrevious => CreateShapeGeometry<ActionButtonBackPreviousGeometry>(),
+                ShapeTypeValues.ActionButtonBlank => CreateShapeGeometry<ActionButtonBlankGeometry>(),
+                ShapeTypeValues.ActionButtonDocument => CreateShapeGeometry<ActionButtonDocumentGeometry>(),
+                ShapeTypeValues.ActionButtonBeginning => CreateShapeGeometry<ActionButtonBeginningGeometry>(),
+                ShapeTypeValues.ActionButtonEnd => CreateShapeGeometry<ActionButtonEndGeometry>(),
+                ShapeTypeValues.ActionButtonForwardNext => CreateShapeGeometry<ActionButtonForwardNextGeometry>(),
+                ShapeTypeValues.ActionButtonHelp => CreateShapeGeometry<ActionButtonHelpGeometry>(),
+                ShapeTypeValues.ActionButtonHome => CreateShapeGeometry<ActionButtonHomeGeometry>(),
+                ShapeTypeValues.ActionButtonInformation => CreateShapeGeometry<ActionButtonInformationGeometry>(),
+                ShapeTypeValues.ActionButtonMovie => CreateShapeGeometry<ActionButtonMovieGeometry>(),
+                ShapeTypeValues.ActionButtonReturn => CreateShapeGeometry<ActionButtonReturnGeometry>(),
+                ShapeTypeValues.ActionButtonSound => CreateShapeGeometry<ActionButtonSoundGeometry>(),
                 _ => null
             };
 

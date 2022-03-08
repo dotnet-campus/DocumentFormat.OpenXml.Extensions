@@ -32,6 +32,9 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
             var customAdj1 = adjusts?.GetAdjustValue("adj1");
             var adj1 = customAdj1 ?? 23520d;
 
+            //当adj1为最低为0，导致一些值为0，参与公式乘除运算，导致路径有误
+            adj1 = System.Math.Max(adj1, 1);
+
             //<gdLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
             //  <gd name="a1" fmla="pin 0 adj1 73490" />
             //  <gd name="dx1" fmla="*/ w 73490 200000" />

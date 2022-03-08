@@ -138,13 +138,14 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CustomGeometryConvert
                 stringPath.Clear();
             }
 
+            var customGeometryInfo = new CustomGeometryInfo(_customGeometry.ShapeGuideList, _customGeometry.AdjustValueList, _customGeometry.PathList, _customGeometry.Rectangle);
             if (svgPathList.Count == 1)
             {
-                return new SvgPath(null, svgPathList.First().Path, ShapeTextRectangle, default);
+                return new SvgPath(null, svgPathList.First().Path, ShapeTextRectangle, default, customGeometryInfo);
             }
             else if (svgPathList.Count > 1)
             {
-                return new SvgPath(null, svgPathList.First().Path, ShapeTextRectangle, svgPathList.ToArray());
+                return new SvgPath(null, svgPathList.First().Path, ShapeTextRectangle, svgPathList.ToArray(), customGeometryInfo);
             }
             else
             {
