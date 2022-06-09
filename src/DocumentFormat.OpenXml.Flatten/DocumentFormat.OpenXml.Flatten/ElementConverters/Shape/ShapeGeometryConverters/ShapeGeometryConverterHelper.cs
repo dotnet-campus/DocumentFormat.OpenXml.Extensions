@@ -40,27 +40,27 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
         /// </summary>
         public static SvgPath? ToSvgPath(this ShapeAdapt shape)
         {
-            var shapeProperties = shape.ShapeProperties;
-            Debug.Assert(shapeProperties != null, nameof(shapeProperties) + " != null");
+            var shapePropertiesAdapt = shape.ShapePropertiesAdapt;
+            Debug.Assert(shapePropertiesAdapt != null, nameof(shapePropertiesAdapt) + " != null");
             var emuSize = shape.GetElementEmuSize();
-            var presetGeometry = shapeProperties!.GetFirstChild<PresetGeometry>();
+            var presetGeometry = shapePropertiesAdapt?.ShapeProperties?.GetFirstChild<PresetGeometry>();
             if (presetGeometry?.Preset != null)
             {
                 return GetPresetGeometrySvgPath(presetGeometry.Preset.Value, emuSize, presetGeometry.AdjustValueList);
             }
 
-            return GetCustomGeometrySvgPath(shapeProperties, emuSize);
+            return GetCustomGeometrySvgPath(shapePropertiesAdapt, emuSize);
         }
 
         /// <summary>
         /// 获取自定义形状的 SVG 路径
         /// </summary>
-        /// <param name="shapeProperties"></param>
+        /// <param name="shapePropertiesAdapt"></param>
         /// <param name="emuSize"></param>
         /// <returns></returns>
-        public static SvgPath? GetCustomGeometrySvgPath(ShapeProperties shapeProperties, ElementEmuSize emuSize)
+        public static SvgPath? GetCustomGeometrySvgPath(ShapePropertiesAdapt? shapePropertiesAdapt, ElementEmuSize emuSize)
         {
-            var customGeometry = shapeProperties.GetFirstChild<CustomGeometry>();
+            var customGeometry = shapePropertiesAdapt?.ShapeProperties?.GetFirstChild<CustomGeometry>();
             if (customGeometry == null)
             {
                 return null;
@@ -252,6 +252,14 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
                 ShapeTypeValues.ActionButtonMovie => CreateShapeGeometry<ActionButtonMovieGeometry>(),
                 ShapeTypeValues.ActionButtonReturn => CreateShapeGeometry<ActionButtonReturnGeometry>(),
                 ShapeTypeValues.ActionButtonSound => CreateShapeGeometry<ActionButtonSoundGeometry>(),
+                ShapeTypeValues.Funnel => CreateShapeGeometry<FunnelGeometry>(),
+                ShapeTypeValues.Gear6 => CreateShapeGeometry<Gear6Geometry>(),
+                ShapeTypeValues.Gear9 => CreateShapeGeometry<Gear9Geometry>(),
+                ShapeTypeValues.LeftRightRibbon => CreateShapeGeometry<LeftRightRibbonGeometry>(),
+                ShapeTypeValues.SwooshArrow => CreateShapeGeometry<SwooshArrowGeometry>(),
+                ShapeTypeValues.PieWedge => CreateShapeGeometry<PieWedgeGeometry>(),
+                ShapeTypeValues.LeftCircularArrow => CreateShapeGeometry<LeftCircularArrowGeometry>(),
+                ShapeTypeValues.NonIsoscelesTrapezoid=>CreateShapeGeometry<NonIsoscelesTrapezoidGeometry>(),
                 _ => null
             };
 

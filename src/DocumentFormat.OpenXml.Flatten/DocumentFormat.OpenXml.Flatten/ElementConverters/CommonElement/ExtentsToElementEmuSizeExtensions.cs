@@ -26,8 +26,8 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
         /// <returns></returns>
         public static ElementEmuSize GetElementEmuSize(this ShapeAdapt shape)
         {
-            var shapeProperties = shape.ShapeProperties;
-            var extents = shapeProperties?.Transform2D?.Extents;
+            var shapePropertiesAdapt = shape.ShapePropertiesAdapt;
+            var extents = shapePropertiesAdapt?.GetTransform2D()?.Extents;
             if (extents == null)
             {
                 return default;
@@ -50,7 +50,7 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
         {
             if (extents == null) return new ElementEmuSize(new Emu(0), new Emu(0));
             if (groupShape == null) return GetElementEmuSize(extents);
-            ElementEmuSize elementEmuSize = GetElementEmuSize(extents);
+            var elementEmuSize = GetElementEmuSize(extents);
             Extents? groupExtents = null;
             ChildExtents? childExtents = null;
             var cxFactor = 1d;
@@ -74,8 +74,8 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
             //先算出第一层组合嵌套组合的Extents的Cx和Cy的变换因子
             if (groupShape.Parent is DocumentFormat.OpenXml.Presentation.GroupShape parentGroupShape)
             {
-                Extents? parentGroupExtents = parentGroupShape.GroupShapeProperties?.TransformGroup?.Extents;
-                ChildExtents? parentChildExtents = parentGroupShape.GroupShapeProperties?.TransformGroup?.ChildExtents;
+                var parentGroupExtents = parentGroupShape.GroupShapeProperties?.TransformGroup?.Extents;
+                var parentChildExtents = parentGroupShape.GroupShapeProperties?.TransformGroup?.ChildExtents;
                 groupExtents = groupShape.GroupShapeProperties?.TransformGroup?.Extents;
                 childExtents = groupShape.GroupShapeProperties?.TransformGroup?.ChildExtents;
                 if (groupExtents != null && childExtents != null)
@@ -84,7 +84,7 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
                         groupExtents, childExtents, cxFactor, cyFactor);
                 }
 
-                DocumentFormat.OpenXml.Presentation.GroupShape tempGroupShape = parentGroupShape;
+                var tempGroupShape = parentGroupShape;
                 //假如groupShape的Parent的Parent再是组合，则只需要用变化因子分别乘与其自身的变化因子即可
                 while (tempGroupShape.Parent is DocumentFormat.OpenXml.Presentation.GroupShape tempParentGroupShape)
                 {
