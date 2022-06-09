@@ -42,12 +42,15 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
         internal static ITransformData CreateTransformData(this OpenXmlElement element, SlideContext context)
         {
             var transformData = new TransformData();
-            // sppr 是 ShapeProperties
-            var shapeProperties = element.GetFirstChild<ShapeProperties>();
-            if (shapeProperties?.Transform2D != null)
+
+            Transform2D? transform2D = null;
+            var shapeTransform = element.GetFirstChild<ShapeProperties>()?.GetFirstChild<Transform2D>();
+            if (shapeTransform is not null)
             {
-                // xfrm 是 Transform2D
-                var transform2D = shapeProperties.Transform2D;
+                transform2D = shapeTransform;
+            }
+            if (transform2D != null)
+            {
                 FillOffset(transform2D.Offset, transformData);
                 //如果是组合形状得子元素，需要走组合形状算法计算元素大小
                 if (element.Parent is DocumentFormat.OpenXml.Presentation.GroupShape groupShape)
@@ -90,6 +93,17 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
                 FillExtents(transform.Extents, transformData);
                 FillRotation(transform.Rotation, transformData);
                 FillFlip(transform.HorizontalFlip, transform.VerticalFlip, transformData);
+                return transformData;
+            }
+
+            //这是SmartArt获取Transform2D逻辑
+            var officeShapeTransform = element.GetFirstChild<DocumentFormat.OpenXml.Office.Drawing.ShapeProperties>()?.GetFirstChild<Transform2D>();
+            if (officeShapeTransform is not null)
+            {
+                FillOffset(officeShapeTransform.Offset, transformData);
+                FillExtents(officeShapeTransform.Extents, transformData);
+                FillRotation(officeShapeTransform.Rotation, transformData);
+                FillFlip(officeShapeTransform.HorizontalFlip, officeShapeTransform.VerticalFlip, transformData);
                 return transformData;
             }
 

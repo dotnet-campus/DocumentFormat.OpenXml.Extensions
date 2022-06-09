@@ -146,8 +146,8 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
             stringPath.Append("z ");
             shapePaths[0] = new ShapePath(stringPath.ToString());
 
-            //<rect l="il" t="ir" r="it" b="ib" xmlns="http://schemas.openxmlformats.org/drawingml/2006/main" />
-            InitializeShapeTextRectangle(il, ir, it, ib);
+            //<rect l="il" t="it" r="ir" b="ib" xmlns="http://schemas.openxmlformats.org/drawingml/2006/main" />
+            InitializeShapeTextRectangle(il, it, ir, ib);
 
             return shapePaths;
         }

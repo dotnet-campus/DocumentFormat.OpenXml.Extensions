@@ -12,7 +12,11 @@ namespace DocumentFormat.OpenXml.Flatten
     public class OpenXmlElementFlatten
     {
         IReadOnlyList<IOpenXmlElementFlattenConverter> FlattenConverterList { get; } =
-           new[] { new ShapeFlattenConverter() };
+           new IOpenXmlElementFlattenConverter[]
+           {
+               new ShapeFlattenConverter(),
+               new SmartArtElementFlattenConverter()
+           };
 
         /// <summary>
         /// 获取拍平属性后的 OpenXml 对象

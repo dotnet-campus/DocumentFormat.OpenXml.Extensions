@@ -228,6 +228,30 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.Primitive
             return HslToColor(hue, sat, lum, alpha);
         }
 
+        private static Color HandleHue(Color color, HueModulation? hueModulation,
+            HueOffset? hueOffset)
+        {
+            var (hue, sat, lum, alpha) = ColorToHsl(color);
+            if (hueModulation != null || hueOffset != null)
+            {
+                var modulationVal = hueModulation?.Val;
+                var offsetVal = hueOffset?.Val;
+                var mod = modulationVal is not null && modulationVal.HasValue
+                    ? new Percentage(modulationVal)
+                    : Percentage.FromDouble(1);
+                var offset = offsetVal is not null && offsetVal.HasValue
+                    ? new Angle(offsetVal).ToRadiansValue()
+                    : new Angle(0).ToRadiansValue();
+
+                var value = hue.ToRadiansValue() * mod.DoubleValue + offset;
+                value = value > 2 * System.Math.PI ? 2 * System.Math.PI : value;
+                value = value < 0 ? 0 : value;
+                hue = Degree.FromDouble(value * 180 / System.Math.PI - 13);
+            }
+
+            return HslToColor(hue, sat, lum, alpha);
+        }
+
         private static Color HandleSaturation(Color color, SaturationModulation? saturationModulation,
             SaturationOffset? saturationOffset)
         {
