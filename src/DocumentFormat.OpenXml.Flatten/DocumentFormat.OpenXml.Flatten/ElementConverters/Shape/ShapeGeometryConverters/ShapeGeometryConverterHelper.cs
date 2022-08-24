@@ -259,7 +259,7 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
                 ShapeTypeValues.SwooshArrow => CreateShapeGeometry<SwooshArrowGeometry>(),
                 ShapeTypeValues.PieWedge => CreateShapeGeometry<PieWedgeGeometry>(),
                 ShapeTypeValues.LeftCircularArrow => CreateShapeGeometry<LeftCircularArrowGeometry>(),
-                ShapeTypeValues.NonIsoscelesTrapezoid=>CreateShapeGeometry<NonIsoscelesTrapezoidGeometry>(),
+                ShapeTypeValues.NonIsoscelesTrapezoid => CreateShapeGeometry<NonIsoscelesTrapezoidGeometry>(),
                 _ => null
             };
 
