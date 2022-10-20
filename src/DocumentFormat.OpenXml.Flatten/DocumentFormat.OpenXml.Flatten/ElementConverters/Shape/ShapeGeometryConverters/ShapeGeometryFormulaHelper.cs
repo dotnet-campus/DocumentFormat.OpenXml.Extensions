@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Globalization;
+using System.Text;
 
 using DocumentFormat.OpenXml.Flatten.Contexts;
 
@@ -321,7 +323,7 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
         private static string PixelToString(Pixel x, int unitPrecision = 3)
         {
             // 太小了很看不到形状，丢失精度，这里的值都是采用形状的大小进行填充，所以参数都是相对大小就可以
-            return (x.Value * 1.000).ToString($"F{unitPrecision}");
+            return (x.Value * 1.000).ToString($"F{unitPrecision}", CultureInfo.InvariantCulture);
         }
     }
 }

@@ -32,7 +32,10 @@
         /// <param name="element"></param>
         public void AddToElement(OpenXmlElement element)
         {
-            element.Append(new[] { _fill });
+            if (_fill.Clone() is OpenXmlElement openXmlElement)
+            {
+                element.Append(new[] { openXmlElement });
+            }
         }
 
         private readonly OpenXmlElement _fill;

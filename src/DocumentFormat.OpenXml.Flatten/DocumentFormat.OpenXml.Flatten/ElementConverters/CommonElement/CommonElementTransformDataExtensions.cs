@@ -123,27 +123,27 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
 
             void FillOffset(Offset? offset, TransformData transformData2)
             {
-                if (offset?.X is not null)
+                if (!string.IsNullOrEmpty(offset?.X?.InnerText))
                 {
-                    transformData2.OffsetX = new Emu(offset.X);
+                    transformData2.OffsetX = new Emu(offset!.X!);
                 }
 
-                if (offset?.Y is not null)
+                if (!string.IsNullOrEmpty(offset?.Y?.InnerText))
                 {
-                    transformData2.OffsetY = new Emu(offset.Y);
+                    transformData2.OffsetY = new Emu(offset!.Y!);
                 }
             }
 
             void FillExtents(Extents? extents, TransformData transformData3)
             {
-                if (extents?.Cx is not null)
+                if (!string.IsNullOrEmpty(extents?.Cx?.InnerText))
                 {
-                    transformData3.Width = new Emu(extents.Cx);
+                    transformData3.Width = new Emu(extents!.Cx!);
                 }
 
-                if (extents?.Cy is not null)
+                if (!string.IsNullOrEmpty(extents?.Cy?.InnerText))
                 {
-                    transformData3.Height = new Emu(extents.Cy);
+                    transformData3.Height = new Emu(extents!.Cy!);
                 }
             }
 
