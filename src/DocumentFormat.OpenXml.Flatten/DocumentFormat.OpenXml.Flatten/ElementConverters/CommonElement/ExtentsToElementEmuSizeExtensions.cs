@@ -3,6 +3,7 @@
 using dotnetCampus.OpenXmlUnitConverter;
 
 using ElementEmuSize = dotnetCampus.OpenXmlUnitConverter.EmuSize;
+using ShapeProperties = DocumentFormat.OpenXml.Presentation.ShapeProperties;
 
 namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
 {
@@ -37,6 +38,34 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
             {
                 return GetGroupExtentsEmuSize(groupShape, extents);
             }
+
+            return GetElementEmuSize(extents);
+        }
+
+        /// <summary>
+        /// 获取元素的大小
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static ElementEmuSize GetElementEmuSize(this OpenXmlElement? element)
+        {
+            if (element is null)
+            {
+                return default;
+            }
+
+            var shapeProperties = element.GetFirstChild<ShapeProperties>();
+            var extents = shapeProperties?.GetFirstChild<Transform2D>()?.Extents;
+            if (extents == null)
+            {
+                return default;
+            }
+
+            if (element?.Parent is DocumentFormat.OpenXml.Presentation.GroupShape groupShape)
+            {
+                return GetGroupExtentsEmuSize(groupShape, extents);
+            }
+
             return GetElementEmuSize(extents);
         }
 
@@ -114,11 +143,11 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
             //当元素的父级是组形状时候，元素的真实Extents: 组形状的Extents / ChildExtents * 元素的Extents
             if (groupExtents is not null && childExtents is not null)
             {
-                if (groupExtents.Cx is not null && childExtents.Cx is not null)
+                if (groupExtents.Cx is not null && childExtents.Cx is not null && groupExtents.Cx.Value != 0 && childExtents.Cx.Value != 0)
                 {
                     cxFactor = groupExtents.Cx.Value / (double) childExtents.Cx.Value;
                 }
-                if (groupExtents.Cy is not null && childExtents.Cy is not null)
+                if (groupExtents.Cy is not null && childExtents.Cy is not null && groupExtents.Cy.Value != 0 && childExtents.Cy.Value != 0)
                 {
                     cyFactor = groupExtents.Cy.Value / (double) childExtents.Cy.Value;
                 }
@@ -186,7 +215,16 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
         /// <returns></returns>
         public static ElementEmuSize GetElementEmuSize(Extents extents)
         {
-            return new ElementEmuSize(new Emu(extents.Cx ?? 0), new Emu(extents.Cy ?? 0));
+            if (!long.TryParse(extents.Cx?.InnerText, out var width))
+            {
+                width = 0;
+            }
+            if (!long.TryParse(extents.Cy?.InnerText, out var height))
+            {
+                height = 0;
+            }
+
+            return new ElementEmuSize(new Emu(width), new Emu(height));
         }
     }
 }

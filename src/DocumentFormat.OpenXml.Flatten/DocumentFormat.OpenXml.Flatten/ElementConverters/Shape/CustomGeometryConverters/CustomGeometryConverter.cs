@@ -145,7 +145,13 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CustomGeometryConvert
             }
             else if (svgPathList.Count > 1)
             {
-                return new SvgPath(null, svgPathList.First().Path, ShapeTextRectangle, svgPathList.ToArray(), customGeometryInfo);
+                var stringBuilder = new StringBuilder();
+                foreach (var svgPath in svgPathList)
+                {
+                    stringBuilder.Append(svgPath.Path);
+                }
+
+                return new SvgPath(null, stringBuilder.ToString(), ShapeTextRectangle, svgPathList.ToArray(), customGeometryInfo);
             }
             else
             {

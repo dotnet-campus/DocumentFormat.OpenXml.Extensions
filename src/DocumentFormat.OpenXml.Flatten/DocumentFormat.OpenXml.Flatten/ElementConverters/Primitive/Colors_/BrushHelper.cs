@@ -208,6 +208,12 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
                     return mainBlipFill;
                 }
 
+                var mainPatternFill = mainBrushElement.GetFirstChild<PatternFill>();
+                if (mainPatternFill != null)
+                {
+                    return mainPatternFill;
+                }
+
                 // 需要将 GroupFill 放在最后，这是优先级最低的
                 // 此时将从 GroupFill 取出颜色填充过去
                 var groupFill = mainBrushElement.GetFirstChild<GroupFill>();

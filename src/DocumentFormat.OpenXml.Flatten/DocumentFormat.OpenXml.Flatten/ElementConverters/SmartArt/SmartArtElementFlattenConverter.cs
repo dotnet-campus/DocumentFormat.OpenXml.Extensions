@@ -87,7 +87,7 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
 
             //通过relIdValue找出呈现层
             var drawingPart = context.GetCurrentPart(xmlElement).GetPartById(relIdValue);
-            if (drawingPart is DiagramPersistLayoutPart diagramPersistLayoutPart && diagramPersistLayoutPart.Drawing.ShapeTree is not null)
+            if (drawingPart is DiagramPersistLayoutPart diagramPersistLayoutPart && diagramPersistLayoutPart.Drawing?.ShapeTree is not null)
             {
                 foreach (var shape in diagramPersistLayoutPart.Drawing.ShapeTree.ChildElements.OfType<SmartArtShape>())
                 {
@@ -225,12 +225,18 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
 
         }
 
-        private void FlattenOutline(SmartArtShape shape, Point point, OpenXmlElement? outLineColor, in ElementContext context)
+        private void FlattenOutline(SmartArtShape shape, Point point, OpenXmlElement? outlineColor, in ElementContext context)
         {
             var pointOutline = point.ShapeProperties?.GetFirstChild<Outline>();
+            if (pointOutline is null)
+            {
+                return;
+            }
+
+            var shapeOutline = shape.ShapeProperties?.GetOrCreateElement<Outline>();
             var provider = new OpenXmlCompositeElementFlattenProvider<Outline>
             (
-                shape.ShapeProperties?.GetOrCreateElement<Outline>(),
+                shapeOutline,
                 pointOutline
             );
 
@@ -240,27 +246,95 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
             elementOutline.CapType = provider.GetFlattenProperty(outline => outline.CapType);
             elementOutline.CompoundLineType = provider.GetFlattenProperty(outline => outline.CompoundLineType);
 
-            //当边框不存在NoFill才需要继承样式
-            if (outLineColor is SchemeColor schemeColor && shape.GetFirstChild<Outline>()?.GetFirstChild<NoFill>() is null)
+            if (shapeOutline is not null)
             {
-                var solidFill = shape.ShapeProperties?.GetFirstChild<Outline>()?.GetFirstChild<SolidFill>();
-                if (solidFill is null || solidFill.RgbColorModelHex is not null || solidFill.SystemColor is not null)
-                {
-                    return;
-                }
-
-                if (point.ShapeProperties?.GetFirstChild<Outline>()?.GetFirstChild<SolidFill>()?.SchemeColor is not null)
-                {
-                    return;
-                }
-
-                var newSchemeColor = solidFill.GetOrCreateElement<SchemeColor>();
-                if (IsFlattenSchemeColor(newSchemeColor))
-                {
-                    newSchemeColor.Val = schemeColor.Val;
-                }
-
+                var referenceSchemeColor = point.PropertySet?.Style?.LineReference?.GetFirstChild<SchemeColor>();
+                FlattenBackgroundOrOutlineSolidFillFromPoint(shapeOutline, pointOutline, outlineColor, referenceSchemeColor);
             }
+        }
+
+        private void FlattenBackgroundOrOutlineSolidFillFromPoint(OpenXmlCompositeElement shapeElement, OpenXmlCompositeElement pointElement, OpenXmlElement? schemeColorElement, OpenXmlElement? referenceSchemeColorElement)
+        {
+            //当存在其他填充，则不拍平
+            if (!IsFlattenSolidFill(pointElement) || !IsFlattenSolidFill(shapeElement))
+            {
+                return;
+            }
+
+            var pointSolidFill = pointElement.GetFirstChild<SolidFill>();
+            if (pointSolidFill is null)
+            {
+                //假如DataPart不存在SolidFill且DrawingPart的SolidFill存在SchemeColor且带颜色变换值，则不拍平
+                var shapeSchemeColor = shapeElement.GetFirstChild<SolidFill>()?.SchemeColor;
+                if (shapeSchemeColor is not null && !IsFlattenSchemeColor(shapeSchemeColor))
+                {
+                    return;
+                }
+
+                //拍平SchemeColor优先级：FillReference > Point映射关系拿到的SchemeColor
+                if (referenceSchemeColorElement is SchemeColor referenceSchemeColor)
+                {
+                    var solidFill = pointElement.GetOrCreateElement<SolidFill>();
+                    var pointSchemeColor = solidFill.GetOrCreateElement<SchemeColor>();
+                    pointSchemeColor.Val = referenceSchemeColor.Val;
+                }
+                else if (schemeColorElement is SchemeColor schemeColor)
+                {
+                    var solidFill = pointElement.GetOrCreateElement<SolidFill>();
+                    var pointSchemeColor = solidFill.GetOrCreateElement<SchemeColor>();
+                    pointSchemeColor.Val = schemeColor.Val;
+                }
+            }
+
+            pointSolidFill = pointElement.GetFirstChild<SolidFill>();
+            if (pointSolidFill is not null)
+            {
+                //假如获取到DataPart的SolidFill，且DrawingPart的SolidFill存在，则需要先删除DrawingPart的SolidFill
+                var solidFill = shapeElement.GetFirstChild<SolidFill>();
+                if (solidFill is not null)
+                {
+                    shapeElement.RemoveChild(solidFill);
+                }
+            }
+            var provider = new OpenXmlCompositeElementFlattenProvider<SolidFill>
+            (
+                shapeElement.GetOrCreateElement<SolidFill>(),
+                pointSolidFill
+            );
+
+            provider
+                .FlattenMainElementProperty(fill => fill.SchemeColor)
+                .FlattenMainElementProperty(fill => fill.PresetColor)
+                .FlattenMainElementProperty(fill => fill.SystemColor)
+                .FlattenMainElementProperty(fill => fill.HslColor)
+                .FlattenMainElementProperty(fill => fill.RgbColorModelHex)
+                .FlattenMainElementProperty(fill => fill.RgbColorModelPercentage);
+
+        }
+
+        static bool IsFlattenSolidFill(OpenXmlCompositeElement? element)
+        {
+            if (element?.GetFirstChild<NoFill>() is not null)
+            {
+                return false;
+            }
+
+            if (element?.GetFirstChild<BlipFill>() is not null)
+            {
+                return false;
+            }
+
+            if (element?.GetFirstChild<GradientFill>() is not null)
+            {
+                return false;
+            }
+
+            if (element?.GetFirstChild<PatternFill>() is not null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void FlattenEffectList(SmartArtShape shape, Point point, OpenXmlElement? effectColor, in ElementContext context)
@@ -329,27 +403,27 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
             var luminanceOffset = schemeColor.GetFirstChild<LuminanceOffset>();
             var alphaOffset = schemeColor.GetFirstChild<AlphaOffset>();
 
-            if (tint?.Val?.Value is not null && tint.Val.Value != 0)
+            if (tint?.Val?.Value is not null)
             {
                 return false;
             }
 
-            if (saturationOffset?.Val?.Value is not null && saturationOffset.Val.Value != 0)
+            if (saturationOffset?.Val?.Value is not null)
             {
                 return false;
             }
 
-            if (luminanceOffset?.Val?.Value is not null && luminanceOffset.Val.Value != 0)
+            if (luminanceOffset?.Val?.Value is not null)
             {
                 return false;
             }
 
-            if (alphaOffset?.Val?.Value is not null && alphaOffset.Val.Value != 0)
+            if (alphaOffset?.Val?.Value is not null)
             {
                 return false;
             }
 
-            if (hueOffset?.Val?.Value is not null && hueOffset.Val?.Value != 0)
+            if (hueOffset?.Val?.Value is not null)
             {
                 return false;
             }
@@ -359,34 +433,17 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
 
         private void FlattenBackgroundBrush(SmartArtShape shape, Point point, OpenXmlElement? backgroundColor, in ElementContext context)
         {
-            if (backgroundColor is SchemeColor schemeColor && IsFlattenSolidFill(shape))
+            if (point.ShapeProperties is null)
             {
-                var solidFill = shape.ShapeProperties?.GetOrCreateElement<SolidFill>();
-                if (solidFill is null || solidFill.RgbColorModelHex is not null || solidFill.SystemColor is not null)
-                {
-                    return;
-                }
-
-                if (point.ShapeProperties?.GetFirstChild<SolidFill>()?.SchemeColor is not null)
-                {
-                    return;
-                }
-
-                var newSchemeColor = solidFill.GetOrCreateElement<SchemeColor>();
-                if (IsFlattenSchemeColor(newSchemeColor))
-                {
-                    newSchemeColor.Val = schemeColor.Val;
-                }
+                return;
             }
 
-            var fillReference = shape.ShapeStyle?.FillReference;
-            var themeBrush = fillReference.FlattenReferenceBrush(context.SlideContext);
-            // 合并颜色，通过 BrushHelper.MergeBrush 可以将 themeBrush 的颜色合入到 shapeProperties 里面
-            var _ = BrushHelper.MergeBrush(shape.ShapeProperties, themeBrush, context);
-
-            static bool IsFlattenSolidFill(SmartArtShape shape)
+            if (shape.ShapeProperties is not null)
             {
-                return shape.ShapeProperties?.GetFirstChild<NoFill>() is null && shape.ShapeProperties?.GetFirstChild<BlipFill>() is null;
+                //拍平SchemeColor优先级：FillReference > Point映射关系拿到的SchemeColor
+                //假如从Style的FillReference拿到SchemeColor，则直接拍平为该值
+                var referenceSchemeColor = point.PropertySet?.Style?.FillReference?.GetFirstChild<SchemeColor>();
+                FlattenBackgroundOrOutlineSolidFillFromPoint(shape.ShapeProperties, point.ShapeProperties, backgroundColor, referenceSchemeColor);
             }
         }
 
