@@ -6,7 +6,9 @@
              xmlns:local="clr-namespace:OpenXmlFlattenMauiForWpfDemo"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <Grid Background="Gray">
+        <Viewbox Stretch="Uniform">
+            <Canvas x:Name="MauiCanvas"></Canvas>
+        </Viewbox>
     </Grid>
 </UserControl>

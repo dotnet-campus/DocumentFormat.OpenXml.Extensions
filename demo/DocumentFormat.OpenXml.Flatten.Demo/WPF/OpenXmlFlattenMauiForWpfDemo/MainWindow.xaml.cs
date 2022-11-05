@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,29 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        Loaded += MainWindow_Loaded;
+    }
+
+    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        var folder = System.IO.Path.GetDirectoryName(GetType().Assembly.Location)!;
+        var testFile = System.IO.Path.Combine(folder, @"TestFiles\Shape Triangle.pptx");
+
+        if (File.Exists(testFile))
+        {
+            PaintBoardUserControl.Open(new FileInfo(testFile));
+        }
+    }
+
+    private void OpenPptxFileButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var pptxFilePath = PptxFilePathTextBox.Text;
+
+        if (!string.IsNullOrEmpty(pptxFilePath) && File.Exists(pptxFilePath))
+        {
+            PaintBoardUserControl.Open(new FileInfo(pptxFilePath));
+        }
     }
 }
 
