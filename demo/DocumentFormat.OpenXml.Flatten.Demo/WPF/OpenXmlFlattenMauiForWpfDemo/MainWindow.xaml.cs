@@ -33,19 +33,23 @@ public partial class MainWindow : Window
         var folder = System.IO.Path.GetDirectoryName(GetType().Assembly.Location)!;
         var testFile = System.IO.Path.Combine(folder, @"TestFiles\Shape Triangle.pptx");
 
-        if (File.Exists(testFile))
-        {
-            PaintBoardUserControl.Open(new FileInfo(testFile));
-        }
+        Open(testFile);
     }
 
     private void OpenPptxFileButton_OnClick(object sender, RoutedEventArgs e)
     {
         var pptxFilePath = PptxFilePathTextBox.Text;
 
+        Open(pptxFilePath);
+    }
+
+    private void Open(string pptxFilePath)
+    {
         if (!string.IsNullOrEmpty(pptxFilePath) && File.Exists(pptxFilePath))
         {
             PaintBoardUserControl.Open(new FileInfo(pptxFilePath));
+
+            PptxFilePathTextBox.Text = pptxFilePath;
         }
     }
 }
