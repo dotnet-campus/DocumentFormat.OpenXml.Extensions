@@ -103,7 +103,7 @@ DLL 包:
 
 ### 使用方法
 
-具体使用方法请参阅 [DocumentFormat.OpenXml.Flatten 使用文档](src/DocumentFormat.OpenXml.Flatten/README.md)
+具体使用方法请参阅 [DocumentFormat.OpenXml.Flatten 使用文档](src/DocumentFormat.OpenXml.Flatten/README.md) 和[示例代码](demo)
 
 # 感谢
 

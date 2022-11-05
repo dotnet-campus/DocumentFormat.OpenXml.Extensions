@@ -94,7 +94,7 @@ DLL Pakcage:
 
 ### Usage
 
-See [DocumentFormat.OpenXml.Flatten README.md](src/DocumentFormat.OpenXml.Flatten/README.md)
+See [DocumentFormat.OpenXml.Flatten README.md](src/DocumentFormat.OpenXml.Flatten/README.md) and the [Demo](demo).
 
 
 # Thanks
