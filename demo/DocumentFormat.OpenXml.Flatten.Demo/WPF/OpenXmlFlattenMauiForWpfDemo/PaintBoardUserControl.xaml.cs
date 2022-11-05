@@ -42,5 +42,5 @@ public partial class PaintBoardUserControl : UserControl
     }
 
     private PptxViewer? _pptxViewer;
-    private XamlCanvas _xamlCanvas;
+    private readonly XamlCanvas _xamlCanvas;
 }
