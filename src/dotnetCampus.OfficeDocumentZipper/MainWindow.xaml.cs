@@ -58,6 +58,11 @@ namespace dotnetCampus.OfficeDocumentZipper
                 UnzipFile();
 
                 var directory = OfficeFolder.Text;
+                if (!Directory.Exists(directory))
+                {
+                    MessageBox.Show("The folder path does not exist");
+                    return;
+                }
                 FormatXml(directory);
             }
             catch (Exception exception)
