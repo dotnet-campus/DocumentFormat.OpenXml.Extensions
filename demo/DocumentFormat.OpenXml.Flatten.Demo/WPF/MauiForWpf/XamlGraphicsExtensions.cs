@@ -11,16 +11,16 @@ namespace Microsoft.Maui.Graphics.Xaml
         {
             return System.Windows.Media.Color.FromArgb
             (
-                (byte) (255 * target.Alpha),
-                (byte) (255 * target.Red),
-                (byte) (255 * target.Green),
-                (byte) (255 * target.Blue)
+                (byte)(255 * target.Alpha),
+                (byte)(255 * target.Red),
+                (byte)(255 * target.Green),
+                (byte)(255 * target.Blue)
             );
         }
 
         public static PointF AsPointF(this global::System.Windows.Point point)
         {
-            return new PointF((float) point.X, (float) point.Y);
+            return new PointF((float)point.X, (float)point.Y);
         }
 
         public static global::System.Windows.Point AsPoint(this PointF target)
@@ -134,7 +134,7 @@ namespace Microsoft.Maui.Graphics.Xaml
                 }
                 else
                 {
-                    
+
                 }
             }
 

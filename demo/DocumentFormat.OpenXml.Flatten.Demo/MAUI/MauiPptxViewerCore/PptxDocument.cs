@@ -27,7 +27,7 @@ class PptxDocument
         {
             // 获取页面内容
             Debug.Assert(slideId.RelationshipId != null, "slideId.RelationshipId != null");
-            SlidePart slidePart = (SlidePart) presentationPart.GetPartById(slideId.RelationshipId!);
+            SlidePart slidePart = (SlidePart)presentationPart.GetPartById(slideId.RelationshipId!);
 
             Debug.Assert(slideId.Id is not null, "slideId.Id != null");
             var pptxSlide = new PptxSlide(slideId.Id!.Value, slidePart, documentModel);

@@ -283,7 +283,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         protected override void PlatformDrawPath(PathF path)
         {
             var item = GetOrCreateItem(ItemType.DrawPath);
-            var element = (Path) item.Element;
+            var element = (Path)item.Element;
             var transformedPath = path;
             if (!CurrentState.Transform.IsIdentity)
             {
@@ -309,7 +309,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         protected override void PlatformDrawEllipse(float x, float y, float width, float height)
         {
             var item = GetOrCreateItem(ItemType.DrawEllipse);
-            var element = (Ellipse) item.Element;
+            var element = (Ellipse)item.Element;
 
             CreateStrokeRect(x, y, width, height);
 
@@ -334,7 +334,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         protected override void PlatformDrawRoundedRectangle(float x, float y, float width, float height, float cornerRadius)
         {
             var item = GetOrCreateItem(ItemType.DrawRoundedRectangle);
-            var element = (global::System.Windows.Shapes.Rectangle) item.Element;
+            var element = (global::System.Windows.Shapes.Rectangle)item.Element;
 
             CreateStrokeRoundedRect(x, y, width, height, cornerRadius);
 
@@ -361,7 +361,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         protected override void PlatformDrawRectangle(float x, float y, float width, float height)
         {
             var item = GetOrCreateItem(ItemType.DrawRectangle);
-            var element = (global::System.Windows.Shapes.Rectangle) item.Element;
+            var element = (global::System.Windows.Shapes.Rectangle)item.Element;
 
             CreateStrokeRect(x, y, width, height);
 
@@ -398,13 +398,13 @@ namespace Microsoft.Maui.Graphics.Xaml
             }
 
             var item = GetOrCreateItem(ItemType.DrawArc);
-            var element = (Path) item.Element;
+            var element = (Path)item.Element;
 
             CreateArcStrokeRect(x, y, width, height);
 
-            var geometry = (PathGeometry) element.Data;
+            var geometry = (PathGeometry)element.Data;
             var figure = geometry.Figures[0];
-            var arcSegment = (ArcSegment) figure.Segments[0];
+            var arcSegment = (ArcSegment)figure.Segments[0];
 
             var sweep = GeometryUtil.GetSweep(startAngle, endAngle, clockwise);
             var absSweep = Math.Abs(sweep);
@@ -429,7 +429,7 @@ namespace Microsoft.Maui.Graphics.Xaml
                 }
                 else
                 {
-                    lineSegment = (LineSegment) figure.Segments[1];
+                    lineSegment = (LineSegment)figure.Segments[1];
                 }
 
                 lineSegment.Point = new global::System.Windows.Point(startPoint.X, startPoint.Y);
@@ -461,7 +461,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         protected override void PlatformDrawLine(float x1, float y1, float x2, float y2)
         {
             var item = GetOrCreateItem(ItemType.DrawLine);
-            var element = (Line) item.Element;
+            var element = (Line)item.Element;
 
             var p1 = CurrentState.Transform.Transform(x1, y1);
             var p2 = CurrentState.Transform.Transform(x2, y2);
@@ -555,8 +555,8 @@ namespace Microsoft.Maui.Graphics.Xaml
             CreateFillRect(x, y, width, height);
 
             var item = GetOrCreateItem(ItemType.DrawTextInRect);
-            var element = (Border) item.Element;
-            var block = (TextBlock) element.Child;
+            var element = (Border)item.Element;
+            var block = (TextBlock)element.Child;
 
             block.Text = value;
 
@@ -610,7 +610,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         public override void DrawString(string value, float x, float y, HorizontalAlignment horizontalAlignment)
         {
             var item = GetOrCreateItem(ItemType.DrawText);
-            var element = (TextBlock) item.Element;
+            var element = (TextBlock)item.Element;
             element.Text = value;
 
             switch (horizontalAlignment)
@@ -650,7 +650,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         public override void FillEllipse(float x, float y, float width, float height)
         {
             var item = GetOrCreateItem(ItemType.FillEllipse);
-            var element = (Ellipse) item.Element;
+            var element = (Ellipse)item.Element;
 
             CreateFillRect(x, y, width, height);
 
@@ -668,7 +668,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         public override void FillRoundedRectangle(float x, float y, float width, float height, float cornerRadius)
         {
             var item = GetOrCreateItem(ItemType.FillRoundedRectangle);
-            var element = (global::System.Windows.Shapes.Rectangle) item.Element;
+            var element = (global::System.Windows.Shapes.Rectangle)item.Element;
 
             CreateFillRect(x, y, width, height);
 
@@ -700,7 +700,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         public override void FillRectangle(float x, float y, float width, float height)
         {
             var item = GetOrCreateItem(ItemType.FillRectangle);
-            var element = (global::System.Windows.Shapes.Rectangle) item.Element;
+            var element = (global::System.Windows.Shapes.Rectangle)item.Element;
 
             CreateFillRect(x, y, width, height);
 
@@ -783,7 +783,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         public override void FillPath(PathF path, WindingMode windingMode)
         {
             var item = GetOrCreateItem(ItemType.FillPath);
-            var element = (Path) item.Element;
+            var element = (Path)item.Element;
 
             var transformedPath = path;
             if (!CurrentState.Transform.IsIdentity)
@@ -826,13 +826,13 @@ namespace Microsoft.Maui.Graphics.Xaml
             }
 
             var item = GetOrCreateItem(ItemType.FillArc);
-            var element = (Path) item.Element;
+            var element = (Path)item.Element;
 
             CreateFillRect(x, y, width, height);
 
-            var geometry = (PathGeometry) element.Data;
+            var geometry = (PathGeometry)element.Data;
             var figure = geometry.Figures[0];
-            var arcSegment = (ArcSegment) figure.Segments[0];
+            var arcSegment = (ArcSegment)figure.Segments[0];
 
             var sweep = GeometryUtil.GetSweep(startAngle, endAngle, clockwise);
             var absSweep = Math.Abs(sweep);

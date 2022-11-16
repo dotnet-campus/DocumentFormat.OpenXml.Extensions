@@ -74,11 +74,11 @@ namespace Microsoft.Maui.Graphics.Xaml
 
                     if (_fillPaint is LinearGradientPaint linearGradientPaint)
                     {
-                        float x1 = (float) (linearGradientPaint.StartPoint.X * _fillRectangle.Width);
-                        float y1 = (float) (linearGradientPaint.StartPoint.Y * _fillRectangle.Height);
+                        float x1 = (float)(linearGradientPaint.StartPoint.X * _fillRectangle.Width);
+                        float y1 = (float)(linearGradientPaint.StartPoint.Y * _fillRectangle.Height);
 
-                        float x2 = (float) (linearGradientPaint.EndPoint.X * _fillRectangle.Width);
-                        float y2 = (float) (linearGradientPaint.EndPoint.Y * _fillRectangle.Height);
+                        float x2 = (float)(linearGradientPaint.EndPoint.X * _fillRectangle.Width);
+                        float y2 = (float)(linearGradientPaint.EndPoint.Y * _fillRectangle.Height);
 
                         var brush = new LinearGradientBrush
                         {
@@ -95,9 +95,9 @@ namespace Microsoft.Maui.Graphics.Xaml
 
                     if (_fillPaint is RadialGradientPaint radialGradientPaint)
                     {
-                        float centerX = (float) (radialGradientPaint.Center.X * _fillRectangle.Width);
-                        float centerY = (float) (radialGradientPaint.Center.Y * _fillRectangle.Height);
-                        float radius = (float) radialGradientPaint.Radius * Math.Max(_fillRectangle.Height, _fillRectangle.Width);
+                        float centerX = (float)(radialGradientPaint.Center.X * _fillRectangle.Width);
+                        float centerY = (float)(radialGradientPaint.Center.Y * _fillRectangle.Height);
+                        float radius = (float)radialGradientPaint.Radius * Math.Max(_fillRectangle.Height, _fillRectangle.Width);
 
                         if (radius == 0)
                             radius = GeometryUtil.GetDistance(_fillRectangle.Left, _fillRectangle.Top, _fillRectangle.Right, _fillRectangle.Bottom);
@@ -389,7 +389,7 @@ namespace Microsoft.Maui.Graphics.Xaml
         public void XamlScale(float sx, float sy)
         {
             InitGroup();
-            var transform = new ScaleTransform((double) sx, (double) sy);
+            var transform = new ScaleTransform((double)sx, (double)sy);
             _transformGroup.Children.Add(transform);
         }
 
