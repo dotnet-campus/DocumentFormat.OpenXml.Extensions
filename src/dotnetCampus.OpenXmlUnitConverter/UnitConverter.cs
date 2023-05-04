@@ -42,6 +42,10 @@ namespace dotnetCampus.OpenXmlUnitConverter
 
         public static Pixel ToPixel(this Inch inch) => inch.ToEmu().ToPixel();
 
+        public static Pixel ToPixel(this Cm cm) => cm.ToEmu().ToPixel();
+
+        public static Pixel ToPixel(this Mm mm) => mm.ToEmu().ToPixel();
+
         public static Inch ToInch(this Pixel pixel) => pixel.ToEmu().ToInch();
 
         #endregion
