@@ -20,10 +20,14 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.TableStyleEntries
         /// <returns></returns>
         /// 此代码是生成代码，通过 OpenXmlSdkTool.exe 生成，工具版本 V2.5。
         /// 生成代码方法请看 <see cref="GenerateTableStyleEntriesCode"/>
+        /// 文档： MS-OE376 的 2.1.1343 Part 4 Section 5.1.6.10, tableStyleId (Table Style ID
+        /// 文档里面有各个样式的对应值
         public static TableStyleEntry? CreateTableStyleEntry(string styleId)
         {
             return styleId switch
             {
+                "{2D5ABB26-0587-4C30-8999-92F81FD0307C}" => NoStyleNoGrid_2D5ABB26_0587_4C30_8999_92F81FD0307C.GenerateTableStyleEntry(),
+
                 "{284E427A-3D55-4303-BF80-6455036E1DE7}" => ThemedStyle1Accent2_284E427A_3D55_4303_BF80_6455036E1DE7.GenerateTableStyleEntry(),
                 "{69C7853C-536D-4A76-A0AE-DD22124D55A5}" => ThemedStyle1Accent3_69C7853C_536D_4A76_A0AE_DD22124D55A5.GenerateTableStyleEntry(),
                 "{775DCB02-9BB8-47FD-8907-85C794F793BA}" => ThemedStyle1Accent4_775DCB02_9BB8_47FD_8907_85C794F793BA.GenerateTableStyleEntry(),

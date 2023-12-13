@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Flatten.Framework.Context;
@@ -295,14 +296,37 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.Primitive
         /// <returns></returns>
         public static Color? ToColor(this RgbColorModelHex color)
         {
-            if (color.Val is not null)
+            if (color.Val is null)
             {
-                if (uint.TryParse(color.Val.Value, NumberStyles.HexNumber, null, out var result))
-                {
-                    var solidColor = result.HexToColor();
-                    var modifiedColor = ColorTransform.AppendColorModify(solidColor, color.ChildElements);
-                    return modifiedColor;
-                }
+                return null;
+            }
+
+            var solidColor = ToColor(color.Val.Value);
+            if (solidColor is null)
+            {
+                return null;
+            }
+            var modifiedColor = ColorTransform.AppendColorModify(solidColor, color.ChildElements);
+            return modifiedColor;
+
+        }
+
+        /// <summary>
+        /// 将<see cref="string" />颜色值转换为<see cref="Color" />
+        /// </summary>
+        /// <param name="colorValue">颜色值：例如#E71224</param>
+        /// <returns></returns>
+        public static Color? ToColor(this string? colorValue)
+        {
+            if (string.IsNullOrEmpty(colorValue))
+            {
+                return null;
+            }
+
+            var (success, a, r, g, b) = ConvertToColor(colorValue!);
+            if (success)
+            {
+                return new(a, r, g, b);
             }
 
             return null;
@@ -356,6 +380,121 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.Primitive
             color.A = 0xFF;
 
             return color;
+        }
+
+        /// <summary>
+        /// 将传入的颜色字符串转换为颜色输出
+        /// </summary>
+        /// <param name="hexColorText">颜色字符串，格式如 “#FFDFD991” 或 “#DFD991”等，规则和 WPF 的 XAML 颜色相同，其中 “#” 是可选的</param>
+        /// <returns></returns>
+        public static (bool success, byte a, byte r, byte g, byte b) ConvertToColor(string hexColorText)
+        {
+#if NET6_0_OR_GREATER
+            bool startWithPoundSign = hexColorText.StartsWith('#');
+#else
+            bool startWithPoundSign = hexColorText.StartsWith("#");
+#endif
+            var colorStringLength = hexColorText.Length;
+            if (startWithPoundSign) colorStringLength -= 1;
+            int currentOffset = startWithPoundSign ? 1 : 0;
+            // 可以采用的格式如下
+            // #FFDFD991   8 个字符 存在 Alpha 通道
+            // #DFD991     6 个字符
+            // #FD92       4 个字符 存在 Alpha 通道
+            // #DAC        3 个字符
+            if (colorStringLength == 8
+                || colorStringLength == 6
+                || colorStringLength == 4
+                || colorStringLength == 3)
+            {
+                bool success;
+                byte result;
+                byte a;
+
+                int readCount;
+                // #DFD991     6 个字符
+                // #FFDFD991   8 个字符 存在 Alpha 通道
+                //if (colorStringLength == 8 || colorStringLength == 6)
+                if (colorStringLength > 5)
+                {
+                    readCount = 2;
+                }
+                else
+                {
+                    readCount = 1;
+                }
+
+                bool includeAlphaChannel = colorStringLength == 8 || colorStringLength == 4;
+
+                if (includeAlphaChannel)
+                {
+                    (success, result) = HexCharToNumber(hexColorText, currentOffset, readCount);
+                    if (!success) return default;
+                    a = result;
+                    currentOffset += readCount;
+                }
+                else
+                {
+                    a = 0xFF;
+                }
+
+                (success, result) = HexCharToNumber(hexColorText, currentOffset, readCount);
+                if (!success) return default;
+                byte r = result;
+                currentOffset += readCount;
+
+                (success, result) = HexCharToNumber(hexColorText, currentOffset, readCount);
+                if (!success) return default;
+                byte g = result;
+                currentOffset += readCount;
+
+                (success, result) = HexCharToNumber(hexColorText, currentOffset, readCount);
+                if (!success) return default;
+                byte b = result;
+
+                return (true, a, r, g, b);
+            }
+
+            return default;
+        }
+
+        static (bool success, byte result) HexCharToNumber(string input, int offset, int readCount)
+        {
+            Debug.Assert(readCount == 1 || readCount == 2, "要求 readCount 只能是 1 或者 2 的值，这是框架限制，因此不做判断");
+
+            byte result = 0;
+
+            for (int i = 0; i < readCount; i++, offset++)
+            {
+                var c = input[offset];
+                byte n;
+                if (c >= '0' && c <= '9')
+                {
+                    n = (byte) (c - '0');
+                }
+                else if (c >= 'a' && c <= 'f')
+                {
+                    n = (byte) (c - 'a' + 10);
+                }
+                else if (c >= 'A' && c <= 'F')
+                {
+                    n = (byte) (c - 'A' + 10);
+                }
+                else
+                {
+                    return default;
+                }
+
+                result *= 16;
+                result += n;
+            }
+
+            if (readCount == 1)
+            {
+                result = (byte) (result * 16 + result);
+            }
+
+            return (true, result);
         }
 
         //private static ColorBrush? ToColorBrush([CanBeNull] this Color? color)
