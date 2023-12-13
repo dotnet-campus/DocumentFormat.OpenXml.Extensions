@@ -119,6 +119,17 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CommonElement
                 return transformData;
             }
 
+            var alternateContentTransform2D = element.GetFirstChild<ContentPart>()?.GetFirstChild<DocumentFormat.OpenXml.Office2010.PowerPoint.Transform2D>();
+            if (alternateContentTransform2D is not null)
+            {
+                FillOffset(alternateContentTransform2D.Offset, transformData);
+                FillExtents(alternateContentTransform2D.Extents, transformData);
+                FillRotation(alternateContentTransform2D.Rotation, transformData);
+                FillFlip(alternateContentTransform2D.HorizontalFlip, alternateContentTransform2D.VerticalFlip, transformData);
+                return transformData;
+            }
+
+
             return transformData;
 
             void FillOffset(Offset? offset, TransformData transformData2)

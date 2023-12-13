@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Xml.Linq;
 
 using DocumentFormat.OpenXml.Drawing;
@@ -268,9 +269,25 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.ShapeGeometryConverte
                 return default;
             }
 
-            var path = shapeGeometryBase.ToGeometryPathString(emuSize, adjustList);
             var multiGeometryPaths = shapeGeometryBase.GetMultiShapePaths(emuSize, adjustList);
+
+            var pathString = shapeGeometryBase.ToGeometryPathString(emuSize, adjustList);
+            var path = string.IsNullOrWhiteSpace(pathString) ? GetSvgPath(multiGeometryPaths) : pathString;
             return new SvgPath(geometryShapeTypeValues, path, shapeGeometryBase.ShapeTextRectangle, multiGeometryPaths);
+        }
+
+        private static string? GetSvgPath(ShapePath[]? shapePaths)
+        {
+            if (shapePaths is not null)
+            {
+                var sb = new StringBuilder();
+                foreach (var shapePath in shapePaths)
+                {
+                    sb.Append(shapePath.Path);
+                }
+                return sb.ToString();
+            }
+            return default;
         }
 
         /// <summary>

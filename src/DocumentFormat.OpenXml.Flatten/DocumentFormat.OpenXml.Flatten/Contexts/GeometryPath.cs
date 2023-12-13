@@ -13,18 +13,19 @@ namespace DocumentFormat.OpenXml.Flatten.Contexts
         /// 创建PPT的Geometry Path
         /// </summary>
         /// <param name="path">OpenXml  Path字符串</param>
-        /// <param name="fillMode">OpenXml的Path Fill Mode  </param>
-        /// <param name="isStroke">是否有轮廓</param>
-        /// <param name="isExtrusionOk">指定使用 3D 拉伸可能在此路径</param>
+        /// <param name="fillMode">OpenXml的Path Fill Mode：默认为Norm  </param>
+        /// <param name="isStroke">是否有轮廓：默认为True</param>
+        /// <param name="isExtrusionOk">指定使用 3D 拉伸可能在此路径：默认为False</param>
         /// <param name="emuWidth">指定的宽度或在路径坐标系统中应在使用的最大的 x 坐标</param>
         /// <param name="emuHeight">指定框架的高度或在路径坐标系统中应在使用的最大的 y 坐标</param>
-        public ShapePath(string path, PathFillModeValues fillMode = PathFillModeValues.Norm, bool isStroke = true, bool isExtrusionOk = false, double? emuWidth = null, double? emuHeight = null)
+        /// <remarks>参考文档：Ecma Office Open XML Part 1 - Fundamentals And Markup Language Reference - 20.1.9.15 path (Shape Path)</remarks>
+        public ShapePath(string path, PathFillModeValues? fillMode = PathFillModeValues.Norm, bool? isStroke = true, bool? isExtrusionOk = false, double? emuWidth = null, double? emuHeight = null)
         {
             Path = path;
-            IsStroke = isStroke;
-            FillMode = fillMode;
+            IsStroke = isStroke ?? true;
+            FillMode = fillMode ?? PathFillModeValues.Norm;
             IsFilled = fillMode is not PathFillModeValues.None;
-            IsExtrusionOk = isExtrusionOk;
+            IsExtrusionOk = isExtrusionOk ?? false;
             Width = emuWidth.HasValue ? new Emu(emuWidth.Value) : null;
             Height = emuHeight.HasValue ? new Emu(emuHeight.Value) : null;
         }

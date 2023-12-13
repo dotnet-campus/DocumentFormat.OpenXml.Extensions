@@ -53,7 +53,7 @@ partial class CompatiblePackage
             //Step 2: 通过路径进行特殊判断
             // 例如 Slide 几的页面路径
             var uri = partUri.OriginalString;
-            if (Regex.IsMatch(uri, @"/ppt/slides/slide\d+.xml"))
+            if (Regex.IsMatch(uri, @"/ppt/slides/slide\d+\.xml"))
             {
                 // "/ppt/slides/slide0.xml"
                 return new CompatiblePackage.ContentType(
@@ -82,6 +82,20 @@ partial class CompatiblePackage
             {
                 // "/ppt/notesMasters/notesMaster0.xml"
                 return new CompatiblePackage.ContentType("application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml");
+            }
+
+            if (Regex.IsMatch(uri, @"/ppt/diagrams/drawing\d+\.xml"))
+            {
+                // /ppt/diagrams/drawing0.xml
+                // application/vnd.ms-office.drawingml.diagramDrawing+xml
+                return new CompatiblePackage.ContentType("application/vnd.ms-office.drawingml.diagramDrawing+xml");
+            }
+
+            if (Regex.IsMatch(uri, @"/tags/tag\d+\.xml"))
+            {
+                // /tags/tag0.xml
+                // application/vnd.openxmlformats-officedocument.presentationml.tags+xml
+                return new CompatiblePackage.ContentType("application/vnd.openxmlformats-officedocument.presentationml.tags+xml");
             }
 
             //Step 3: Check if there is a default entry corresponding to the

@@ -38,6 +38,7 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CustomGeometryConvert
         /// <returns></returns>
         public SvgPath? Convert()
         {
+            ConvertAdjustValueList();
             ConvertShapeGuideList();
             ConvertShapeTextRectangle();
             return ConvertPathList();
@@ -67,6 +68,25 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CustomGeometryConvert
             ShapeTextRectangle = new EmuShapeTextRectangle(left, top, right, bottom);
         }
 
+        private void ConvertAdjustValueList()
+        {
+            var adjustValueList = _customGeometry.AdjustValueList;
+            if (adjustValueList is not null)
+            {
+                foreach (var shapeGuide in adjustValueList.Elements().OfType<ShapeGuide>())
+                {
+                    var name = shapeGuide.Name?.Value;
+                    var formula = shapeGuide.Formula?.Value;
+
+                    if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(formula))
+                    {
+                        ShapeGeometryFormulaCalculator.Calculate(name!, formula!);
+                    }
+                }
+            }
+        }
+
+
         private void ConvertShapeGuideList()
         {
             var shapeGuideList = _customGeometry.ShapeGuideList;
@@ -83,6 +103,7 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CustomGeometryConvert
                     }
                 }
             }
+
         }
 
         private SvgPath? ConvertPathList()
@@ -134,7 +155,13 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters.CustomGeometryConvert
                     }
                 }
 
-                svgPathList.Add(new ShapePath(stringPath.ToString()));
+                var pathFillModeValues = path.Fill?.Value;
+                var isStroke = path.Stroke?.Value;
+                var width = path.Width?.Value;
+                var height = path.Height?.Value;
+                var isExtrusionOk = path.ExtrusionOk?.Value;
+
+                svgPathList.Add(new ShapePath(stringPath.ToString(), pathFillModeValues, isStroke, isExtrusionOk, width, height));
                 stringPath.Clear();
             }
 

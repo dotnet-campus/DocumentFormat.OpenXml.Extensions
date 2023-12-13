@@ -697,8 +697,10 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
                 //partUri provided. Override takes precedence over the default entries
                 if (_overrideDictionary != null)
                 {
-                    if (_overrideDictionary.ContainsKey(partUri))
-                        return _overrideDictionary[partUri];
+                    if (_overrideDictionary.TryGetValue(partUri, out var result))
+                    {
+                        return result;
+                    }
                 }
 
                 //Step 2: Check if there is a default entry corresponding to the
@@ -789,9 +791,11 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
             {
                 // The part Uris are stored in the Override Dictionary in their original form , but they are compared
                 // in a normalized manner using the PartUriComparer
-                if (_overrideDictionary == null)
-                    _overrideDictionary =
-                        new Dictionary<CompatiblePackage.PackUriHelper.ValidatedPartUri, CompatiblePackage.ContentType>(OverrideDictionaryInitialSize);
+                _overrideDictionary ??= new Dictionary<CompatiblePackage.PackUriHelper.ValidatedPartUri, CompatiblePackage.ContentType>(
+                    OverrideDictionaryInitialSize,
+                    // 这里需要忽略字符串的大小写
+                    // 修复 https://github.com/dotnet/Open-XML-SDK/issues/1355
+                    new ValidatedPartUriIgnoreCaseEqualityComparer());
             }
 
             private void ParseContentTypesFile(
@@ -1096,6 +1100,20 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
             private const string OverrideTagName = "Override";
             private const string PartNameAttributeName = "PartName";
             private const string TemporaryPartNameWithoutExtension = "/tempfiles/sample.";
+        }
+
+        class ValidatedPartUriIgnoreCaseEqualityComparer : IEqualityComparer<
+            CompatiblePackage.PackUriHelper.ValidatedPartUri>
+        {
+            public bool Equals(PackUriHelper.ValidatedPartUri x, PackUriHelper.ValidatedPartUri y)
+            {
+                return StringComparer.OrdinalIgnoreCase.Equals(x.NormalizedPartUriString, y.NormalizedPartUriString);
+            }
+
+            public int GetHashCode(PackUriHelper.ValidatedPartUri obj)
+            {
+                return StringComparer.OrdinalIgnoreCase.GetHashCode(obj.NormalizedPartUriString);
+            }
         }
     }
 }
