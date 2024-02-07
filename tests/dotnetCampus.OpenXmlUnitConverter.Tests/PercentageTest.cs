@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using MSTest.Extensions.Contracts;
 
 namespace dotnetCampus.OpenXmlUnitConverter.Tests
@@ -22,6 +25,18 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
                 var percentage = new Percentage(percentageText);
                 Assert.AreEqual(99999, percentage.IntValue);
             });
+        }
+
+        [ContractTestCase]
+        public void TestCalculate()
+        {
+            "非零百分比除以自己等于 100%".Test((double value) =>
+            {
+                var percentage = Percentage.FromDouble(value);
+
+                var result = percentage / percentage;
+                Assert.AreEqual(true, Math.Abs(result.DoubleValue - 1) < 0.000001);
+            }).WithArguments(1.5, 2.3, 3.6, 100.5, 100000.123);
         }
     }
 }
