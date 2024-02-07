@@ -178,7 +178,8 @@ namespace dotnetCampus.OpenXmlUnitConverter
         /// <returns></returns>
         public static Percentage operator *(Percentage a, Percentage b)
         {
-            return new Percentage(a.IntValue * b.IntValue);
+            // 相乘 和 相除 都要考虑倍率，不如直接靠 DoubleValue 来计算
+            return FromDouble(a.DoubleValue * b.DoubleValue);
         }
 
         /// <summary>
@@ -191,7 +192,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
         {
             if (b.IntValue == 0) throw new DivideByZeroException();
 
-            return new Percentage(a.IntValue / b.IntValue);
+            return FromDouble(a.DoubleValue / b.DoubleValue);
         }
 
         /// <summary>
