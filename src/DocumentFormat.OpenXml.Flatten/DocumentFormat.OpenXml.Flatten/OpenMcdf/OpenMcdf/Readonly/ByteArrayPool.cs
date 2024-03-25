@@ -1,4 +1,5 @@
-﻿// ReSharper disable once CheckNamespace 特别的命名空间
+﻿#nullable enable
+// ReSharper disable once CheckNamespace 特别的命名空间
 
 namespace OpenMcdf
 {
