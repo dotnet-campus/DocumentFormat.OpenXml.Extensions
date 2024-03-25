@@ -84,11 +84,42 @@ partial class CompatiblePackage
                 return new CompatiblePackage.ContentType("application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml");
             }
 
-            if (Regex.IsMatch(uri, @"/ppt/diagrams/drawing\d+\.xml"))
+            if (uri.StartsWith("/ppt/diagrams/", StringComparison.OrdinalIgnoreCase))
             {
-                // /ppt/diagrams/drawing0.xml
-                // application/vnd.ms-office.drawingml.diagramDrawing+xml
-                return new CompatiblePackage.ContentType("application/vnd.ms-office.drawingml.diagramDrawing+xml");
+                if (Regex.IsMatch(uri, @"/ppt/diagrams/drawing\d+\.xml"))
+                {
+                    // /ppt/diagrams/drawing0.xml
+                    // application/vnd.ms-office.drawingml.diagramDrawing+xml
+                    return new CompatiblePackage.ContentType("application/vnd.ms-office.drawingml.diagramDrawing+xml");
+                }
+
+                if (Regex.IsMatch(uri, @"/ppt/diagrams/layout\d+\.xml"))
+                {
+                    // /ppt/diagrams/layout1.xml
+                    // application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml
+                    return new CompatiblePackage.ContentType("application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml");
+                }
+
+                if (Regex.IsMatch(uri, @"/ppt/diagrams/data\d+\.xml"))
+                {
+                    // /ppt/diagrams/data1.xml
+                    // application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml
+                    return new CompatiblePackage.ContentType("application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml");
+                }
+
+                if (Regex.IsMatch(uri, @"/ppt/diagrams/colors\d+\.xml"))
+                {
+                    // /ppt/diagrams/colors1.xml
+                    // application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml
+                    return new CompatiblePackage.ContentType("application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml");
+                }
+
+                if (Regex.IsMatch(uri, @"/ppt/diagrams/quickStyle\d+\.xml"))
+                {
+                    // /ppt/diagrams/quickStyle1.xml
+                    // application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml
+                    return new CompatiblePackage.ContentType("application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml");
+                }
             }
 
             if (Regex.IsMatch(uri, @"/tags/tag\d+\.xml"))

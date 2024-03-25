@@ -69,6 +69,14 @@ namespace DocumentFormat.OpenXml.Flatten.ElementConverters
         private void FlattenDrawingElementFromData(GraphicFrame xmlElement, DiagramDataPart diagramDataPart, DiagramColorsPart? colorsPart, in ElementContext context)
         {
             var dataModelRoot = diagramDataPart.DataModelRoot;
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (dataModelRoot is null)
+            {
+                // 这个 dataModelRoot 是可空的，请看内部 issues/627
+                return;
+            }
+
             var connectionList = dataModelRoot.ConnectionList;
             var pointList = dataModelRoot.PointList;
             if (connectionList is null || pointList is null)

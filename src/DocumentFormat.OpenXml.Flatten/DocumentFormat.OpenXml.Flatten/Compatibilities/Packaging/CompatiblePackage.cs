@@ -689,7 +689,6 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
                 }
             }
 
-
             //Returns the content type for the part, if present, else returns null.
             internal CompatiblePackage.ContentType? GetContentType(CompatiblePackage.PackUriHelper.ValidatedPartUri partUri)
             {
@@ -912,7 +911,6 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
                     }
                 }
 
-
                 // If an atomic file was found, open a stream on it.
                 if (_contentTypeZipArchiveEntry != null)
                 {
@@ -1016,7 +1014,7 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
 
                 // The part Uris are stored in the Override Dictionary in their original form , but they are compared
                 // in a normalized manner using PartUriComparer.
-                _overrideDictionary.Add(partUri, contentType);
+                _overrideDictionary?.Add(partUri, contentType);
                 _dirty = true;
             }
 
@@ -1059,7 +1057,6 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
                         ((IXmlLineInfo) reader).LineNumber, ((IXmlLineInfo) reader).LinePosition);
             }
 
-
             //Validate if the required Content type XML attribute is present
             //Content type of a part can be empty
             private void ThrowIfXmlAttributeMissing(string attributeName, string? attributeValue, string tagName,
@@ -1074,7 +1071,6 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
                 GetOverrideDictionary() => _overrideDictionary;
 
             internal Dictionary<string, CompatiblePackage.ContentType> GetDefaultDictionary() => _defaultDictionary;
-
 
             private Dictionary<CompatiblePackage.PackUriHelper.ValidatedPartUri, CompatiblePackage.ContentType>? _overrideDictionary;
             private readonly Dictionary<string, CompatiblePackage.ContentType> _defaultDictionary;
@@ -1105,8 +1101,11 @@ namespace DocumentFormat.OpenXml.Flatten.Compatibilities.Packaging
         class ValidatedPartUriIgnoreCaseEqualityComparer : IEqualityComparer<
             CompatiblePackage.PackUriHelper.ValidatedPartUri>
         {
-            public bool Equals(PackUriHelper.ValidatedPartUri x, PackUriHelper.ValidatedPartUri y)
+            public bool Equals(PackUriHelper.ValidatedPartUri? x, PackUriHelper.ValidatedPartUri? y)
             {
+                if (x is null && y is null) return true;
+                if (x is null || y is null) return false;
+
                 return StringComparer.OrdinalIgnoreCase.Equals(x.NormalizedPartUriString, y.NormalizedPartUriString);
             }
 
