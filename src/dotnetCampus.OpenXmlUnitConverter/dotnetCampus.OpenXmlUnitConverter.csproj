@@ -16,7 +16,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19099-alpha" Condition="'$(TargetFramework)'=='net45'">
+    <PackageReference Include="dotnetCampus.SourceYard" Version="1.0.0-alpha03" Condition="'$(TargetFramework)'=='net45'">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
