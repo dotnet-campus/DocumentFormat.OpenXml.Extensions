@@ -26,8 +26,7 @@ namespace dotnetCampus.OpenXmlUnitConverter
                 Milliseconds = value;
                 IsIndefinite = false;
             }
-            else if (Enum.TryParse<IndefiniteTimeDeclarationValues>(millisecond, true, out var result)
-                     && result == IndefiniteTimeDeclarationValues.Indefinite)
+            else if (new IndefiniteTimeDeclarationValues(millisecond) == IndefiniteTimeDeclarationValues.Indefinite)
             {
                 Milliseconds = long.MaxValue;
                 IsIndefinite = true;

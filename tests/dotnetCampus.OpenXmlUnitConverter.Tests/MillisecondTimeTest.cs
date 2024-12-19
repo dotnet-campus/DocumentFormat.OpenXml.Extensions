@@ -32,7 +32,8 @@ namespace dotnetCampus.OpenXmlUnitConverter.Tests
 
             "传入未定义的 OpenXML 字符串，可以说明未解析".Test(() =>
             {
-                var stringValue = new StringValue(IndefiniteTimeDeclarationValues.Indefinite.ToString());
+                var indefinite = (IEnumValue)IndefiniteTimeDeclarationValues.Indefinite;
+                var stringValue = new StringValue(indefinite.Value);
                 var millisecondTime = new MillisecondTime(stringValue);
                 Assert.AreEqual(true, millisecondTime.IsIndefinite);
             });
