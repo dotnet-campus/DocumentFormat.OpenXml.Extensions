@@ -7,10 +7,12 @@ using System.IO.Pipelines;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect;
 
-public class SoftEdgeHelper
+public static class SoftEdgeHelper
 {
     /// <summary>
     /// 创建柔化边缘蒙层
@@ -30,21 +32,9 @@ public class SoftEdgeHelper
         var offsetX = (int) Math.Round(radius / 4.0);
         var offsetY = (int) Math.Round(radius / 4.0);
 
-        var source = new byte[cols, rows];
-        // 创建Alpha通道蒙层Maps
-        bitmap.ProcessPixelRows(pixelAccessor
-            =>
-        {
-            for (var row = 0; row < rows; row++)
-            {
-                var pixelRow = pixelAccessor.GetRowSpan(row);
-                for (var col = 0; col < cols; col++)
-                {
-                    var pixel = pixelRow[col];
-                    source[col, row] = pixel.A == 0 ? (byte) 0 : byte.MaxValue;
-                }
-            }
-        });
+        var inputSource = CreateSoftEdgeAlphaMask(bitmap);
+
+        var source = inputSource;
 
         //腐蚀
         byte[/*cols*/, /*rows*/]? erodeMask = null;
@@ -110,6 +100,32 @@ public class SoftEdgeHelper
                 }
             }
         });
+    }
+
+    /// <summary>
+    ///     创建Alpha通道蒙层Maps
+    /// </summary>
+    private static byte[,] CreateSoftEdgeAlphaMask(Image<Rgba32> bitmap)
+    {
+        var cols = bitmap.Width;
+        var rows = bitmap.Height;
+
+        var inputSource = new byte[cols, rows];
+        // 创建Alpha通道蒙层Maps
+        bitmap.ProcessPixelRows(pixelAccessor
+            =>
+        {
+            for (var row = 0; row < rows; row++)
+            {
+                var pixelRow = pixelAccessor.GetRowSpan(row);
+                for (var col = 0; col < cols; col++)
+                {
+                    var pixel = pixelRow[col];
+                    inputSource[col, row] = pixel.A == 0 ? (byte) 0 : byte.MaxValue;
+                }
+            }
+        });
+        return inputSource;
     }
 
     /// <summary>
