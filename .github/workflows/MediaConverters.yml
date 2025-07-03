@@ -14,7 +14,7 @@ jobs:
       run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
 
     - name: Test
-      run: dotnet test --configuration Release --no-build src\MediaConvertersMediaConverters.Tests\MediaConverters.Tests.csproj
+      run: dotnet test --configuration Release --no-build src\MediaConverters\MediaConverters.Tests\MediaConverters.Tests.csproj
 
   BuildOnLinux:
 
@@ -27,4 +27,4 @@ jobs:
       run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
 
     - name: Test
-      run: dotnet test --configuration Release --no-build src/MediaConvertersMediaConverters.Tests/MediaConverters.Tests.csproj
+      run: dotnet test --configuration Release --no-build src/MediaConverters/MediaConverters.Tests/MediaConverters.Tests.csproj
