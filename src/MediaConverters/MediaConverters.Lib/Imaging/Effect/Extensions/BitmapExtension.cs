@@ -1,18 +1,11 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+
 using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
-using static System.Net.Mime.MediaTypeNames;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
 

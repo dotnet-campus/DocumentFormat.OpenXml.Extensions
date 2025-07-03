@@ -1,10 +1,8 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.ColorSpaces.Conversion;
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
+
 using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+
 using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effect.Colors.ColorMatrix5x5;
 using ColorSpaceConverter = DotNetCampus.MediaConverters.Imaging.Effect.Colors.ColorSpaceConverter;
 

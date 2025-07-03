@@ -79,8 +79,9 @@ public static class ColorModeConverter
             var q = lightness < 0.5
                 ? lightness * (1 + saturation)
                 : lightness + saturation - lightness * saturation;
+
             var p = 2 * lightness - q;
-            var rgb = new[] { hue + 1 / 3f, hue, hue - 1 / 3f };
+            Span<float> rgb = [hue + 1 / 3f, hue, hue - 1 / 3f];
             for (var i = 0; i < 3; i++)
             {
                 if (rgb[i] < 0)

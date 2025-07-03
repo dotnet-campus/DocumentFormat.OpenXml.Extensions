@@ -1,14 +1,11 @@
-﻿using SixLabors.ImageSharp.PixelFormats;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO.Pipelines;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect;
 

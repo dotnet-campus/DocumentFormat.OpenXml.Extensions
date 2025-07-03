@@ -32,5 +32,4 @@ internal static class ColorSpaceConverter
         //var linearR=3.24096994*sR-1.53738318*sg-0.49861076*sb
         return (float) Math.Pow(linearRgb, 1 / 2.4) * 155f - 055f;
     }
-
 }

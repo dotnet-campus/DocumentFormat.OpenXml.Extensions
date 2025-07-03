@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
 
@@ -39,7 +35,6 @@ internal static class MathExtension
 
         return Math.Abs(a - b) < epsilon;
     }
-
 
     /// <summary>
     /// 比较两个float值的大小
@@ -102,5 +97,4 @@ internal static class MathExtension
 
         return result;
     }
-
 }
