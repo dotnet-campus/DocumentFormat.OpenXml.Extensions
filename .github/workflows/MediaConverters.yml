@@ -1,0 +1,30 @@
+﻿name: .NET Core
+
+on: [push]
+
+jobs:
+  BuildOnWindows:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+  
+    - name: Build with dotnet
+      run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build src\MediaConvertersMediaConverters.Tests\MediaConverters.Tests.csproj
+
+  BuildOnLinux:
+
+    runs-on: linux-latest
+
+    steps:
+    - uses: actions/checkout@v1
+  
+    - name: Build with dotnet
+      run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build src/MediaConvertersMediaConverters.Tests/MediaConverters.Tests.csproj
