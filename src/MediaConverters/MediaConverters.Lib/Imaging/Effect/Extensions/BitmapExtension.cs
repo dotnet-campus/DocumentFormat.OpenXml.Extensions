@@ -1,13 +1,19 @@
 ﻿using DotNetCampus.MediaConverters.Imaging.Effect.Color;
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Advanced;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
 
@@ -22,24 +28,27 @@ internal static class BitmapExtension
     /// 将<see cref="Image{Rgba32}"/>逐像素处理
     /// </summary>
     /// <returns></returns>
-    public static void PerPixelProcess(this Image<Rgba32> bitmap, Func<ColorMetadata, ColorMetadata> func)
+    public static void PerPixelProcess(this Image<Rgba32> image, Func<ColorMetadata, ColorMetadata> func)
     {
-        bitmap.ProcessPixelRows(accessor =>
+        //var stopwatch = new Stopwatch();
+        //stopwatch.Start();
+        Parallel.For(0, image.Height, rowIndex =>
         {
-            for (int rowIndex = 0; rowIndex < accessor.Height; rowIndex++)
+            Memory<Rgba32> rowMemory = image.DangerousGetPixelRowMemory(rowIndex);
+
+            var span = rowMemory.Span;
+
+            for (int colIndex = 0; colIndex < span.Length; colIndex++)
             {
-                var span = accessor.GetRowSpan(rowIndex);
-                for (int colIndex = 0; colIndex < span.Length; colIndex++)
-                {
-                    //获取颜色
-                    var color = new ColorMetadata(span[colIndex]);
-                    //处理颜色
-                    var targetColor = func(color);
-                    //保存颜色
-                    span[colIndex] = targetColor.Color;
-                }
+                //获取颜色
+                var color = new ColorMetadata(span[colIndex]);
+                //处理颜色
+                var targetColor = func(color);
+                //保存颜色
+                span[colIndex] = targetColor.Color;
             }
         });
+        //stopwatch.Stop();
 
         //var pixelFormat = bitmap.PixelFormat;
 
