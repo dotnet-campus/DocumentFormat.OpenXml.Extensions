@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Color;
+namespace DotNetCampus.MediaConverters.Imaging.Effect.Colors;
 
 public readonly struct ColorMetadata
 {

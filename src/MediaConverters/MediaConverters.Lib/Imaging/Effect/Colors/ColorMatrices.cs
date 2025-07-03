@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effect.Color.ColorMatrix5x5;
+using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effect.Colors.ColorMatrix5x5;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Color;
+namespace DotNetCampus.MediaConverters.Imaging.Effect.Colors;
 
 /// <summary>
 ///     颜色转换矩阵

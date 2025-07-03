@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Color;
+namespace DotNetCampus.MediaConverters.Imaging.Effect.Colors;
 
 /// <summary>
 /// 色彩空间转换器

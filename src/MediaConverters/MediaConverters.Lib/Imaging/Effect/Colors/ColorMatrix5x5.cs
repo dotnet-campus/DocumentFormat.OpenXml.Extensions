@@ -1,4 +1,4 @@
-﻿namespace DotNetCampus.MediaConverters.Imaging.Effect.Color;
+﻿namespace DotNetCampus.MediaConverters.Imaging.Effect.Colors;
 
 // ReSharper disable once InconsistentNaming
 public readonly record struct ColorMatrix5x5()
@@ -28,5 +28,4 @@ public readonly record struct ColorMatrix5x5()
     public float Matrix42 { get; init; } = 0.0f;
     public float Matrix43 { get; init; } = 0.0f;
     public float Matrix44 { get; init; } = 1.0f;
-
 }

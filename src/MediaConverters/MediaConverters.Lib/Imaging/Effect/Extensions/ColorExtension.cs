@@ -1,15 +1,12 @@
-﻿using DotNetCampus.MediaConverters.Imaging.Effect.Color;
-
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.ColorSpaces.Conversion;
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-
-
-using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effect.Color.ColorMatrix5x5;
-using ColorSpaceConverter = DotNetCampus.MediaConverters.Imaging.Effect.Color.ColorSpaceConverter;
+using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effect.Colors.ColorMatrix5x5;
+using ColorSpaceConverter = DotNetCampus.MediaConverters.Imaging.Effect.Colors.ColorSpaceConverter;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
 
