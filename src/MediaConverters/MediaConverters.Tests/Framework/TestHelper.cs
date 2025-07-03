@@ -31,7 +31,12 @@ public static class TestHelper
     {
         if (File.Exists(filePath))
         {
-            Process.Start(new ProcessStartInfo("explorer", $"\"{filePath}\"") { UseShellExecute = true });
+#if DEBUG
+            if (Debugger.IsAttached)
+            {
+                Process.Start(new ProcessStartInfo("explorer", $"\"{filePath}\"") { UseShellExecute = true });
+            }
+#endif
         }
         else
         {
