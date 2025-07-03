@@ -16,7 +16,7 @@ namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
 /// <summary>
 /// 颜色拓展方法
 /// </summary>
-public static class ColorExtension
+internal static class ColorExtension
 {
     /// <summary>
     /// 在图像上执行颜色矩阵的应用。

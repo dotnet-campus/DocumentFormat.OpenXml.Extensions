@@ -14,7 +14,7 @@ namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
 /// <summary>
 /// <see cref="Image{Rgba32}"/>拓展
 /// </summary>
-public static class BitmapExtension
+internal static class BitmapExtension
 {
     #region 逐像素处理
 
