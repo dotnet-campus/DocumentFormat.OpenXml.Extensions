@@ -1,0 +1,34 @@
+﻿using DotNetCampus.MediaConverters.Imaging.Effect;
+
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
+namespace DotNetCampus.MediaConverters.Tests.Imaging.Effect;
+
+[TestClass()]
+public class BitmapEffectExtensionTests
+{
+    [TestMethod()]
+    public void TestGetMaxCountColor()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        var (rgba32, count) = image.GetMaxCountColor();
+
+        var expected = new Rgba32(0xF1, 0xD7, 0xA6, 0xFF);
+        Assert.AreEqual(expected, rgba32);
+        Assert.AreEqual(1215, count);
+    }
+
+    [TestMethod()]
+    public void ReplaceColorTest1()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        var (rgba32, count) = image.GetMaxCountColor();
+        _ = count;
+        var targetColor = new Rgba32(0xFF, 0xFF, 0xFF, 0x00);
+        image.ReplaceColor(rgba32, targetColor);
+
+        var file = image.SaveAndCompareTestFile("ReplaceColorTest1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+}

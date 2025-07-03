@@ -2,6 +2,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
+using TextVisionComparer;
 
 namespace DotNetCampus.MediaConverters.Tests;
 
@@ -16,7 +17,7 @@ public static class TestHelper
 
     private static DirectoryInfo WorkingDirectory { get; set; } = null!;
 
-    public static string SaveAsTestImageFile(this Image<Rgba32> image)
+    public static FileInfo SaveAsTestImageFile(this Image<Rgba32> image)
     {
         var file = Path.Join(WorkingDirectory.FullName, Path.GetRandomFileName() + ".png");
         using var fileStream = File.OpenWrite(file);
@@ -24,23 +25,43 @@ public static class TestHelper
         {
             ColorType = PngColorType.RgbWithAlpha
         });
-        return file;
+        return new FileInfo(file);
     }
 
-    public static void OpenFileInExplorer(string filePath)
+    public static FileInfo SaveAndCompareTestFile(this Image<Rgba32> image, string? testFileName = null)
     {
-        if (File.Exists(filePath))
+        FileInfo testFile = image.SaveAsTestImageFile();
+
+        if (testFileName != null)
+        {
+            var file = TestFileProvider.GetTestFile(testFileName);
+            CompareImageFile(testFile, file);
+        }
+
+        return testFile;
+    }
+
+    public static void CompareImageFile(FileInfo file1, FileInfo file2)
+    {
+        var visionComparer = new VisionComparer();
+        var visionCompareResult = visionComparer.Compare(file1,file2);
+        Assert.IsTrue(visionCompareResult.IsSimilar());
+    }
+
+    public static void OpenFileInExplorer(FileInfo file)
+    {
+        if (File.Exists(file.FullName))
         {
 #if DEBUG
             if (Debugger.IsAttached)
             {
-                Process.Start(new ProcessStartInfo("explorer", $"\"{filePath}\"") { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo("explorer", $"\"{file.FullName}\"") { UseShellExecute = true });
             }
 #endif
         }
         else
         {
-            throw new FileNotFoundException($"The file '{filePath}' does not exist.");
+            throw new FileNotFoundException($"The file '{file}' does not exist.");
         }
     }
 }

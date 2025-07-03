@@ -18,9 +18,8 @@ public class SoftEdgeHelperTests
 
         SoftEdgeHelper.SetSoftEdgeMask(image, 50.0f);
 
-        var file = image.SaveAsTestImageFile();
+        var file = image.SaveAndCompareTestFile("SetSoftEdgeMaskResult1.png");
 
-        Assert.IsTrue(File.Exists(file));
         TestHelper.OpenFileInExplorer(file);
     }
 

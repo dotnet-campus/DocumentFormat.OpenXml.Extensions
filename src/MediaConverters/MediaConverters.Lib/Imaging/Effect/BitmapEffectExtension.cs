@@ -3,6 +3,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
 using DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
@@ -178,4 +179,36 @@ public static class BitmapEffectExtension
 
         SoftEdgeHelper.SetSoftEdgeMask(bitmap, radius);
     }
+
+    /// <summary>
+    /// 获取一张图中颜色数量最多的颜色
+    /// </summary>
+    /// <param name="image"></param>
+    public static ColorCount GetMaxCountColor(this Image<Rgba32> image)
+    {
+        var dictionary = new Dictionary<Rgba32, int>();
+        image.ProcessPixelRows(accessor =>
+        {
+            for (int row = 0; row < accessor.Height; row++)
+            {
+                var pixelRow = accessor.GetRowSpan(row);
+                foreach (var pixel in pixelRow)
+                {
+                    if (dictionary.TryGetValue(pixel, out int count))
+                    {
+                        dictionary[pixel] = count + 1;
+                    }
+                    else
+                    {
+                        dictionary[pixel] = 1;
+                    }
+                }
+            }
+        });
+
+        var (color, count) = dictionary.MaxBy(pair => pair.Value);
+        return new ColorCount(color, count);
+    }
 }
+
+public readonly record struct ColorCount(Rgba32 Color, int Count);
