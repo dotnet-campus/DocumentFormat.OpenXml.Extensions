@@ -10,6 +10,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Processing;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect;
@@ -39,36 +40,33 @@ public static class BitmapEffectExtension
     /// <param name="targetColor">目标颜色</param>
     public static void ReplaceColor(this Image<Rgba32> image, Rgba32 sourceColor, Rgba32 targetColor)
     {
-        var sourceVector4 = sourceColor.ToVector4();
-        var targetVector4 = targetColor.ToVector4();
-
         var sourceMetadata = new ColorMetadata(sourceColor);
 
-        image.Mutate(context =>
+        Parallel.For(0, image.Height, rowIndex =>
         {
-            context.ProcessPixelRowsAsVector4((Span<Vector4> row) =>
-            {
-                for (int i = 0; i < row.Length; i++)
-                {
-                    var current = row[i];
-                    if (current.Equals(sourceVector4))
-                    {
-                        // 快速分支
-                        row[i] = targetVector4;
-                    }
-                    else
-                    {
-                        Rgba32 pixel = default;
-                        pixel.FromVector4(current);
+            Memory<Rgba32> rowMemory = image.DangerousGetPixelRowMemory(rowIndex);
 
-                        var currentMetadata = new ColorMetadata(pixel);
-                        if (currentMetadata.IsNearlyEquals(sourceMetadata))
-                        {
-                            row[i] = targetVector4;
-                        }
+            var span = rowMemory.Span;
+
+            for (int colIndex = 0; colIndex < span.Length; colIndex++)
+            {
+                //获取颜色
+                Rgba32 pixel = span[colIndex];
+                // 快速分支
+                if (pixel.Equals(sourceColor))
+                {
+                    span[colIndex] = targetColor;
+                }
+                else
+                {
+                    var color = new ColorMetadata(pixel);
+                    //处理颜色
+                    if (color.IsNearlyEquals(sourceMetadata))
+                    {
+                        span[colIndex] = targetColor;
                     }
                 }
-            });
+            }
         });
     }
 
