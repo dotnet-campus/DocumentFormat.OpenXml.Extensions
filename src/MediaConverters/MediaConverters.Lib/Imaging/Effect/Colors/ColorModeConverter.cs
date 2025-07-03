@@ -25,14 +25,23 @@ public static class ColorModeConverter
         float hue;
         var delta = max - min;
         if (r.AlmostEquals(max))
+        {
             hue = (g - b) / delta;
+        }
         else if (g.AlmostEquals(max))
+        {
             hue = (b - r) / delta + 2f;
+        }
         else
+        {
             hue = (r - g) / delta + 4f;
+        }
+
         hue *= 60f;
         if (hue < 0f)
+        {
             hue += 360f;
+        }
 
         //计算饱和度
         var saturation = 0f;
@@ -75,9 +84,15 @@ public static class ColorModeConverter
             for (var i = 0; i < 3; i++)
             {
                 if (rgb[i] < 0)
+                {
                     rgb[i] += 1;
+                }
+
                 if (rgb[i] > 1)
+                {
                     rgb[i] -= 1;
+                }
+
                 if (rgb[i] * 6 < 1)
                 {
                     rgb[i] = p + (q - p) * 6 * rgb[i];
@@ -91,7 +106,9 @@ public static class ColorModeConverter
                     rgb[i] = p + (q - p) * (2 / 3f - rgb[i]) * 6;
                 }
                 else
+                {
                     rgb[i] = p;
+                }
             }
 
             return (rgb[0], rgb[1], rgb[2]);
