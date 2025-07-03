@@ -21,13 +21,13 @@ public static class ColorMatrices
     /// <param name="color">颜色</param>
     /// <param name="m">颜色处理矩阵.</param>
     /// <returns>处理后的颜色</returns>
-    public static ColorMetadata ApplyMatrix(ColorMetadata color, in ColorMatrix5x5 m)
+    public static ColorMetadata ApplyMatrix(in ColorMetadata color, in ColorMatrix m)
     {
         // 应用颜色转换矩阵将RGB颜色转换为新颜色
-        var r = color.ARGB.Item1;
-        var g = color.ARGB.Item2;
-        var b = color.ARGB.Item3;
-        var a = color.ARGB.Item4;
+        var r = color.ARGB.R;
+        var g = color.ARGB.G;
+        var b = color.ARGB.B;
+        var a = color.ARGB.A;
         var w = 1.0f;
         Span<float> newColor =
         [
