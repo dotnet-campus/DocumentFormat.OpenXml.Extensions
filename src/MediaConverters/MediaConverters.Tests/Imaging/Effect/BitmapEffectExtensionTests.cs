@@ -82,7 +82,44 @@ public class BitmapEffectExtensionTests
     {
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
         image.SetContrast(0);
-        var file = image.SaveAndCompareTestFile();
+        var file = image.SaveAndCompareTestFile("SetContrast2.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetContrast3()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetContrast(1);
+        // 对比度不变，和原图一样
+        var file = image.SaveAndCompareTestFile("file_example_PNG_500kB.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBrightness1()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBrightness(0.2f);
+        var file = image.SaveAndCompareTestFile("SetBrightness1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBrightness2()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBrightness(0);
+        var file = image.SaveAndCompareTestFile("SetBrightness2.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBrightness3()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBrightness(1);
+        var file = image.SaveAndCompareTestFile("file_example_PNG_500kB.png");
         TestHelper.OpenFileInExplorer(file);
     }
 }
