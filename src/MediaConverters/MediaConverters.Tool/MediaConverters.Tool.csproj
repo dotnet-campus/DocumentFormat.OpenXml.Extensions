@@ -10,4 +10,8 @@
     <RootNamespace>DotNetCampus.MediaConverter</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MediaConverters.Lib\MediaConverters.Lib.csproj" />
+  </ItemGroup>
+
 </Project>
