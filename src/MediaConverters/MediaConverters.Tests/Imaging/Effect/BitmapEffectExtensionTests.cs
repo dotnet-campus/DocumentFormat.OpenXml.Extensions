@@ -46,4 +46,25 @@ public class BitmapEffectExtensionTests
         var file = image.SaveAndCompareTestFile("ReplaceColorTest1.png");
         TestHelper.OpenFileInExplorer(file);
     }
+
+    [TestMethod()]
+    public void ReplaceColorTest3()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        var list = image.GetColorCount();
+        list = list.OrderByDescending(t => t.Count).ToList();
+
+        var targetColor = new Rgba32(0xFF, 0xFF, 0xFF, 0x00);
+        var targetMetadata = new ColorMetadata(targetColor);
+
+        Dictionary<ColorMetadata, ColorMetadata> colorInfos = [];
+        for (var i = 0; i < list.Count && i < 10; i++)
+        {
+            colorInfos[new ColorMetadata(list[i].Color)] = targetMetadata;
+        }
+
+        image.ReplaceColor(colorInfos);
+        var file = image.SaveAndCompareTestFile("ReplaceColorTest3.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
 }

@@ -1,13 +1,16 @@
-﻿using SixLabors.ImageSharp;
+﻿using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+using DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
+
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
-using DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
-using SixLabors.ImageSharp.Advanced;
+
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect;
 
@@ -186,6 +189,18 @@ public static class BitmapEffectExtension
     /// <param name="image"></param>
     public static ColorCount GetMaxCountColor(this Image<Rgba32> image)
     {
+        var list = image.GetColorCount();
+
+        return list.MaxBy(t => t.Count);
+    }
+
+    /// <summary>
+    /// 获取无序的颜色数量列表
+    /// </summary>
+    /// <param name="image"></param>
+    /// <returns></returns>
+    public static IReadOnlyList<ColorCount> GetColorCount(this Image<Rgba32> image)
+    {
         var dictionary = new Dictionary<Rgba32, int>();
         image.ProcessPixelRows(accessor =>
         {
@@ -206,8 +221,7 @@ public static class BitmapEffectExtension
             }
         });
 
-        var (color, count) = dictionary.MaxBy(pair => pair.Value);
-        return new ColorCount(color, count);
+        return [..dictionary.Select(t => new ColorCount(t.Key, t.Value))];
     }
 }
 
