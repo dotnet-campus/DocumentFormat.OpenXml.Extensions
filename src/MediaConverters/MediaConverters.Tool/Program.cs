@@ -9,6 +9,7 @@ ImageDecoder d = WebpDecoder.Instance;
 
 var file = @"E:\Download\file_example_favicon.ico";
 var buffer = File.ReadAllBytes(file);
+var detectFormat = Image.DetectFormat(buffer);
 // ImageFormatManager.ThrowInvalidDecoder(configuration.ImageFormatsManager);
 var imageInfo = Image.Identify(buffer);
 Image image = Image.Load<Rgba32>(buffer);
