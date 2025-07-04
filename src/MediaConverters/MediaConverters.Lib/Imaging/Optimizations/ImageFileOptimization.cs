@@ -1,13 +1,14 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Gif;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Metadata.Profiles.Exif;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Gif;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 
@@ -26,7 +27,7 @@ public static class ImageFileOptimization
     /// <param name="useAreaSizeLimit">当包含宽度高度限制时，采用面积限制。采用面积限制时，可能宽度或高度依然超过限制的最大宽度高度。采用面积限制时，可以保证最大像素数量小于限制数量的同时，让图片可以达到最大尺寸</param>
     /// <returns></returns>
     public static async Task<ImageFileOptimizationResult> OptimizeImageFileAsync(FileInfo imageFile,
-        DirectoryInfo workingFolder, int? maxImageWidth = null, int? maxImageHeight = null, bool copyNewFile = true, bool useAreaSizeLimit = true)
+        DirectoryInfo workingFolder, int? maxImageWidth = null, int? maxImageHeight = null, bool useAreaSizeLimit = true, bool copyNewFile = true)
     {
         if (!File.Exists(imageFile.FullName))
         {
@@ -53,7 +54,6 @@ public static class ImageFileOptimization
         {
             await using var fileStream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
 
-            // 额外输出旋转图片的情况
             image = await Image.LoadAsync<Rgba32>(fileStream);
         }
         catch (ImageFormatException e)
@@ -87,17 +87,7 @@ public static class ImageFileOptimization
             };
         }
 
-        // 不带点的后缀名
-        //var fileExtension = image.Metadata.DecodedImageFormat?.FileExtensions.FirstOrDefault();
-
-        if (useAreaSizeLimit && maxImageWidth is not null && maxImageHeight is not null)
-        {
-            LimitImageSize(image, maxImageWidth.Value * maxImageHeight.Value);
-        }
-        else
-        {
-            LimitImageSize(image, maxImageWidth, maxImageHeight);
-        }
+        OptimizeImage(image, maxImageWidth, maxImageHeight, useAreaSizeLimit);
 
         // 重新保存即可
         var outputImageFilePath = Path.Join(workingFolder.FullName, $"{Path.GetRandomFileName()}.png");
@@ -112,6 +102,35 @@ public static class ImageFileOptimization
             OptimizedImageFile = new FileInfo(outputImageFilePath),
             FailureReason = ImageFileOptimizationFailureReason.Ok
         };
+    }
+
+    /// <summary>
+    /// 优化图片，包括自动旋转、限制图片尺寸等
+    /// </summary>
+    /// <param name="image"></param>
+    /// <param name="maxImageWidth"></param>
+    /// <param name="maxImageHeight"></param>
+    /// <param name="useAreaSizeLimit"></param>
+    public static void OptimizeImage(Image<Rgba32> image, int? maxImageWidth = null, int? maxImageHeight = null, bool useAreaSizeLimit = true)
+    {
+        // 额外输出旋转图片的情况
+        //if (image.Metadata.ExifProfile is not null && image.Metadata.ExifProfile.TryGetValue(SixLabors.ImageSharp.Metadata.Profiles.Exif.ExifTag.Orientation,out var value))
+        //{
+        //}
+        // 不需要去解析 Exif 信息，因为 ImageSharp 会自动处理 Exif 信息
+        image.Mutate(context => context.AutoOrient());
+
+        // 不带点的后缀名
+        //var fileExtension = image.Metadata.DecodedImageFormat?.FileExtensions.FirstOrDefault();
+
+        if (useAreaSizeLimit && maxImageWidth is not null && maxImageHeight is not null)
+        {
+            LimitImageSize(image, maxImageWidth.Value * maxImageHeight.Value);
+        }
+        else
+        {
+            LimitImageSize(image, maxImageWidth, maxImageHeight);
+        }
     }
 
     /// <summary>

@@ -97,4 +97,16 @@ public class ImageFileOptimizationTests
         Assert.AreEqual(false, imageFileOptimizationResult.IsSuccess);
         Assert.AreEqual(ImageFileOptimizationFailureReason.UnknownImageFormat, imageFileOptimizationResult.FailureReason);
     }
+
+    [TestMethod()]
+    public async Task OptimizeImageFileAsyncTest_Orientation()
+    {
+        // Orientation":{"val":"Right-top","type":3}，其中 type 信息是可以忽略，以 value 信息为准
+        // https://www.impulseadventure.com/photo/exif-orientation.html
+        // http://sylvana.net/jpegcrop/exif_orientation.html
+        var file = TestFileProvider.GetTestFile("EXIF Orientation.png");
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory);
+        Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
+        TestHelper.OpenFileInExplorer(imageFileOptimizationResult.OptimizedImageFile!);
+    }
 }
