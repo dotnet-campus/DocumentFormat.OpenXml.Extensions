@@ -6,9 +6,9 @@
     <Company>dotnet campus（.NET 职业技术学院）</Company>
  
     <Authors>dotnet-campus</Authors>
-    <RepositoryUrl>https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/dotnet-campus/dotnetCampus.OfficeDocumentZipper</PackageProjectUrl>
-    <Description>A dotnet tool to assist in editing Office document files</Description>
+    <RepositoryUrl>https://github.com/dotnet-campus/DocumentFormat.OpenXml.Extensions</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/dotnet-campus/DocumentFormat.OpenXml.Extensions</PackageProjectUrl>
+    <Description>The dotnet tools to assist in editing or reading the Office document files</Description>
 
     <RepositoryType>git</RepositoryType>
     <Copyright>Copyright © 2020-$([System.DateTime]::Now.ToString(`yyyy`)) dotnet campus, All Rights Reserved.</Copyright> 
