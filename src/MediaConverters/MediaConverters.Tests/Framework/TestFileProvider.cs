@@ -6,9 +6,11 @@ namespace DotNetCampus.MediaConverters.Tests;
 
 internal static class TestFileProvider
 {
+    public const string DefaultTestImageName = "file_example_PNG_500kB.png";
+
     public static Image<Rgba32> GetDefaultTestImage()
     {
-        var imageFile = GetTestFile("file_example_PNG_500kB.png");
+        var imageFile = GetTestFile(DefaultTestImageName);
         using var fileStream = imageFile.OpenRead();
         return Image.Load<Rgba32>(new DecoderOptions(), fileStream);
     }

@@ -32,6 +32,22 @@ public class BitmapEffectExtensionTests
         TestHelper.OpenFileInExplorer(file);
     }
 
+    [TestMethod("替换不存在的颜色，不会影响原来的图片")]
+    public void ReplaceColorTest_NotExists()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+
+        // 这是一个不存在图片里的颜色
+        var source = new Rgba32(0x36, 0x55, 0x23, 0xFF);
+
+        var targetColor = new Rgba32(0xFF, 0xFF, 0xFF, 0x00);
+        image.ReplaceColor(source, targetColor);
+
+        // 替换不存在的颜色，不会影响原来的图片
+        var file = image.SaveAndCompareTestFile(TestFileProvider.DefaultTestImageName);
+        TestHelper.OpenFileInExplorer(file);
+    }
+
     [TestMethod()]
     public void ReplaceColorTest2()
     {
@@ -92,7 +108,7 @@ public class BitmapEffectExtensionTests
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
         image.SetContrast(1);
         // 对比度不变，和原图一样
-        var file = image.SaveAndCompareTestFile("file_example_PNG_500kB.png");
+        var file = image.SaveAndCompareTestFile(TestFileProvider.DefaultTestImageName);
         TestHelper.OpenFileInExplorer(file);
     }
 
@@ -122,7 +138,25 @@ public class BitmapEffectExtensionTests
     {
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
         image.SetBrightness(1);
-        var file = image.SaveAndCompareTestFile("file_example_PNG_500kB.png");
+        var file = image.SaveAndCompareTestFile(TestFileProvider.DefaultTestImageName);
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBrightness4()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBrightness(0.5f);
+        var file = image.SaveAndCompareTestFile("SetBrightness4.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBrightness5()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBrightness(0.7f);
+        var file = image.SaveAndCompareTestFile("SetBrightness5.png");
         TestHelper.OpenFileInExplorer(file);
     }
 
@@ -132,6 +166,25 @@ public class BitmapEffectExtensionTests
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
         image.SetSoftEdgeEffect(50.0f);
         var file = image.SaveAndCompareTestFile("SetSoftEdgeMaskResult1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetSoftEdgeEffect2()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetSoftEdgeEffect(10.0f);
+        var file = image.SaveAndCompareTestFile("SetSoftEdgeEffect2.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetSoftEdgeEffect3()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetSoftEdgeEffect(0);
+        // 算法原因，设置为 0 时，还是有微弱差别
+        var file = image.SaveAndCompareTestFile();
         TestHelper.OpenFileInExplorer(file);
     }
 
