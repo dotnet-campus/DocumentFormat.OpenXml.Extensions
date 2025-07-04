@@ -17,7 +17,7 @@ public static class TestHelper
         WorkingDirectory = Directory.CreateDirectory(Path.Join(context.TestRunDirectory, "Working"));
     }
 
-    private static DirectoryInfo WorkingDirectory { get; set; } = null!;
+    public static DirectoryInfo WorkingDirectory { get; set; } = null!;
 
     public static FileInfo SaveAsTestImageFile(this Image<Rgba32> image)
     {
