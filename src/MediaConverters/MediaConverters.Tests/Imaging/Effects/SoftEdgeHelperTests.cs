@@ -4,7 +4,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace DotNetCampus.MediaConverters.Tests.Imaging.Effect;
+namespace DotNetCampus.MediaConverters.Tests.Imaging.Effects;
 
 [TestClass()]
 public class SoftEdgeHelperTests

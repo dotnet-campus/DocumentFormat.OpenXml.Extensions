@@ -3,7 +3,7 @@ using DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace DotNetCampus.MediaConverters.Tests.Imaging.Effect;
+namespace DotNetCampus.MediaConverters.Tests.Imaging.Effects;
 
 [TestClass()]
 public class BitmapEffectExtensionTests
