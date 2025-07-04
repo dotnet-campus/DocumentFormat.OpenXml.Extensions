@@ -23,9 +23,10 @@ public static class ImageFileOptimization
     /// <param name="maxImageHeight">限制图片的最大高度。为空则表示不限制</param>
     /// <param name="copyNewFile">是否先行拷贝新的文件，再进行处理，避免图片占用。默认为 true。</param>
     /// <param name="workingFolder"></param>
+    /// <param name="useAreaSizeLimit">当包含宽度高度限制时，采用面积限制。采用面积限制时，可能宽度或高度依然超过限制的最大宽度高度。采用面积限制时，可以保证最大像素数量小于限制数量的同时，让图片可以达到最大尺寸</param>
     /// <returns></returns>
     public static async Task<ImageFileOptimizationResult> OptimizeImageFileAsync(FileInfo imageFile,
-        DirectoryInfo workingFolder, int? maxImageWidth = null, int? maxImageHeight = null, bool copyNewFile = true)
+        DirectoryInfo workingFolder, int? maxImageWidth = null, int? maxImageHeight = null, bool copyNewFile = true, bool useAreaSizeLimit = true)
     {
         if (!File.Exists(imageFile.FullName))
         {
@@ -86,9 +87,10 @@ public static class ImageFileOptimization
             };
         }
 
-        var fileExtension = image.Metadata.DecodedImageFormat?.FileExtensions.FirstOrDefault();
+        // 不带点的后缀名
+        //var fileExtension = image.Metadata.DecodedImageFormat?.FileExtensions.FirstOrDefault();
 
-        if (maxImageWidth is not null && maxImageHeight is not null)
+        if (useAreaSizeLimit && maxImageWidth is not null && maxImageHeight is not null)
         {
             LimitImageSize(image, maxImageWidth.Value * maxImageHeight.Value);
         }
