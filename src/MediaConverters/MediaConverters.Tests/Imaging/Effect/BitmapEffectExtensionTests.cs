@@ -110,6 +110,9 @@ public class BitmapEffectExtensionTests
     {
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
         image.SetBrightness(0);
+
+        image.AssertSolidBlackColorImage();
+
         var file = image.SaveAndCompareTestFile("SetBrightness2.png");
         TestHelper.OpenFileInExplorer(file);
     }
@@ -179,6 +182,7 @@ public class BitmapEffectExtensionTests
     {
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
         image.SetBlackWhiteEffect(0);
+        image.AssertSolidWhiteColorImage();
         var file = image.SaveAndCompareTestFile("SetBlackWhiteEffect4.png");
         TestHelper.OpenFileInExplorer(file);
     }
@@ -188,6 +192,7 @@ public class BitmapEffectExtensionTests
     {
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
         image.SetBlackWhiteEffect(1);
+        image.AssertSolidBlackColorImage();
         var file = image.SaveAndCompareTestFile("SetBlackWhiteEffect5.png");
         TestHelper.OpenFileInExplorer(file);
     }

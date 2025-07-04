@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
+
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
+
 using TextVisionComparer;
 
 namespace DotNetCampus.MediaConverters.Tests;
@@ -41,10 +43,30 @@ public static class TestHelper
         return testFile;
     }
 
+    public static void AssertSolidBlackColorImage(this Image<Rgba32> image)
+        => image.AssertSolidColorImage(new Rgba32(0, 0, 0, 0xFF));
+    public static void AssertSolidWhiteColorImage(this Image<Rgba32> image)
+        => image.AssertSolidColorImage(new Rgba32(0xFF, 0xFF, 0xFF, 0xFF));
+
+    public static void AssertSolidColorImage(this Image<Rgba32> image, Rgba32 color)
+    {
+        image.ProcessPixelRows(accessor =>
+        {
+            for (int i = 0; i < accessor.Height; i++)
+            {
+                var row = accessor.GetRowSpan(i);
+                foreach (var pixel in row)
+                {
+                    Assert.AreEqual(color, pixel);
+                }
+            }
+        });
+    }
+
     public static void CompareImageFile(FileInfo file1, FileInfo file2)
     {
         var visionComparer = new VisionComparer();
-        var visionCompareResult = visionComparer.Compare(file1,file2);
+        var visionCompareResult = visionComparer.Compare(file1, file2);
         Assert.IsTrue(visionCompareResult.IsSimilar());
     }
 
