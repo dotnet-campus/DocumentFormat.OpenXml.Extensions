@@ -3,11 +3,13 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Webp;
+using SixLabors.ImageSharp.PixelFormats;
 
 ImageDecoder d = WebpDecoder.Instance;
 
-var ico = @"E:\download\file_example_favicon.ico";
-Image image = Image.Load(ico);
+var file = @"E:\Download\file_example_TIFF_1MB.tiff";
+var buffer = File.ReadAllBytes(file);
+Image image = Image.Load<Rgba32>(buffer);
 
 foreach (IImageFormat imageFormat in Configuration.Default.ImageFormats)
 {
