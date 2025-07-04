@@ -9,7 +9,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect;
 
-public static class SoftEdgeHelper
+internal static class SoftEdgeHelper
 {
     /// <summary>
     /// 创建柔化边缘蒙层
