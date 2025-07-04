@@ -6,44 +6,17 @@ using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.Formats.Tiff;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 ImageDecoder d = WebpDecoder.Instance;
 
 var tiffFile = @"E:\Download\file_example_TIFF_1MB.tiff";
-var file = @"E:\Download\file_example_favicon.ico";
+var file = @"E:\Download\file_example_JPG_100kB.jpg";
 var buffer = File.ReadAllBytes(file);
 
-var tiffImageFormatDetector = new TiffImageFormatDetector();
-if (tiffImageFormatDetector.TryDetectFormat(File.ReadAllBytes(tiffFile),out var f))
-{
-    
-}
+var image = Image.Load<Rgba32>(buffer);
+image.Mutate(context => context.Resize(new Size(100, 100), compand: true));
+Console.WriteLine(image.Width);
+image.SaveAsPng("1.png");
 
-var detector = new BmpImageFormatDetector();
-if (detector.TryDetectFormat(buffer,out var format))
-{
-    
-}
-
-var detectFormat = Image.DetectFormat(buffer);
-// ImageFormatManager.ThrowInvalidDecoder(configuration.ImageFormatsManager);
-var imageInfo = Image.Identify(buffer);
-Image image = Image.Load<Rgba32>(buffer);
-
-foreach (IImageFormat imageFormat in Configuration.Default.ImageFormats)
-{
-    Console.WriteLine(imageFormat.Name);
-}
-
-/*
-   PNG
-   JPEG
-   GIF
-   BMP
-   PBM
-   TGA
-   TIFF
-   Webp
-   QOI
- */
 Console.WriteLine("Hello, World!");
