@@ -67,7 +67,7 @@ public class BitmapEffectExtensionTests
     public void ReplaceColorTest3()
     {
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
-        var list = image.GetColorCount();
+        var list = image.GetColorCountList();
         list = list.OrderByDescending(t => t.Count).ToList();
 
         var targetColor = new Rgba32(0xFF, 0xFF, 0xFF, 0x00);
@@ -192,7 +192,7 @@ public class BitmapEffectExtensionTests
     public void SetDuotoneEffect1()
     {
         Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
-        var list = image.GetColorCount();
+        var list = image.GetColorCountList();
         list = list.OrderByDescending(t => t.Count).ToList();
 
         ColorMetadata color1 = new ColorMetadata(list[0].Color);

@@ -187,7 +187,7 @@ public static class BitmapEffectExtension
     /// <param name="image"></param>
     public static ColorCount GetMaxCountColor(this Image<Rgba32> image)
     {
-        var list = image.GetColorCount();
+        var list = image.GetColorCountList();
 
         return list.MaxBy(t => t.Count);
     }
@@ -197,7 +197,7 @@ public static class BitmapEffectExtension
     /// </summary>
     /// <param name="image"></param>
     /// <returns></returns>
-    public static IReadOnlyList<ColorCount> GetColorCount(this Image<Rgba32> image)
+    public static IReadOnlyList<ColorCount> GetColorCountList(this Image<Rgba32> image)
     {
         var dictionary = new Dictionary<Rgba32, int>();
         image.ProcessPixelRows(accessor =>
