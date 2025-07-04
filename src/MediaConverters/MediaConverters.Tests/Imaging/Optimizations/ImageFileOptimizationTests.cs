@@ -81,6 +81,15 @@ public class ImageFileOptimizationTests
     }
 
     [TestMethod()]
+    public async Task OptimizeImageFileAsyncTest_FormatTga()
+    {
+        var file = TestFileProvider.GetTestFile("sample_640×426.tga");
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory);
+        Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
+        TestHelper.OpenFileInExplorer(imageFileOptimizationResult.OptimizedImageFile!);
+    }
+
+    [TestMethod()]
     public async Task OptimizeImageFileAsyncTest_FormatWmf()
     {
         var file = TestFileProvider.GetTestFile("sample.wmf");
