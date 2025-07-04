@@ -1,0 +1,35 @@
+﻿name: MediaConverters
+
+on: [push]
+
+jobs:
+  BuildOnWindows:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+  
+    - name: Build with dotnet
+      run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build src\MediaConverters\MediaConverters.Tests\MediaConverters.Tests.csproj
+
+  BuildOnLinux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: | 
+          9.0.x
+
+    - name: Build with dotnet
+      run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build src/MediaConverters/MediaConverters.Tests/MediaConverters.Tests.csproj
