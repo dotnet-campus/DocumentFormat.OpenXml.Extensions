@@ -7,8 +7,10 @@ using SixLabors.ImageSharp.PixelFormats;
 
 ImageDecoder d = WebpDecoder.Instance;
 
-var file = @"E:\Download\file_example_TIFF_1MB.tiff";
+var file = @"E:\Download\file_example_favicon.ico";
 var buffer = File.ReadAllBytes(file);
+// ImageFormatManager.ThrowInvalidDecoder(configuration.ImageFormatsManager);
+var imageInfo = Image.Identify(buffer);
 Image image = Image.Load<Rgba32>(buffer);
 
 foreach (IImageFormat imageFormat in Configuration.Default.ImageFormats)
