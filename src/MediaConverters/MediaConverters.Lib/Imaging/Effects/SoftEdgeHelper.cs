@@ -81,22 +81,6 @@ internal static class SoftEdgeHelper
                 }
             }
         });
-
-        // 测试代码
-        bitmap.ProcessPixelRows(pixelAccessor
-            =>
-        {
-            for (var row = 0; row < rows; row++)
-            {
-                var pixelRow = pixelAccessor.GetRowSpan(row);
-                for (var col = 0; col < pixelRow.Length; col++)
-                {
-                    var pixel = pixelRow[col];
-                    var a = pixel.A;
-                    _ = a;
-                }
-            }
-        });
     }
 
     /// <summary>
