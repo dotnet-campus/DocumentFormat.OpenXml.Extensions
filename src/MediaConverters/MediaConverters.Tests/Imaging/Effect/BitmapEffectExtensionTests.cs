@@ -122,4 +122,91 @@ public class BitmapEffectExtensionTests
         var file = image.SaveAndCompareTestFile("file_example_PNG_500kB.png");
         TestHelper.OpenFileInExplorer(file);
     }
+
+    [TestMethod()]
+    public void SetSoftEdgeEffect1()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetSoftEdgeEffect(50.0f);
+        var file = image.SaveAndCompareTestFile("SetSoftEdgeMaskResult1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetDuotoneEffect1()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        var list = image.GetColorCount();
+        list = list.OrderByDescending(t => t.Count).ToList();
+
+        ColorMetadata color1 = new ColorMetadata(list[0].Color);
+        ColorMetadata color2 = new ColorMetadata(list[1].Color);
+
+        image.SetDuotoneEffect(color1, color2);
+        var file = image.SaveAndCompareTestFile("SetDuotoneEffect1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBlackWhiteEffect1()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBlackWhiteEffect(0.5f);
+        var file = image.SaveAndCompareTestFile("SetBlackWhiteEffect1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBlackWhiteEffect2()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBlackWhiteEffect(0.7f);
+        var file = image.SaveAndCompareTestFile("SetBlackWhiteEffect2.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBlackWhiteEffect3()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBlackWhiteEffect(0.2f);
+        var file = image.SaveAndCompareTestFile("SetBlackWhiteEffect3.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBlackWhiteEffect4()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBlackWhiteEffect(0);
+        var file = image.SaveAndCompareTestFile("SetBlackWhiteEffect4.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetBlackWhiteEffect5()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetBlackWhiteEffect(1);
+        var file = image.SaveAndCompareTestFile("SetBlackWhiteEffect5.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetGrayScaleEffect1()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetGrayScaleEffect();
+        var file = image.SaveAndCompareTestFile("SetGrayScaleEffect1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetLuminanceEffect1()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetLuminanceEffect();
+        var file = image.SaveAndCompareTestFile("SetLuminanceEffect1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
 }
