@@ -1,16 +1,14 @@
-﻿using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
 using DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effect;
 
@@ -221,7 +219,7 @@ public static class BitmapEffectExtension
             }
         });
 
-        return [..dictionary.Select(t => new ColorCount(t.Key, t.Value))];
+        return [.. dictionary.Select(t => new ColorCount(t.Key, t.Value))];
     }
 }
 
