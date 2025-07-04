@@ -67,4 +67,22 @@ public class BitmapEffectExtensionTests
         var file = image.SaveAndCompareTestFile("ReplaceColorTest3.png");
         TestHelper.OpenFileInExplorer(file);
     }
+
+    [TestMethod()]
+    public void SetContrast1()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetContrast(0.2f);
+        var file = image.SaveAndCompareTestFile("SetContrast1.png");
+        TestHelper.OpenFileInExplorer(file);
+    }
+
+    [TestMethod()]
+    public void SetContrast2()
+    {
+        Image<Rgba32> image = TestFileProvider.GetDefaultTestImage();
+        image.SetContrast(0);
+        var file = image.SaveAndCompareTestFile();
+        TestHelper.OpenFileInExplorer(file);
+    }
 }
