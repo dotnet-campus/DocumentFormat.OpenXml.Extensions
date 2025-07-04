@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
-
-using DotNetCampus.MediaConverters.Imaging.Effect;
-
+using DotNetCampus.MediaConverters.Imaging.Effects;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;

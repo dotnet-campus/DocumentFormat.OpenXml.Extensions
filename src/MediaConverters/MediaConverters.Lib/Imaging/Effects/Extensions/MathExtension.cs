@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
+namespace DotNetCampus.MediaConverters.Imaging.Effects.Extensions;
 
 /// <summary>
 /// 数学拓展方法

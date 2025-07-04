@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+namespace DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 
 /// <summary>
 /// 色彩空间转换器

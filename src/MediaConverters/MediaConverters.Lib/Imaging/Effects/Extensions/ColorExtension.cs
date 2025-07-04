@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Globalization;
 
-using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+using DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 
-using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effect.Colors.ColorMatrix5x5;
-using ColorSpaceConverter = DotNetCampus.MediaConverters.Imaging.Effect.Colors.ColorSpaceConverter;
+using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effects.Colors.ColorMatrix5x5;
+using ColorSpaceConverter = DotNetCampus.MediaConverters.Imaging.Effects.Colors.ColorSpaceConverter;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
+namespace DotNetCampus.MediaConverters.Imaging.Effects.Extensions;
 
 /// <summary>
 /// 颜色拓展方法

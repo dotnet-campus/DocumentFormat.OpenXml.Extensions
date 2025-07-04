@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect;
+namespace DotNetCampus.MediaConverters.Imaging.Effects;
 
 internal static class SoftEdgeHelper
 {

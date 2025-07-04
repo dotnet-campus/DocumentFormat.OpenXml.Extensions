@@ -1,7 +1,7 @@
 ﻿using System;
-using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effect.Colors.ColorMatrix5x5;
+using ColorMatrix = DotNetCampus.MediaConverters.Imaging.Effects.Colors.ColorMatrix5x5;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+namespace DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 
 /// <summary>
 ///     颜色转换矩阵

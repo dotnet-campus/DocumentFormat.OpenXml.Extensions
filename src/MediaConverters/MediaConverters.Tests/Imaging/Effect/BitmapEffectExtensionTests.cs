@@ -1,5 +1,5 @@
-﻿using DotNetCampus.MediaConverters.Imaging.Effect;
-using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+﻿using DotNetCampus.MediaConverters.Imaging.Effects;
+using DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 

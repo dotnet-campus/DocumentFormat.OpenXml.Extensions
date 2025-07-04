@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+using DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
+namespace DotNetCampus.MediaConverters.Imaging.Effects.Extensions;
 
 /// <summary>
 /// <see cref="Image{Rgba32}"/>拓展

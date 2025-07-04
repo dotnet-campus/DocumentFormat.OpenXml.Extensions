@@ -1,7 +1,7 @@
 ﻿using System;
-using DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
+using DotNetCampus.MediaConverters.Imaging.Effects.Extensions;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect.Colors;
+namespace DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 
 /// <summary>
 /// 色彩模式转换器

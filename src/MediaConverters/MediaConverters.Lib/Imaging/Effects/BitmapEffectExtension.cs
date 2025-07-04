@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using DotNetCampus.MediaConverters.Imaging.Effect.Colors;
-using DotNetCampus.MediaConverters.Imaging.Effect.Extensions;
+using DotNetCampus.MediaConverters.Imaging.Effects.Colors;
+using DotNetCampus.MediaConverters.Imaging.Effects.Extensions;
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace DotNetCampus.MediaConverters.Imaging.Effect;
+namespace DotNetCampus.MediaConverters.Imaging.Effects;
 
 /// <summary>
 /// 为<see cref="Image{T}"/>提供效果拓展
