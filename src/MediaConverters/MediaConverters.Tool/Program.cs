@@ -6,6 +6,9 @@ using SixLabors.ImageSharp.Formats.Webp;
 
 ImageDecoder d = WebpDecoder.Instance;
 
+var ico = @"E:\download\file_example_favicon.ico";
+Image image = Image.Load(ico);
+
 foreach (IImageFormat imageFormat in Configuration.Default.ImageFormats)
 {
     Console.WriteLine(imageFormat.Name);
