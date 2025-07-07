@@ -2,7 +2,7 @@
 
 namespace DotNetCampus.MediaConverters.Contexts;
 
-[JsonDerivedType(typeof(ReplaceColorTask))]
+[JsonDerivedType(typeof(ReplaceColorTask), typeDiscriminator: nameof(ReplaceColorTask))]
 public interface IImageConvertTask
 {
 }

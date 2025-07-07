@@ -1,19 +1,32 @@
-﻿using DotNetCampus.MediaConverters.Contexts;
-using DotNetCampus.MediaConverters.Imaging.Optimizations;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+using DotNetCampus.MediaConverters.Contexts;
 
 namespace DotNetCampus.MediaConverters.Tests.Tool;
 
 [TestClass]
 public class MediaConverterTests
 {
+    [TestMethod]
+    public async Task ReplaceColorTask1()
+    {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            ImageConvertTaskList =
+                [
+                    new ReplaceColorTask()
+                    {
+                    },
+                ]
+        };
+
+        var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(ErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
+
     [TestMethod]
     public async Task OptimizeImageFile1()
     {
