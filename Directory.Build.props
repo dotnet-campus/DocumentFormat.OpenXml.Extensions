@@ -11,6 +11,7 @@
     <Description>The dotnet tools to assist in editing or reading the Office document files</Description>
 
     <RepositoryType>git</RepositoryType>
-    <Copyright>Copyright © 2020-$([System.DateTime]::Now.ToString(`yyyy`)) dotnet campus, All Rights Reserved.</Copyright> 
+    <Copyright>Copyright © 2020-$([System.DateTime]::Now.ToString(`yyyy`)) dotnet campus, All Rights Reserved.</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 </Project>
