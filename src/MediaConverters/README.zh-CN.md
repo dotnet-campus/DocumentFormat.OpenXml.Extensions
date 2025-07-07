@@ -15,3 +15,5 @@
   - 参阅： <https://sixlabors.freshdesk.com/support/tickets/517> (此链接无法直接被访问，仅用于与 Six Labors 组织沟通时附带)
 - 开源项目
 - 年总收入少于 100 万美元的营利性公司或个人
+
+反之，若您不满足上述任一条件，则需要购买 Six Labors 的商业许可

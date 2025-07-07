@@ -15,3 +15,5 @@ You can use this project in commercial projects without payment or any copyright
   - Reference: <https://sixlabors.freshdesk.com/support/tickets/517> (This link may not be directly accessible and is provided for communication with the Six Labors organization.)
 - The project is open source.
 - The annual revenue of the for-profit company or individual is less than $1,000,000 USD.
+
+Otherwise, if you do not meet any of the above conditions, you will need to purchase a commercial license from Six Labors.
