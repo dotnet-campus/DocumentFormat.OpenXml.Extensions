@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
  
     - name: Install dotnet tool
       run: dotnet tool install -g dotnetCampus.TagToVersion
@@ -40,3 +40,47 @@ jobs:
       run: |
         dotnet nuget push .\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
         dotnet nuget push .\bin\Release\*.nupkg -s github
+
+  PackOnLinux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+ 
+    - name: Install dotnet tool
+      run: dotnet tool install -g dotnetCampus.TagToVersion
+
+    - name: Set tag to version  
+      run: dotnet TagToVersion -t ${{ github.ref }}
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: |
+          3.1.x
+          5.0.x
+          6.0.x
+          9.0.x
+ 
+    - name: Build with dotnet
+      run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
+
+    - name: Publish and Pack linux-x64
+      run: |
+        dotnet publish -c Release -r linux-x64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-x64 src/MediaConverters/MediaConverters.RuntimeNuGet/MediaConverters.RuntimeNuGet.csproj
+
+    - name: Publish and Pack linux-arm64
+      run: |
+        dotnet publish -c Release -r linux-arm64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-arm64 src/MediaConverters/MediaConverters.RuntimeNuGet/MediaConverters.RuntimeNuGet.csproj
+
+    - name: Add private GitHub registry to NuGet
+      run: |
+        dotnet nuget add source --username dotnet-campus --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/dotnet-campus/index.json"
+
+    - name: Push generated package to NuGet 
+      run: |
+        dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
+        dotnet nuget push ./bin/Release/*.nupkg -s github
