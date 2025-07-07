@@ -1,9 +1,10 @@
 ﻿using System;
+
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 
-public readonly struct ColorMetadata
+public readonly struct ColorMetadata : IEquatable<ColorMetadata>
 {
     public ColorMetadata(Rgba32 color)
     {
@@ -67,5 +68,20 @@ public readonly struct ColorMetadata
         var g = ARGB.G;
         var b = ARGB.B;
         return 0.30f * r + 0.59f * g + 0.11f * b;
+    }
+
+    public bool Equals(ColorMetadata other)
+    {
+        return Color.Equals(other.Color);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ColorMetadata other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return Color.GetHashCode();
     }
 }
