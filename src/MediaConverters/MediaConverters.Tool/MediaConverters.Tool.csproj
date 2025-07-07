@@ -7,8 +7,12 @@
     <Nullable>enable</Nullable>
     <RootNamespace>DotNetCampus.MediaConverters</RootNamespace>
     <!-- 故意去掉 s 方便生成名为 DotNetCampus.MediaConverter.exe 的文件 -->
-    <RootNamespace>DotNetCampus.MediaConverter</RootNamespace>
+    <AssemblyName>DotNetCampus.MediaConverter</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetCampus.CommandLine" Version="4.0.0-alpha04" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MediaConverters.Lib\MediaConverters.Lib.csproj" />

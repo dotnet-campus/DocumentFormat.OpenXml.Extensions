@@ -1,46 +1,80 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Diagnostics;
+using System.Text.Json;
+
+using DotNetCampus.MediaConverters.Contexts;
+using DotNetCampus.MediaConverters.Imaging.Optimizations;
+
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Bmp;
-using SixLabors.ImageSharp.Formats.Tiff;
-using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using SourceGenerationContext = DotNetCampus.MediaConverters.Contexts.SourceGenerationContext;
 
-using System.Text;
+namespace DotNetCampus.MediaConverters;
 
-ImageDecoder d = WebpDecoder.Instance;
-
-var maxPixelCount = 100_00_00;
-
-var w = 1500;
-var h = 1300;
-
-var s = w / (double) h;
-
-var pw = (int) Math.Sqrt(maxPixelCount * w / (double) h);
-var ph = (int) Math.Sqrt(maxPixelCount * h / (double) w);
-
-var s1 = pw / (double) ph;
-
-
-
-var tiffFile = @"E:\Download\file_example_TIFF_1MB.tiff";
-var file = @"E:\Download\file_example_favicon.ico";
-var buffer = File.ReadAllBytes(file);
-
-try
+public class Program
 {
-    var image = Image.Load<Rgba32>(buffer);
-    image.Mutate(context => context.Resize(new Size(100, 100), compand: true));
-    Console.WriteLine(image.Width);
-    image.SaveAsPng("1.png");
+    public static async Task<int> Main(string[] args)
+    {
+        var options = DotNetCampus.Cli.CommandLine.Parse(args).As<Options>();
 
-    
-}
-catch (ImageFormatException e)
-{
-}
+        var jsonText = await File.ReadAllTextAsync(options.ConvertConfigurationFile);
+        var imageConvertContext = JsonSerializer.Deserialize<ImageConvertContext>(jsonText, SourceGenerationContext.Default.Options);
 
-Console.WriteLine("Hello, World!");
+        if (imageConvertContext is null)
+        {
+            Console.Error.WriteLine("无法解析转换配置文件，请检查配置文件内容是否正确。");
+            return ErrorCode.UnknownError;
+        }
+
+        var inputFile = new FileInfo(options.InputFile);
+
+        var workingFolder = Directory.CreateDirectory(options.WorkingFolder);
+
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(inputFile, workingFolder, imageConvertContext.MaxImageWidth, imageConvertContext.MaxImageHeight, imageConvertContext.UseAreaSizeLimit ?? true);
+
+        if (!imageFileOptimizationResult.IsSuccess)
+        {
+            Console.Error.WriteLine(imageFileOptimizationResult);
+
+            switch (imageFileOptimizationResult.FailureReason)
+            {
+                case ImageFileOptimizationFailureReason.Ok:
+                    Debug.Fail("返回成功时，不可能状态是失败");
+                    break;
+                case ImageFileOptimizationFailureReason.UnknownImageFormat:
+                    return ErrorCode.UnknownImageFormat;
+                    break;
+                case ImageFileOptimizationFailureReason.InvalidImageContent:
+                    return ErrorCode.InvalidImageContent;
+                    break;
+                case ImageFileOptimizationFailureReason.FileNotFound:
+                    return ErrorCode.ImageFileNotFound;
+                    break;
+                case ImageFileOptimizationFailureReason.NotSupported:
+                    return ErrorCode.NotSupported;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return ErrorCode.UnknownError;
+        }
+
+        FileInfo optimizedImageFile = imageFileOptimizationResult.OptimizedImageFile;
+
+        if (imageConvertContext.ImageConvertTaskList is { } list)
+        {
+            using var image = await Image.LoadAsync<Rgba32>(optimizedImageFile.FullName);
+
+            foreach (var imageConvertTask in list)
+            {
+                imageConvertTask.Run(image);
+            }
+        }
+
+        optimizedImageFile.CopyTo(options.OutputFile, overwrite: true);
+
+        return 0;
+    }
+}
