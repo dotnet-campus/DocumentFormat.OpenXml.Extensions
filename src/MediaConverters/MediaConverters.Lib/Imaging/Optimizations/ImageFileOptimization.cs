@@ -78,32 +78,40 @@ public static class ImageFileOptimization
             };
         }
 
-        using var _ = image;
-
-        if (image.Metadata.DecodedImageFormat is GifFormat)
+        try
         {
+            if (image.Metadata.DecodedImageFormat is GifFormat)
+            {
+                image.Dispose();
+                return new ImageFileOptimizationResult()
+                {
+                    OptimizedImageFile = null,
+                    FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                };
+            }
+
+            OptimizeImage(image, maxImageWidth, maxImageHeight, useAreaSizeLimit);
+
+            // 重新保存即可
+            var outputImageFilePath = Path.Join(workingFolder.FullName, $"{Path.GetRandomFileName()}.png");
+            await image.SaveAsPngAsync(outputImageFilePath, new PngEncoder()
+            {
+                ColorType = PngColorType.RgbWithAlpha,
+                BitDepth = PngBitDepth.Bit8,
+            });
+
             return new ImageFileOptimizationResult()
             {
-                OptimizedImageFile = null,
-                FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                Image = image,
+                OptimizedImageFile = new FileInfo(outputImageFilePath),
+                FailureReason = ImageFileOptimizationFailureReason.Ok
             };
         }
-
-        OptimizeImage(image, maxImageWidth, maxImageHeight, useAreaSizeLimit);
-
-        // 重新保存即可
-        var outputImageFilePath = Path.Join(workingFolder.FullName, $"{Path.GetRandomFileName()}.png");
-        await image.SaveAsPngAsync(outputImageFilePath, new PngEncoder()
+        catch
         {
-            ColorType = PngColorType.RgbWithAlpha,
-            BitDepth = PngBitDepth.Bit8,
-        });
-
-        return new ImageFileOptimizationResult()
-        {
-            OptimizedImageFile = new FileInfo(outputImageFilePath),
-            FailureReason = ImageFileOptimizationFailureReason.Ok
-        };
+            image.Dispose();
+            throw;
+        }
     }
 
     /// <summary>

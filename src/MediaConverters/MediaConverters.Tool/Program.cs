@@ -38,7 +38,7 @@ class Program
 
         var workingFolder = Directory.CreateDirectory(options.WorkingFolder);
 
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(inputFile, workingFolder, imageConvertContext.MaxImageWidth, imageConvertContext.MaxImageHeight, imageConvertContext.UseAreaSizeLimit ?? true);
+       using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(inputFile, workingFolder, imageConvertContext.MaxImageWidth, imageConvertContext.MaxImageHeight, imageConvertContext.UseAreaSizeLimit ?? true);
 
         if (!imageFileOptimizationResult.IsSuccess)
         {
@@ -68,7 +68,7 @@ class Program
 
         if (imageConvertContext.ImageConvertTaskList is { } list)
         {
-            using var image = await Image.LoadAsync<Rgba32>(optimizedImageFile.FullName);
+            var image = imageFileOptimizationResult.Image;
             var workerProvider = new WorkerProvider();
 
             foreach (IImageConvertTask imageConvertTask in list)
