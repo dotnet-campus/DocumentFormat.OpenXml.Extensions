@@ -17,6 +17,28 @@ namespace DotNetCampus.MediaConverters.Tests.Tool;
 public class MediaConverterTests
 {
     [TestMethod]
+    public async Task SetDuotoneEffectTask1()
+    {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            ImageConvertTaskList =
+            [
+                new SetDuotoneEffectTask()
+                {
+                    ArgbFormatColor1 = "#FFF1D7A6",
+                    ArgbFormatColor2 = "#FFFFF2C8",
+                }
+            ]
+        };
+
+        var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(ErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
+
+    [TestMethod]
     public async Task ReplaceColorTask1()
     {
         var imageConvertContext = new ImageConvertContext()
