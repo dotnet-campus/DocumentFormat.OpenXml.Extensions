@@ -72,6 +72,27 @@ public static class BitmapEffectExtension
     /// </summary>
     /// <param name="bitmap">图片</param>
     /// <param name="colorInfos">存储替换信息的颜色组</param>
+    public static void ReplaceColor(this Image<Rgba32> bitmap, IReadOnlyList<(ColorMetadata SourceColor, ColorMetadata TargetColor)> colorInfos)
+    {
+        bitmap.PerPixelProcess(color =>
+        {
+            foreach (var colorInfo in colorInfos)
+            {
+                if (color.IsNearlyEquals(colorInfo.SourceColor))
+                {
+                    return colorInfo.TargetColor;
+                }
+            }
+
+            return color;
+        });
+    }
+
+    /// <summary>
+    ///     将图片<paramref name="bitmap"/>上指定的一部分颜色替换为指定的对应颜色
+    /// </summary>
+    /// <param name="bitmap">图片</param>
+    /// <param name="colorInfos">存储替换信息的颜色组</param>
     public static void ReplaceColor(this Image<Rgba32> bitmap, Dictionary<ColorMetadata, ColorMetadata> colorInfos)
     {
         bitmap.PerPixelProcess(color =>
