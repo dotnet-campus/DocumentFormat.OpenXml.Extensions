@@ -1,13 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Diagnostics;
-using System.Text.Json;
-
 using DotNetCampus.MediaConverters.Contexts;
 using DotNetCampus.MediaConverters.Imaging.Optimizations;
+using DotNetCampus.MediaConverters.Workers;
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+
+using System.Diagnostics;
+using System.Text.Json;
+
 using SourceGenerationContext = DotNetCampus.MediaConverters.Contexts.SourceGenerationContext;
 
 namespace DotNetCampus.MediaConverters;
@@ -44,16 +46,12 @@ public class Program
                     break;
                 case ImageFileOptimizationFailureReason.UnknownImageFormat:
                     return ErrorCode.UnknownImageFormat;
-                    break;
                 case ImageFileOptimizationFailureReason.InvalidImageContent:
                     return ErrorCode.InvalidImageContent;
-                    break;
                 case ImageFileOptimizationFailureReason.FileNotFound:
                     return ErrorCode.ImageFileNotFound;
-                    break;
                 case ImageFileOptimizationFailureReason.NotSupported:
                     return ErrorCode.NotSupported;
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -66,10 +64,11 @@ public class Program
         if (imageConvertContext.ImageConvertTaskList is { } list)
         {
             using var image = await Image.LoadAsync<Rgba32>(optimizedImageFile.FullName);
+            var workerProvider = new WorkerProvider();
 
-            foreach (var imageConvertTask in list)
+            foreach (IImageConvertTask imageConvertTask in list)
             {
-                imageConvertTask.Run(image);
+                workerProvider.Run(image, imageConvertTask);
             }
         }
 
