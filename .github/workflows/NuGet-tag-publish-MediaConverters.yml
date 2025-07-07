@@ -59,8 +59,8 @@ jobs:
 
     - name: Publish and Pack win-arm64
       run: |
-        dotnet publish -c Release -r win-x64 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x64 src\MediaConverters\MediaConverters.RuntimeNuGet\MediaConverters.RuntimeNuGet.csproj
+        dotnet publish -c Release -r win-arm64 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=win-arm64 src\MediaConverters\MediaConverters.RuntimeNuGet\MediaConverters.RuntimeNuGet.csproj
 
     - name: Add private GitHub registry to NuGet
       run: |
