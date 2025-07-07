@@ -39,7 +39,7 @@ jobs:
     - name: Push generated package to NuGet 
       run: |
         dotnet nuget push .\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
-        dotnet nuget push .\bin\Release\*.nupkg -s github
+        dotnet nuget push .\bin\Release\*.nupkg -s github --timeout 3000
 
   PackOnWindowsArm64:
 
@@ -69,7 +69,7 @@ jobs:
     - name: Push generated package to NuGet 
       run: |
         dotnet nuget push .\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
-        dotnet nuget push .\bin\Release\*.nupkg -s github
+        dotnet nuget push .\bin\Release\*.nupkg -s github --timeout 3000
 
   PackOnLinuxX64:
 
@@ -108,7 +108,7 @@ jobs:
     - name: Push generated package to NuGet 
       run: |
         dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
-        dotnet nuget push ./bin/Release/*.nupkg -s github
+        dotnet nuget push ./bin/Release/*.nupkg -s github --timeout 3000
 
   PackOnLinuxArm64:
 
@@ -147,4 +147,4 @@ jobs:
     - name: Push generated package to NuGet 
       run: |
         dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
-        dotnet nuget push ./bin/Release/*.nupkg -s github
+        dotnet nuget push ./bin/Release/*.nupkg -s github --timeout 3000
