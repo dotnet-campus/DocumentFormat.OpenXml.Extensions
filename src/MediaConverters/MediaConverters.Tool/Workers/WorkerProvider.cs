@@ -10,6 +10,12 @@ class WorkerProvider
     [
         new ReplaceColorWorker(),
         new SetDuotoneEffectWorker(),
+        new SetBlackWhiteEffectWorker(),
+        new SetBrightnessWorker(),
+        new SetContrastWorker(),
+        new SetGrayScaleEffectWorker(),
+        new SetLuminanceEffectWorker(),
+        new SetSoftEdgeEffectWorker(),
     ];
 
     public void Run(Image<Rgba32> image, IImageConvertTask task)

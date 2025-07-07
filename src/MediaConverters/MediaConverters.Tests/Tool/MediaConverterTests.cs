@@ -1,13 +1,13 @@
-﻿using DotNetCampus.MediaConverters.Contexts;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+
+using DotNetCampus.MediaConverters.Contexts;
 using DotNetCampus.MediaConverters.Imaging.Effects;
 using DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
-
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 using TextVisionComparer;
 
@@ -16,6 +16,130 @@ namespace DotNetCampus.MediaConverters.Tests.Tool;
 [TestClass]
 public class MediaConverterTests
 {
+    [TestMethod]
+    public async Task SetSoftEdgeEffectTask1()
+    {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            ImageConvertTaskList =
+            [
+                new SetSoftEdgeEffectTask()
+                {
+                    Radius = 20
+                }
+            ]
+        };
+
+        var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(ErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
+
+    [TestMethod]
+    public async Task SetLuminanceEffectTask1()
+    {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            ImageConvertTaskList =
+            [
+                new SetLuminanceEffectTask()
+                {
+                }
+            ]
+        };
+
+        var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(ErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
+
+    [TestMethod]
+    public async Task SetGrayScaleEffectTask1()
+    {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            ImageConvertTaskList =
+            [
+                new SetGrayScaleEffectTask()
+                {
+                }
+            ]
+        };
+
+        var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(ErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
+
+    [TestMethod]
+    public async Task SetContrastTask1()
+    {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            ImageConvertTaskList =
+            [
+                new SetContrastTask()
+                {
+                    Percentage = 0.7f
+                }
+            ]
+        };
+
+        var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(ErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
+
+    [TestMethod]
+    public async Task SetBrightnessTask1()
+    {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            ImageConvertTaskList =
+            [
+                new SetBrightnessTask()
+                {
+                    Percentage = 0.7f
+                }
+            ]
+        };
+
+        var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(ErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
+
+    [TestMethod]
+    public async Task SetBlackWhiteEffectTask1()
+    {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            ImageConvertTaskList =
+            [
+                new SetBlackWhiteEffectTask()
+                {
+                    Threshold = 0.7f
+                }
+            ]
+        };
+
+        var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(ErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
+
     [TestMethod]
     public async Task SetDuotoneEffectTask1()
     {
@@ -44,11 +168,11 @@ public class MediaConverterTests
         var imageConvertContext = new ImageConvertContext()
         {
             ImageConvertTaskList =
-                [
-                    new ReplaceColorTask()
-                    {
-                    },
-                ]
+            [
+                new ReplaceColorTask()
+                {
+                },
+            ]
         };
 
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
@@ -70,7 +194,8 @@ public class MediaConverterTests
         for (var i = 0; i < list.Count && i < 10; i++)
         {
             var color = list[i].Color;
-            replaceColorInfoList.Add(new ReplaceColorInfo($"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}", "#00FFFFFF"));
+            replaceColorInfoList.Add(new ReplaceColorInfo($"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}",
+                "#00FFFFFF"));
         }
 
         var imageConvertContext = new ImageConvertContext()
@@ -105,7 +230,8 @@ public class MediaConverterTests
         for (var i = 0; i < list.Count && i < 10; i++)
         {
             var color = list[i].Color;
-            replaceColorInfoList.Add(new ReplaceColorInfo($"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}", "#00FFFFFF"));
+            replaceColorInfoList.Add(new ReplaceColorInfo($"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}",
+                "#00FFFFFF"));
         }
 
         var imageConvertContext = new ImageConvertContext()
@@ -220,10 +346,11 @@ public class MediaConverterTests
 
         var inputFile = TestFileProvider.GetTestFile(fileName);
 
-        var jsonText = JsonSerializer.Serialize(imageConvertContext, new JsonSerializerOptions(SourceGenerationContext.Default.Options)
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        });
+        var jsonText = JsonSerializer.Serialize(imageConvertContext,
+            new JsonSerializerOptions(SourceGenerationContext.Default.Options)
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            });
         File.WriteAllText(configFile, jsonText);
 
         return new Options()
