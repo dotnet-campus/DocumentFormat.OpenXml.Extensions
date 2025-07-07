@@ -17,6 +17,11 @@ internal static class TestFileProvider
 
     public static string GetTestFilePath(string fileName)
     {
+        if (File.Exists(fileName))
+        {
+            return Path.GetFullPath(fileName);
+        }
+
         return System.IO.Path.Join(AppContext.BaseDirectory, "Assets", "TestFiles", fileName);
     }
 

@@ -9,7 +9,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 using System.Diagnostics;
 using System.Text.Json;
-
+using SixLabors.ImageSharp.Formats.Png;
 using SourceGenerationContext = DotNetCampus.MediaConverters.Contexts.SourceGenerationContext;
 
 namespace DotNetCampus.MediaConverters;
@@ -75,9 +75,18 @@ class Program
             {
                 workerProvider.Run(image, imageConvertTask);
             }
+
+            await image.SaveAsPngAsync(options.OutputFile, new PngEncoder()
+            {
+                ColorType = PngColorType.RgbWithAlpha,
+                BitDepth = PngBitDepth.Bit8,
+            });
         }
 
-        optimizedImageFile.CopyTo(options.OutputFile, overwrite: true);
+        else
+        {
+            optimizedImageFile.CopyTo(options.OutputFile, overwrite: true);
+        }
 
         return ErrorCode.Success;
     }
