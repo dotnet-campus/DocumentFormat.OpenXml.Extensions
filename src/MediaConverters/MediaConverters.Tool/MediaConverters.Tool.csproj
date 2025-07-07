@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetCampus.CommandLine" Version="4.0.0-alpha04" />
+    <PackageReference Include="VC-LTL" Version="5.2.1" />
   </ItemGroup>
 
   <ItemGroup>
