@@ -8,6 +8,8 @@
     <RootNamespace>DotNetCampus.MediaConverters</RootNamespace>
     <!-- 故意去掉 s 方便生成名为 DotNetCampus.MediaConverter.exe 的文件 -->
     <AssemblyName>DotNetCampus.MediaConverter</AssemblyName>
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

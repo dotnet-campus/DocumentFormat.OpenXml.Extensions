@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>DotNetCampus.MediaConverters</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

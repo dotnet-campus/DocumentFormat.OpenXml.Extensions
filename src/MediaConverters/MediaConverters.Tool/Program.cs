@@ -26,7 +26,7 @@ class Program
     internal static async Task<ErrorCode> RunAsync(Options options)
     {
         var jsonText = await File.ReadAllTextAsync(options.ConvertConfigurationFile);
-        var imageConvertContext = JsonSerializer.Deserialize<ImageConvertContext>(jsonText, SourceGenerationContext.Default.Options);
+        var imageConvertContext = JsonSerializer.Deserialize(jsonText, typeof(ImageConvertContext), SourceGenerationContext.Default) as ImageConvertContext;
 
         if (imageConvertContext is null)
         {
@@ -38,7 +38,7 @@ class Program
 
         var workingFolder = Directory.CreateDirectory(options.WorkingFolder);
 
-       using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(inputFile, workingFolder, imageConvertContext.MaxImageWidth, imageConvertContext.MaxImageHeight, imageConvertContext.UseAreaSizeLimit ?? true);
+        using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(inputFile, workingFolder, imageConvertContext.MaxImageWidth, imageConvertContext.MaxImageHeight, imageConvertContext.UseAreaSizeLimit ?? true);
 
         if (!imageFileOptimizationResult.IsSuccess)
         {
