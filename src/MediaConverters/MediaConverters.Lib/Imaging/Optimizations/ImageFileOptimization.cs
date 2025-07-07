@@ -78,6 +78,8 @@ public static class ImageFileOptimization
             };
         }
 
+        using var _ = image;
+
         if (image.Metadata.DecodedImageFormat is GifFormat)
         {
             return new ImageFileOptimizationResult()
