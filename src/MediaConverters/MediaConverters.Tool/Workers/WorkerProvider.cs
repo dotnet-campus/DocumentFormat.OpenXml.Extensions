@@ -9,6 +9,7 @@ class WorkerProvider
     private readonly IReadOnlyList<IWorker> _workerList =
     [
         new ReplaceColorWorker(),
+        new SetDuotoneEffectWorker(),
     ];
 
     public void Run(Image<Rgba32> image, IImageConvertTask task)
