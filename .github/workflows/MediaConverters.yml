@@ -33,3 +33,29 @@ jobs:
 
     - name: Test
       run: dotnet test --configuration Release --no-build src/MediaConverters/MediaConverters.Tests/MediaConverters.Tests.csproj
+
+  PackOnWindows:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build with dotnet
+      run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
+  
+    - name: Publish and Pack win-x86
+      run: |
+        dotnet publish -c Release -r win-x86 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x86 src\MediaConverters\MediaConverters.RuntimeNuGet\MediaConverters.RuntimeNuGet.csproj
+
+    - name: Publish and Pack win-x64
+      run: |
+        dotnet publish -c Release -r win-x64 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x64 src\MediaConverters\MediaConverters.RuntimeNuGet\MediaConverters.RuntimeNuGet.csproj
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: MediaConverters-Windows-NuGet
+        path: bin\Release\
