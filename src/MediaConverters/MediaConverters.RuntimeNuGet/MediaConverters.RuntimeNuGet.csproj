@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <!-- 
+      配置为无依赖。即避免带上 TargetFramework=netstandard2.0 的限制
+      配合 IncludeBuildOutput=false 即可让任意项目引用，无视目标框架
+    -->
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>The Media Converter can convert the media files in Office document.</Description>
+
+    <PackageId>DotNetCampus.MediaConverter.Tool.$(RuntimeIdentifier)</PackageId>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\MediaConverters.Tool\bin\Release\net9.0\publish\$(RuntimeIdentifier)\*" LinkBase="Publish" Pack="True" PackagePath="\runtimes\$(RuntimeIdentifier)\native"/>
+    <None Include="..\README.md" Link="README.md" Pack="True" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

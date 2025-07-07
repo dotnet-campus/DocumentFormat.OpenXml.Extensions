@@ -10,6 +10,7 @@
     <AssemblyName>DotNetCampus.MediaConverter</AssemblyName>
     <PublishAot>true</PublishAot>
     <IsAotCompatible>true</IsAotCompatible>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
