@@ -1,4 +1,6 @@
-﻿namespace DotNetCampus.MediaConverters.Contexts;
+﻿using System.Text.Json.Serialization;
+
+namespace DotNetCampus.MediaConverters.Contexts;
 
 public class ImageConvertContext
 {

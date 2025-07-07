@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MediaConverters.Lib\MediaConverters.Lib.csproj" />
+    <ProjectReference Include="..\MediaConverters.Tool\MediaConverters.Tool.csproj" />
     <ProjectReference Include="..\TextVisionComparer\TextVisionComparer.csproj" />
   </ItemGroup>
 

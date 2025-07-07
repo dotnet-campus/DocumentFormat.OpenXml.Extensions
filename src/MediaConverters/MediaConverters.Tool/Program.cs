@@ -14,12 +14,17 @@ using SourceGenerationContext = DotNetCampus.MediaConverters.Contexts.SourceGene
 
 namespace DotNetCampus.MediaConverters;
 
-public class Program
+class Program
 {
-    public static async Task<int> Main(string[] args)
+    static async Task<int> Main(string[] args)
     {
         var options = DotNetCampus.Cli.CommandLine.Parse(args).As<Options>();
 
+        return await RunAsync(options);
+    }
+
+    internal static async Task<ErrorCode> RunAsync(Options options)
+    {
         var jsonText = await File.ReadAllTextAsync(options.ConvertConfigurationFile);
         var imageConvertContext = JsonSerializer.Deserialize<ImageConvertContext>(jsonText, SourceGenerationContext.Default.Options);
 
@@ -74,6 +79,6 @@ public class Program
 
         optimizedImageFile.CopyTo(options.OutputFile, overwrite: true);
 
-        return 0;
+        return ErrorCode.Success;
     }
 }
