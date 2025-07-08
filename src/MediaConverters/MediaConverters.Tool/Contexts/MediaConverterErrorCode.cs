@@ -3,7 +3,10 @@ using ErrorCode = DotNetCampus.MediaConverters.Contexts.MediaConverterErrorCode;
 
 namespace DotNetCampus.MediaConverters.Contexts;
 
-internal readonly record struct MediaConverterErrorCode
+/// <summary>
+/// 多媒体转换过程的错误代码
+/// </summary>
+public readonly record struct MediaConverterErrorCode
 {
     /// <summary>
     /// 成功
@@ -15,12 +18,24 @@ internal readonly record struct MediaConverterErrorCode
     /// </summary>
     public static readonly ErrorCode UnknownError = new(-1, "Unknown error");
 
+    /// <summary>
+    /// 未知的图片格式
+    /// </summary>
     public static readonly ErrorCode UnknownImageFormat = new(1001, "Unknown image format");
 
+    /// <summary>
+    /// 图片内容错误
+    /// </summary>
     public static readonly ErrorCode InvalidImageContent = new(1002, "Invalid image content");
 
+    /// <summary>
+    /// 找不到图片文件
+    /// </summary>
     public static readonly ErrorCode ImageFileNotFound = new(1003, "Image file not found");
 
+    /// <summary>
+    /// 不支持的转换
+    /// </summary>
     public static readonly ErrorCode NotSupported = new(1004, "Not supported operation");
 
     /// <summary>
