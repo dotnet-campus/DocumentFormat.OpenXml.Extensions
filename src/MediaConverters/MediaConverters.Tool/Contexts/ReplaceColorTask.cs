@@ -1,4 +1,6 @@
-﻿namespace DotNetCampus.MediaConverters.Contexts;
+﻿using System.Collections.Generic;
+
+namespace DotNetCampus.MediaConverters.Contexts;
 
 public class ReplaceColorTask : IImageConvertTask
 {

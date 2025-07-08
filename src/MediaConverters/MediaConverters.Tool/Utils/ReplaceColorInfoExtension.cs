@@ -1,4 +1,5 @@
-﻿using DotNetCampus.MediaConverters.Contexts;
+﻿using System;
+using DotNetCampus.MediaConverters.Contexts;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace DotNetCampus.MediaConverters.Utils;
@@ -14,6 +15,4 @@ internal static class ReplaceColorInfoExtension
 
         throw new FormatException();
     }
-
-   
 }

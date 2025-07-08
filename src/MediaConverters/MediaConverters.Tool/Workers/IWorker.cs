@@ -1,4 +1,5 @@
-﻿using DotNetCampus.MediaConverters.Contexts;
+﻿using System;
+using DotNetCampus.MediaConverters.Contexts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 

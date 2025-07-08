@@ -1,4 +1,5 @@
-﻿using DotNetCampus.MediaConverters.Contexts;
+﻿using System.Collections.Generic;
+using DotNetCampus.MediaConverters.Contexts;
 using DotNetCampus.MediaConverters.Imaging.Effects;
 using DotNetCampus.MediaConverters.Imaging.Effects.Colors;
 using DotNetCampus.MediaConverters.Utils;

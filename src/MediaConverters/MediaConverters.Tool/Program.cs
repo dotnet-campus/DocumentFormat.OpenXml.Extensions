@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System;
 using DotNetCampus.MediaConverters.Contexts;
 using DotNetCampus.MediaConverters.Imaging.Optimizations;
 using DotNetCampus.MediaConverters.Workers;
@@ -8,7 +9,9 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 using System.Diagnostics;
+using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using SixLabors.ImageSharp.Formats.Png;
 using SourceGenerationContext = DotNetCampus.MediaConverters.Contexts.SourceGenerationContext;
 
