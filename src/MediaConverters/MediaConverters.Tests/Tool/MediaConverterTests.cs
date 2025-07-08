@@ -347,7 +347,7 @@ public class MediaConverterTests
         var inputFile = TestFileProvider.GetTestFile(fileName);
 
         var jsonText = JsonSerializer.Serialize(imageConvertContext,
-            new JsonSerializerOptions(SourceGenerationContext.Default.Options)
+            new JsonSerializerOptions(MediaConverterJsonSerializerSourceGenerationContext.Default.Options)
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             });

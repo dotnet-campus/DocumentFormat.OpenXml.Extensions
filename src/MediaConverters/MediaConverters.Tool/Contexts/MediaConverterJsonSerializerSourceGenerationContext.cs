@@ -13,6 +13,6 @@ namespace DotNetCampus.MediaConverters.Contexts;
 [JsonSerializable(typeof(SetSoftEdgeEffectTask))]
 [JsonSerializable(typeof(ImageConvertContext))]
 [JsonSerializable(typeof(IImageConvertTask))]
-internal partial class SourceGenerationContext : JsonSerializerContext
+public partial class MediaConverterJsonSerializerSourceGenerationContext : JsonSerializerContext
 {
 }

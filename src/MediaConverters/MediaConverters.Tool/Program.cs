@@ -13,7 +13,6 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SixLabors.ImageSharp.Formats.Png;
-using SourceGenerationContext = DotNetCampus.MediaConverters.Contexts.SourceGenerationContext;
 
 namespace DotNetCampus.MediaConverters;
 
@@ -29,7 +28,7 @@ class Program
     internal static async Task<ErrorCode> RunAsync(Options options)
     {
         var jsonText = await File.ReadAllTextAsync(options.ConvertConfigurationFile);
-        var imageConvertContext = JsonSerializer.Deserialize(jsonText, typeof(ImageConvertContext), SourceGenerationContext.Default) as ImageConvertContext;
+        var imageConvertContext = JsonSerializer.Deserialize(jsonText, typeof(ImageConvertContext), MediaConverterJsonSerializerSourceGenerationContext.Default) as ImageConvertContext;
 
         if (imageConvertContext is null)
         {
