@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System;
+using System.Collections.Generic;
 using DotNetCampus.MediaConverters.Contexts;
 using DotNetCampus.MediaConverters.Imaging.Optimizations;
 using DotNetCampus.MediaConverters.Workers;
@@ -20,6 +21,26 @@ class Program
 {
     static async Task<int> Main(string[] args)
     {
+        var imageConvertContext = new ImageConvertContext()
+        {
+            MaxImageWidth = 100,
+            ImageConvertTaskList = new List<IImageConvertTask>()
+            {
+                new ReplaceColorTask(),
+                new SetDuotoneEffectTask(),
+            }
+        };
+        var jsonText = imageConvertContext.ToJsonText();
+        if (!string.IsNullOrEmpty(jsonText))
+        {
+            Console.WriteLine(jsonText);
+
+            var context = ImageConvertContext.FromJsonText(jsonText);
+            Console.WriteLine($"Context={context} Task={context?.ImageConvertTaskList?.Count}");
+
+            return 0;
+        }
+
         var options = DotNetCampus.Cli.CommandLine.Parse(args).As<Options>();
 
         return await RunAsync(options);
