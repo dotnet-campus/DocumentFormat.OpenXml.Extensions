@@ -9,6 +9,8 @@
 
     <PackageId>DotNetCampus.MediaConverter.Tool.Context</PackageId>
 
+    <IsAotCompatible>true</IsAotCompatible>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
   <ItemGroup>
