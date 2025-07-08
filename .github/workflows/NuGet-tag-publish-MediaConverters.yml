@@ -23,8 +23,7 @@ jobs:
       run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
 
     - name: Pack MediaConverters.Tool.ContextNuGet
-      run: |
-        dotnet pack --no-build true --configuration Release src\MediaConverters\MediaConverters.Tool.ContextNuGet\MediaConverters.Tool.ContextNuGet.csproj
+      run: dotnet pack --no-build true --configuration Release src\MediaConverters\MediaConverters.Tool.ContextNuGet\MediaConverters.Tool.ContextNuGet.csproj
 
     - name: Publish and Pack win-x86
       run: |
@@ -35,10 +34,6 @@ jobs:
       run: |
         dotnet publish -c Release -r win-x64 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
         dotnet pack --configuration Release /p:RuntimeIdentifier=win-x64 src\MediaConverters\MediaConverters.Tool.RuntimeNuGet\MediaConverters.Tool.RuntimeNuGet.csproj
-
-    # - name: Add private GitHub registry to NuGet
-    #   run: |
-    #     dotnet nuget add source --username dotnet-campus --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/dotnet-campus/index.json"
 
     - name: Push generated package to NuGet 
       run: |
@@ -101,10 +96,6 @@ jobs:
         dotnet publish -c Release -r linux-x64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
         dotnet pack --configuration Release /p:RuntimeIdentifier=linux-x64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj
 
-    # - name: Add private GitHub registry to NuGet
-    #   run: |
-    #     dotnet nuget add source --username dotnet-campus --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/dotnet-campus/index.json"
-
     - name: Push generated package to NuGet 
       run: |
         dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
@@ -138,11 +129,7 @@ jobs:
     - name: Publish and Pack linux-arm64
       run: |
         dotnet publish -c Release -r linux-arm64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-arm64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj
-
-    # - name: Add private GitHub registry to NuGet
-    #   run: |
-    #     dotnet nuget add source --username dotnet-campus --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/dotnet-campus/index.json"
+        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-arm64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj        
 
     - name: Push generated package to NuGet 
       run: |
