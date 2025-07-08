@@ -180,10 +180,12 @@ public static class BitmapEffectExtension
     ///     设置冲蚀效果。
     /// </summary>
     /// <param name="bitmap">图片</param>
-    public static void SetLuminanceEffect(this Image<Rgba32> bitmap)
+    /// <param name="contrast">对比度</param>
+    /// <param name="brightness">亮度</param>
+    public static void SetLuminanceEffect(this Image<Rgba32> bitmap, float contrast = 0.2f, float brightness = 1.9f)
     {
-        bitmap.SetContrast(0.2f);
-        bitmap.SetBrightness(1.9f);
+        bitmap.SetContrast(contrast);
+        bitmap.SetBrightness(brightness);
     }
 
     /// <summary>
