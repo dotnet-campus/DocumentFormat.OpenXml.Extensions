@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using ErrorCode = DotNetCampus.MediaConverters.Contexts.MediaConverterErrorCode;
 
 namespace DotNetCampus.MediaConverters.Contexts;
 
-internal readonly record struct ErrorCode
+internal readonly record struct MediaConverterErrorCode
 {
     /// <summary>
     /// 成功
@@ -32,7 +33,7 @@ internal readonly record struct ErrorCode
     /// </summary>
     public string Message { get; init; }
 
-    public ErrorCode(int code, string message)
+    public MediaConverterErrorCode(int code, string message)
     {
         Code = code;
         Message = message;

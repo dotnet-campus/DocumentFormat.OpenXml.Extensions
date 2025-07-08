@@ -6,13 +6,13 @@ using DotNetCampus.MediaConverters.Imaging.Optimizations;
 using DotNetCampus.MediaConverters.Workers;
 
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SixLabors.ImageSharp.Formats.Png;
+using ErrorCode = DotNetCampus.MediaConverters.Contexts.MediaConverterErrorCode;
 
 namespace DotNetCampus.MediaConverters;
 

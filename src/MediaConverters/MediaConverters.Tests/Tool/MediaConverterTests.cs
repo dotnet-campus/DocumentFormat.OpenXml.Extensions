@@ -33,7 +33,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -53,7 +53,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -73,7 +73,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -94,7 +94,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -115,7 +115,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -136,7 +136,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -158,7 +158,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -178,7 +178,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -212,7 +212,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         AssertReplaceColor(options);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
@@ -248,7 +248,7 @@ public class MediaConverterTests
         var options = ToOptions(name, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         AssertReplaceColor(options);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
@@ -288,7 +288,7 @@ public class MediaConverterTests
         var options = ToOptions(TestFileProvider.DefaultTestImageName, imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -299,7 +299,7 @@ public class MediaConverterTests
         var options = ToOptions("file_example_TIFF_1MB.tiff", imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -310,7 +310,7 @@ public class MediaConverterTests
         var options = ToOptions("file_example_WEBP_50kB.webp", imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -321,7 +321,7 @@ public class MediaConverterTests
         var options = ToOptions("sample_640×426.tga", imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
@@ -332,7 +332,7 @@ public class MediaConverterTests
         var options = ToOptions("EXIF Orientation.png", imageConvertContext);
 
         var result = await Program.RunAsync(options);
-        Assert.AreEqual(ErrorCode.Success, result);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
