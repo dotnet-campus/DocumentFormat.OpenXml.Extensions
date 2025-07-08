@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DotNetCampus.MediaConverters.Contexts;
 
-[JsonSourceGenerationOptions(WriteIndented = true)]
+[JsonSourceGenerationOptions(WriteIndented = true,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
 [JsonSerializable(typeof(ReplaceColorInfo))]
 [JsonSerializable(typeof(SetDuotoneEffectTask))]
 [JsonSerializable(typeof(SetBlackWhiteEffectTask))]
