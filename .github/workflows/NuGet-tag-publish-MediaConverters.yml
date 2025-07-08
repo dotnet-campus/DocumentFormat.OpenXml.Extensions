@@ -25,12 +25,12 @@ jobs:
     - name: Publish and Pack win-x86
       run: |
         dotnet publish -c Release -r win-x86 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x86 src\MediaConverters\MediaConverters.RuntimeNuGet\MediaConverters.RuntimeNuGet.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x86 src\MediaConverters\MediaConverters.Tool.RuntimeNuGet\MediaConverters.Tool.RuntimeNuGet.csproj
 
     - name: Publish and Pack win-x64
       run: |
         dotnet publish -c Release -r win-x64 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x64 src\MediaConverters\MediaConverters.RuntimeNuGet\MediaConverters.RuntimeNuGet.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x64 src\MediaConverters\MediaConverters.Tool.RuntimeNuGet\MediaConverters.Tool.RuntimeNuGet.csproj
 
     - name: Add private GitHub registry to NuGet
       run: |
@@ -60,7 +60,7 @@ jobs:
     - name: Publish and Pack win-arm64
       run: |
         dotnet publish -c Release -r win-arm64 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=win-arm64 src\MediaConverters\MediaConverters.RuntimeNuGet\MediaConverters.RuntimeNuGet.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=win-arm64 src\MediaConverters\MediaConverters.Tool.RuntimeNuGet\MediaConverters.Tool.RuntimeNuGet.csproj
 
     - name: Add private GitHub registry to NuGet
       run: |
@@ -99,7 +99,7 @@ jobs:
     - name: Publish and Pack linux-x64
       run: |
         dotnet publish -c Release -r linux-x64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-x64 src/MediaConverters/MediaConverters.RuntimeNuGet/MediaConverters.RuntimeNuGet.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-x64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj
 
     - name: Add private GitHub registry to NuGet
       run: |
@@ -138,7 +138,7 @@ jobs:
     - name: Publish and Pack linux-arm64
       run: |
         dotnet publish -c Release -r linux-arm64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-arm64 src/MediaConverters/MediaConverters.RuntimeNuGet/MediaConverters.RuntimeNuGet.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-arm64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj
 
     - name: Add private GitHub registry to NuGet
       run: |
