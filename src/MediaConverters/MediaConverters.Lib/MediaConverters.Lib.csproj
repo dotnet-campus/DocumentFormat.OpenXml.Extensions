@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>DotNetCampus.MediaConverters</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <IsAotCompatible>true</IsAotCompatible>
+    <Description>The Media Converter can convert the media files in Office document.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.10" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- 不要在 debug 开启 EmbedAllSources 或 EmbedUntrackedSources：
+         1. NuGet 包会提示包含未追踪的源，但实际列出的未追踪的源是空的（所以其实都已经追踪了？）
+         2. 如果采用此属性将源嵌入，会导致 JetBrians Rider 调试时使用嵌入的源而不是仓库中的源，这会导致无法使用断点等一系列依赖于 pdb 源的功能。-->
+    <EmbedAllSources Condition="'$(Configuration)' != 'Debug'">true</EmbedAllSources>
+
+    <!-- 输出符号文件 -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+</Project>
