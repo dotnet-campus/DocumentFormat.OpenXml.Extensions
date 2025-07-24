@@ -156,8 +156,20 @@ public static class ImageFileOptimization
             return;
         }
 
-        var pixelWidth = (int) Math.Sqrt(maxPixelCount * image.Width / (double) image.Height);
-        var pixelHeight = (int) Math.Sqrt(maxPixelCount * image.Height / (double) image.Width);
+        // 提前计算 wh 和 hw 的值。而不是使用 maxPixelCount * Width / Height 的写法
+        // 避免大图的 maxPixelCount * Width 出现越界。如传入尺寸为
+        // maxImageWidth	507	
+        // maxImageHeight	1095
+        // maxPixelCount = maxImageWidth x maxImageHeight = 555165
+        // 图片的尺寸为 4000x4000
+        // 于是就有 maxPixelCount x Width = 555165 x 4000 = 2220660000 > int.MaxValue = 2147483647
+        // 出现越界错误
+
+        double wh = image.Width / (double) image.Height;
+        double hw = image.Height / (double) image.Width;
+
+        var pixelWidth = (int) Math.Sqrt(maxPixelCount * wh);
+        var pixelHeight = (int) Math.Sqrt(maxPixelCount * hw);
         image.Mutate(context => context.Resize(new Size(pixelWidth, pixelHeight), compand: true));
     }
 

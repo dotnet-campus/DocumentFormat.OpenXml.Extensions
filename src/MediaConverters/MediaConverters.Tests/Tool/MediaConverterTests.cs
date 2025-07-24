@@ -361,4 +361,35 @@ public class MediaConverterTests
             ConvertConfigurationFile = configFile,
         };
     }
+
+    /// <summary>
+    /// 这是一些自定义的测试，来源于用户反馈问题
+    /// 图片太大就不传了
+    /// </summary>
+    /// <returns></returns>
+#if DEBUG
+    [TestMethod]
+#endif
+    public async Task CustomTest()
+    {
+        var imageFile = @"C:\lindexi\Work\ImageTest\Test1\file.png";
+        var configFile = @"C:\lindexi\Work\ImageTest\Test1\file.json";
+
+        var testFolder = Path.Join(TestHelper.WorkingDirectory.FullName, Path.GetRandomFileName());
+        Directory.CreateDirectory(testFolder);
+        var workingFolder = Path.Join(testFolder, "Working");
+        var outputFile = Path.Join(testFolder, "Output.png");
+
+        var options = new Options()
+        {
+            WorkingFolder = workingFolder,
+            InputFile = imageFile,
+            OutputFile = outputFile,
+            ConvertConfigurationFile = configFile,
+        };
+
+        var result = await Program.RunAsync(options);
+        Assert.AreEqual(MediaConverterErrorCode.Success, result);
+        TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
+    }
 }
