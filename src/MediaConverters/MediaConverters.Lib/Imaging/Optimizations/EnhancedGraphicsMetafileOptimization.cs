@@ -88,6 +88,8 @@ public static class EnhancedGraphicsMetafileOptimization
         // 继续执行 libwmf 的转换，此时不支持 emf 格式
         if (string.Equals(file.Extension, ".emf"))
         {
+            context.LogMessage($"Convert emf to png is not supported with libwmf. File='{file}'");
+
             return new ImageFileOptimizationResult()
             {
                 OptimizedImageFile = null,

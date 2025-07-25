@@ -84,7 +84,13 @@ class Program
 
         if (!imageFileOptimizationResult.IsSuccess)
         {
-            Console.Error.WriteLine(imageFileOptimizationResult);
+            var errorMessage = $"Failed to convert image file '{inputFile.FullName}'. Reason: {imageFileOptimizationResult.FailureReason}";
+            if (imageFileOptimizationResult.Exception is { } exception)
+            {
+                errorMessage += $" Exception: {exception}";
+            }
+
+            Console.Error.WriteLine(errorMessage);
 
             switch (imageFileOptimizationResult.FailureReason)
             {
