@@ -55,8 +55,6 @@ public static class ImageFileOptimization
         {
             var file = imageFile;
             var newFilePath = Path.Join(workingFolder.FullName, $"Copy_{Path.GetRandomFileName()}_{imageFile.Name}");
-            // 拷贝图片文件是耗时的
-            // Copy new file Cost 179ms.
             file.CopyTo(newFilePath);
             context.LogMessage($"Copy new file to '{newFilePath}'");
             file = new FileInfo(newFilePath);
