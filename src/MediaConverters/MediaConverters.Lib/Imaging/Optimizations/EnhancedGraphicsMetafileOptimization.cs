@@ -150,8 +150,11 @@ public static class EnhancedGraphicsMetafileOptimization
             processStartInfo.ArgumentList.Add($"--wmf-fontdir={fontFolder}");
         }
 
+        var stopwatch = Stopwatch.StartNew();
         using var process = Process.Start(processStartInfo);
         process?.WaitForExit(TimeSpan.FromSeconds(5));
+        stopwatch.Stop();
+        context.LogMessage($"Run wmf2svg process Cost {stopwatch.ElapsedMilliseconds}ms");
         if (process?.ExitCode == 0 && File.Exists(svgFile))
         {
             // 转换成功，再次执行 SVG 转 PNG 的转换
