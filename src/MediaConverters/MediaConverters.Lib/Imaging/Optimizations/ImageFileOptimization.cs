@@ -1,20 +1,18 @@
-﻿using SixLabors.ImageSharp;
+﻿using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Gif;
 using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 using SkiaSharp;
 
 using Svg.Skia;
-
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 
@@ -91,12 +89,7 @@ public static class ImageFileOptimization
             {
                 context.LogMessage($"Convert SVG to PNG failed: {e}");
 
-                return new ImageFileOptimizationResult()
-                {
-                    OptimizedImageFile = null,
-                    Exception = e,
-                    FailureReason = ImageFileOptimizationFailureReason.NotSupported
-                };
+                return ImageFileOptimizationResult.FailException(e);
             }
         }
         else if (IsExtension(".wmf") ||

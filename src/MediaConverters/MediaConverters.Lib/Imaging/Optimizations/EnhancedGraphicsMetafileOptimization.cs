@@ -31,12 +31,7 @@ public static class EnhancedGraphicsMetafileOptimization
             {
                 context.LogMessage($"Convert wmf or emf in linux Fail. Exception: {e}");
 
-                return new ImageFileOptimizationResult()
-                {
-                    OptimizedImageFile = null,
-                    Exception = e,
-                    FailureReason = ImageFileOptimizationFailureReason.NotSupported
-                };
+                return ImageFileOptimizationResult.FailException(e);
             }
         }
 
@@ -116,12 +111,7 @@ public static class EnhancedGraphicsMetafileOptimization
             {
                 context.LogMessage($"Convert svg to png file failed. File: '{svgImageFile.FullName}' Exception: {e}");
 
-                return new ImageFileOptimizationResult()
-                {
-                    OptimizedImageFile = null,
-                    Exception = e,
-                    FailureReason = ImageFileOptimizationFailureReason.NotSupported
-                };
+                return ImageFileOptimizationResult.FailException(e);
             }
         }
     }
@@ -156,6 +146,7 @@ public static class EnhancedGraphicsMetafileOptimization
         if (process?.ExitCode == 0 && File.Exists(svgFile))
         {
             // 转换成功，再次执行 SVG 转 PNG 的转换
+            // 由于可能存在 SVG 文件中包含无效字符的问题，因此需要修复一下
             var convertedFile = ImageFileOptimization.FixSvgInvalidCharacter(context with
             {
                 ImageFile = new FileInfo(svgFile)
@@ -214,12 +205,7 @@ public static class EnhancedGraphicsMetafileOptimization
         {
             // 失败了，继续调用 libwmf 进行转换
             context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File='{file}' Exception: {e}");
-            return new ImageFileOptimizationResult()
-            {
-                OptimizedImageFile = null,
-                Exception = e,
-                FailureReason = ImageFileOptimizationFailureReason.NotSupported,
-            };
+            return ImageFileOptimizationResult.FailException(e);
         }
 
         return new ImageFileOptimizationResult()

@@ -28,6 +28,11 @@ public enum ImageFileOptimizationFailureReason
     NotSupported,
 
     /// <summary>
+    /// 异常
+    /// </summary>
+    Exception,
+
+    /// <summary>
     /// GDI 发生异常
     /// </summary>
     GdiException,

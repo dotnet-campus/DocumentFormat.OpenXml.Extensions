@@ -29,4 +29,14 @@ public readonly record struct ImageFileOptimizationResult() : IDisposable
     {
         Image?.Dispose();
     }
+
+    public static ImageFileOptimizationResult FailException(Exception e)
+    {
+        return new ImageFileOptimizationResult()
+        {
+            OptimizedImageFile = null,
+            Exception = e,
+            FailureReason = ImageFileOptimizationFailureReason.Exception
+        };
+    }
 }

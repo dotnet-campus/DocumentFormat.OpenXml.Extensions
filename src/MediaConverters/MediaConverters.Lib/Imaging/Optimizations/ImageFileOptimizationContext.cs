@@ -6,7 +6,7 @@ namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 /// <summary>
 /// 图片优化的上下文信息
 /// </summary>
-/// <param name="ImageFile"></param>
+/// <param name="ImageFile">图片文件</param>
 /// <param name="WorkingFolder"></param>
 /// <param name="MaxImageWidth">限制图片的最大宽度。为空则表示不限制</param>
 /// <param name="MaxImageHeight">限制图片的最大高度。为空则表示不限制</param>
