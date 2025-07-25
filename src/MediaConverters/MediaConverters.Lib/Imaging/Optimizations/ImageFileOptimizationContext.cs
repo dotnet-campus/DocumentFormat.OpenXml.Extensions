@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
@@ -14,8 +13,6 @@ namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 public readonly record struct ImageFileOptimizationContext(FileInfo ImageFile,
     DirectoryInfo WorkingFolder, int? MaxImageWidth = null, int? MaxImageHeight = null)
 {
-    public Stopwatch TotalStopwatch { get; } = Stopwatch.StartNew();
-
     public string TraceId { get; init; } = Guid.NewGuid().ToString("N");
 
     public bool ShouldLogToConsole { get; init; } = false;
@@ -33,7 +30,7 @@ public readonly record struct ImageFileOptimizationContext(FileInfo ImageFile,
 
         if (ShouldLogToConsole)
         {
-            Console.WriteLine($"{message} Total Cost {TotalStopwatch.ElapsedMilliseconds}ms");
+            Console.WriteLine(message);
         }
 
         if (ShouldLogToFile)
