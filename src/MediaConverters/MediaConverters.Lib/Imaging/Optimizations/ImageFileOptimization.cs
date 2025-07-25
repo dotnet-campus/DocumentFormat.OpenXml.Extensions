@@ -322,9 +322,8 @@ public static class ImageFileOptimization
 
         using var skSvg = new SKSvg();
         using var skPicture = skSvg.Load(imageFile.FullName);
-        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(imageFile.Name);
         var outputFile = Path.Join(workingFolder.FullName,
-            $"SVG_{Path.GetRandomFileName()}_{fileNameWithoutExtension}.png");
+            $"SVG_{Path.GetRandomFileName()}.png");
         var canSave = skSvg.Save(outputFile, SKColors.Transparent);
         if (canSave && File.Exists(outputFile))
         {
