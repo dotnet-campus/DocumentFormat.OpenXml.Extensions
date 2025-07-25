@@ -55,19 +55,11 @@ class Program
 
     internal static async Task<ErrorCode> RunAsync(Options options)
     {
-        var total = Stopwatch.StartNew();
-
         var stopwatch = Stopwatch.StartNew();
+
         var jsonText = await File.ReadAllTextAsync(options.ConvertConfigurationFile);
-        stopwatch.Stop();
-        Console.WriteLine($"ReadJsonFile Cost {stopwatch.ElapsedMilliseconds}ms");
 
-        stopwatch.Restart();
         var imageConvertContext = ImageConvertContext.FromJsonText(jsonText);
-        stopwatch.Stop();
-        Console.WriteLine($"ParseJsonFile Cost {stopwatch.ElapsedMilliseconds}ms");
-        stopwatch.Restart();
-
 
         if (imageConvertContext is null)
         {
@@ -89,9 +81,6 @@ class Program
             ShouldLogToFile = options.ShouldLogToFile ?? false,
         };
         using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(context, useAreaSizeLimit, copyNewFile);
-        stopwatch.Stop();
-        Console.WriteLine($"OptimizeImageFileAsync Cost {stopwatch.ElapsedMilliseconds}ms. File='{inputFile.FullName}'");
-        stopwatch.Restart();
 
         if (!imageFileOptimizationResult.IsSuccess)
         {
@@ -142,18 +131,14 @@ class Program
                 ColorType = PngColorType.RgbWithAlpha,
                 BitDepth = PngBitDepth.Bit8,
             });
-
-            stopwatch.Stop();
-            Console.WriteLine($"Save WorkerProvider Png Cost {stopwatch.ElapsedMilliseconds}ms. File='{inputFile.FullName}'");
-            stopwatch.Restart();
         }
         else
         {
             optimizedImageFile.CopyTo(options.OutputFile, overwrite: true);
         }
 
-        total.Stop();
-        context.LogMessage($"Success converted image. Cost {total.ElapsedMilliseconds}ms. OutputFile='{options.OutputFile}'");
+        stopwatch.Stop();
+        context.LogMessage($"Success converted image. Cost {stopwatch.ElapsedMilliseconds}ms. OutputFile='{options.OutputFile}'");
 
         return ErrorCode.Success;
     }

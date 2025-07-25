@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,8 +29,6 @@ public static class ImageFileOptimization
     /// <returns></returns>
     public static async Task<ImageFileOptimizationResult> OptimizeImageFileAsync(ImageFileOptimizationContext context, bool useAreaSizeLimit = true, bool copyNewFile = true)
     {
-        var stopwatch = Stopwatch.StartNew();
-
         var imageFile = context.ImageFile;
         var workingFolder = context.WorkingFolder;
         var maxImageWidth = context.MaxImageWidth;
@@ -64,10 +61,6 @@ public static class ImageFileOptimization
                 ImageFile = file
             };
         }
-
-        stopwatch.Stop();
-        context.LogMessage($"Copy new file Cost {stopwatch.ElapsedMilliseconds}ms. ImageFile: '{context.ImageFile.FullName}'");
-        stopwatch.Restart();
 
         if (IsExtension(".svg"))
         {
@@ -103,9 +96,6 @@ public static class ImageFileOptimization
                  IsExtension(".emf"))
         {
             var result = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(context);
-            stopwatch.Stop();
-            context.LogMessage($"ConvertWmfOrEmfToPngFile Cost {stopwatch.ElapsedMilliseconds}ms. ImageFile: '{context.ImageFile.FullName}'");
-
             if (result.OptimizedImageFile is not null)
             {
                 context.LogMessage($"Success ConvertWmfOrEmfToPngFile. Update current image file to '{result.OptimizedImageFile}'");
@@ -120,7 +110,6 @@ public static class ImageFileOptimization
             }
         }
 
-        stopwatch.Restart();
         context.LogMessage($"Start optimize image with ImageSharp. ImageFile: '{context.ImageFile.FullName}'");
 
         Image<Rgba32> image;
@@ -130,9 +119,6 @@ public static class ImageFileOptimization
                 FileShare.Read);
 
             image = await Image.LoadAsync<Rgba32>(fileStream);
-
-            stopwatch.Stop();
-            context.LogMessage($"Load image with ImageSharp Cost {stopwatch.ElapsedMilliseconds}ms. ImageFile: '{context.ImageFile.FullName}'");
         }
         catch (ImageFormatException e)
         {
@@ -179,24 +165,15 @@ public static class ImageFileOptimization
                 };
             }
 
-            stopwatch.Restart();
             OptimizeImage(image, maxImageWidth, maxImageHeight, useAreaSizeLimit);
-            stopwatch.Stop();
-            context.LogMessage(
-                $"Optimize image with ImageSharp Cost {stopwatch.ElapsedMilliseconds}ms. ImageFile: '{context.ImageFile.FullName}'");
 
             // 重新保存即可
             var outputImageFilePath = Path.Join(workingFolder.FullName, $"{Path.GetRandomFileName()}.png");
-            stopwatch.Restart();
             await image.SaveAsPngAsync(outputImageFilePath, new PngEncoder()
             {
                 ColorType = PngColorType.RgbWithAlpha,
                 BitDepth = PngBitDepth.Bit8,
             });
-
-            stopwatch.Stop();
-            context.LogMessage(
-                $"Save optimized image with ImageSharp Cost {stopwatch.ElapsedMilliseconds}ms. OutputImageFile: '{outputImageFilePath}'");
 
             return new ImageFileOptimizationResult()
             {
@@ -336,27 +313,11 @@ public static class ImageFileOptimization
         var imageFile = context.ImageFile;
         var workingFolder = context.WorkingFolder;
 
-        var stopwatch = Stopwatch.StartNew();
-
-
         using var skSvg = new SKSvg();
         using var skPicture = skSvg.Load(imageFile.FullName);
-
-        stopwatch.Stop();
-        context.LogMessage($"Load sk svg Cost {stopwatch.ElapsedMilliseconds}ms");
-
         var outputFile = Path.Join(workingFolder.FullName,
             $"SVG_{Path.GetRandomFileName()}.png");
-
-        stopwatch.Restart();
         var canSave = skSvg.Save(outputFile, SKColors.Transparent);
-        stopwatch.Stop();
-        context.LogMessage($"Save sk svg to png Cost {stopwatch.ElapsedMilliseconds}ms. OutputFile='{outputFile}'");
-
-        //var skBitmap = skPicture.ToBitmap(SKColor.Empty, 1,1,SKColorType.Bgra8888,SKAlphaType.Unpremul,null!);
-        //var pixelSpan = skBitmap.GetPixelSpan();
-        //Image<Rgba32>.LoadPixelData<Rgba32>(pixelSpan, skBitmap.Width, skBitmap.Height)
-
         if (canSave && File.Exists(outputFile))
         {
             return new FileInfo(outputFile);

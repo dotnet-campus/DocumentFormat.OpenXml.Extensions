@@ -49,10 +49,7 @@ public static class EnhancedGraphicsMetafileOptimization
 
         // 在 Linux 上，先尝试使用 Inkscape 进行转换，如失败，再使用 libwmf 进行转换
         // 调用 Inkscape 进行转换
-        var stopwatch = Stopwatch.StartNew();
         ImageFileOptimizationResult result = ConvertWithInkscape(context);
-        stopwatch.Stop();
-        context.LogMessage($"ConvertWithInkscape Cost {stopwatch.ElapsedMilliseconds}ms");
         if (result.OptimizedImageFile is { } svgFile)
         {
             return ConvertSvgToPngFile(svgFile);
@@ -76,10 +73,7 @@ public static class EnhancedGraphicsMetafileOptimization
 
         // 使用 libwmf 进行转换
 
-        stopwatch.Restart();
         result = ConvertWithInkscapeLibWmf(context);
-        stopwatch.Stop();
-        context.LogMessage($"ConvertWithInkscapeLibWmf Cost {stopwatch.ElapsedMilliseconds}ms");
         if (result.OptimizedImageFile is { } svgLibWmfFile)
         {
             return ConvertSvgToPngFile(svgLibWmfFile);
@@ -93,13 +87,10 @@ public static class EnhancedGraphicsMetafileOptimization
         {
             try
             {
-                stopwatch.Restart();
                 var convertSvgToPngFile = ImageFileOptimization.ConvertSvgToPngFile(context with
                 {
                     ImageFile = svgImageFile
                 });
-                stopwatch.Stop();
-                context.LogMessage($"Convert svg to png file Cost {stopwatch.ElapsedMilliseconds}ms. File='{svgImageFile.FullName}'");
                 if (convertSvgToPngFile is not null)
                 {
                     return new ImageFileOptimizationResult()
