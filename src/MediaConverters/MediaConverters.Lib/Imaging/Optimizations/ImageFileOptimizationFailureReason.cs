@@ -26,4 +26,9 @@ public enum ImageFileOptimizationFailureReason
     /// 不支持的图片格式
     /// </summary>
     NotSupported,
+
+    /// <summary>
+    /// GDI 发生异常
+    /// </summary>
+    GdiException,
 }

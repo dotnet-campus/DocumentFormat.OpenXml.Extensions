@@ -5,10 +5,16 @@ using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
+using SkiaSharp;
+
+using Svg.Skia;
+
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 
@@ -44,9 +50,40 @@ public static class ImageFileOptimization
         var file = imageFile;
         if (copyNewFile)
         {
-            var newFilePath = Path.Join(workingFolder.FullName, $"{Path.GetRandomFileName()}_{imageFile.Name}");
+            var newFilePath = Path.Join(workingFolder.FullName, $"Copy_{Path.GetRandomFileName()}_{imageFile.Name}");
             file.CopyTo(newFilePath);
             file = new FileInfo(newFilePath);
+        }
+
+        if (IsExtension(".svg"))
+        {
+            // 如果是 svg 那就直接转换了，因为后续叠加特效等逻辑都不能支持 SVG 格式
+            var outputFilePath = ConvertSvgToPngFile(file, workingFolder);
+            if (outputFilePath is null)
+            {
+                return new ImageFileOptimizationResult()
+                {
+                    OptimizedImageFile = null,
+                    FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                };
+            }
+            else
+            {
+                file = outputFilePath;
+            }
+        }
+        else if (IsExtension(".wmf") ||
+                 IsExtension(".emf"))
+        {
+            var result = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(file, workingFolder);
+            if (result.OptimizedImageFile is not null)
+            {
+                file = result.OptimizedImageFile;
+            }
+            else
+            {
+                return result;
+            }
         }
 
         Image<Rgba32> image;
@@ -111,6 +148,11 @@ public static class ImageFileOptimization
         {
             image.Dispose();
             throw;
+        }
+
+        bool IsExtension(string extension)
+        {
+            return string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase);
         }
     }
 
@@ -221,4 +263,94 @@ public static class ImageFileOptimization
     /// 图片压缩的最大高度
     /// </summary>
     private const int MaxHeight = 2160;
+
+    /// <summary>
+    /// 转换 svg 文件为 png 文件
+    /// </summary>
+    /// <param name="imageFile"></param>
+    /// <param name="workingFolder"></param>
+    /// <returns></returns>
+    public static FileInfo? ConvertSvgToPngFile(FileInfo imageFile,
+        DirectoryInfo workingFolder)
+    {
+        using var skSvg = new SKSvg();
+        using var skPicture = skSvg.Load(imageFile.FullName);
+        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(imageFile.Name);
+        var outputFile = Path.Join(workingFolder.FullName, $"SVG_{Path.GetRandomFileName()}_{fileNameWithoutExtension}.png");
+        var canSave = skSvg.Save(outputFile, SKColors.Transparent);
+        if (canSave && File.Exists(outputFile))
+        {
+            return new FileInfo(outputFile);
+        }
+
+        // 转换失败
+        return null;
+    }
+
+    public static async Task<FileInfo> FixSvgInvalidCharacterAsync(FileInfo svgFile,
+        DirectoryInfo workingFolder)
+    {
+        using var fileStream = svgFile.OpenRead();
+        using var streamReader = new StreamReader(fileStream);
+
+        var xDocument = await XDocument.LoadAsync(streamReader, LoadOptions.SetLineInfo, CancellationToken.None);
+        bool anyUpdate = false;
+
+        foreach (var xElement in xDocument.Descendants("text"))
+        {
+            var value = xElement.Value;
+            if (!string.IsNullOrEmpty(value) && value.Length > 0 && value[0] is var c && c == 0xFFFD)
+            {
+                // 0xFFFFD 是 utf8 特殊字符
+                // 画出来就是�符号，不如删掉
+                xElement.Value = string.Empty;
+
+                anyUpdate = true;
+            }
+        }
+
+        if (anyUpdate)
+        {
+            var convertedFile = Path.Join(workingFolder.FullName, $"FixSVG_{Path.GetRandomFileName()}.svg");
+            using var stream = File.Create(convertedFile);
+            await xDocument.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
+            return new FileInfo(convertedFile);
+        }
+
+        // 啥都不用改，返回原图
+        return svgFile;
+    }
+
+    public static FileInfo FixSvgInvalidCharacter(FileInfo svgFile,
+        DirectoryInfo workingFolder)
+    {
+        using var fileStream = svgFile.OpenRead();
+        using var streamReader = new StreamReader(fileStream);
+
+        var xDocument = XDocument.Load(streamReader, LoadOptions.SetLineInfo);
+        bool anyUpdate = false;
+
+        foreach (var xElement in xDocument.Descendants("text"))
+        {
+            var value = xElement.Value;
+            if (!string.IsNullOrEmpty(value) && value.Length > 0 && value[0] is var c && c == 0xFFFD)
+            {
+                // 0xFFFFD 是 utf8 特殊字符
+                // 画出来就是�符号，不如删掉
+                xElement.Value = string.Empty;
+
+                anyUpdate = true;
+            }
+        }
+
+        if (anyUpdate)
+        {
+            var convertedFile = Path.Join(workingFolder.FullName, $"FixSVG_{Path.GetRandomFileName()}.svg");
+            xDocument.Save(convertedFile);
+            return new FileInfo(convertedFile);
+        }
+
+        // 啥都不用改，返回原图
+        return svgFile;
+    }
 }

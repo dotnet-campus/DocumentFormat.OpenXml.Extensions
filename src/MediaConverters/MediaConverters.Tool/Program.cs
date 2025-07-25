@@ -20,6 +20,31 @@ class Program
 {
     static async Task<int> Main(string[] args)
     {
+        if (args.Length == 0)
+        {
+            // 调试模式
+            var imageConvertContext = new ImageConvertContext()
+            {
+                MaxImageWidth = 1000,
+                MaxImageHeight = 1000,
+            };
+
+            var testFolder =
+                Directory.CreateDirectory(Path.Join(AppContext.BaseDirectory, $"Test_{Path.GetRandomFileName()}"));
+            var jsonText = imageConvertContext.ToJsonText();
+            var configurationFile = Path.Join(testFolder.FullName, "image-convert.json");
+            await File.WriteAllTextAsync(configurationFile, jsonText);
+            var outputFile = Path.Join(testFolder.FullName, "1.png");
+
+            return await RunAsync(new Options()
+            {
+                InputFile = "image.wmf",
+                ConvertConfigurationFile = configurationFile,
+                WorkingFolder = testFolder.FullName,
+                OutputFile = outputFile,
+            });
+        }
+
         var options = DotNetCampus.Cli.CommandLine.Parse(args).As<Options>();
 
         return await RunAsync(options);
@@ -28,7 +53,8 @@ class Program
     internal static async Task<ErrorCode> RunAsync(Options options)
     {
         var jsonText = await File.ReadAllTextAsync(options.ConvertConfigurationFile);
-        var imageConvertContext = JsonSerializer.Deserialize(jsonText, typeof(ImageConvertContext), MediaConverterJsonSerializerSourceGenerationContext.Default) as ImageConvertContext;
+
+        var imageConvertContext = ImageConvertContext.FromJsonText(jsonText);
 
         if (imageConvertContext is null)
         {
@@ -61,6 +87,8 @@ class Program
                     return ErrorCode.ImageFileNotFound;
                 case ImageFileOptimizationFailureReason.NotSupported:
                     return ErrorCode.NotSupported;
+                case ImageFileOptimizationFailureReason.GdiException:
+                    return ErrorCode.GdiException;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
