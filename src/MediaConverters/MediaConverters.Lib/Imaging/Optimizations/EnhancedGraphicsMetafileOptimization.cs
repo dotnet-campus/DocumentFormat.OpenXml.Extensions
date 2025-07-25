@@ -160,6 +160,10 @@ public static class EnhancedGraphicsMetafileOptimization
                     OptimizedImageFile = convertedFile
                 };
             }
+            else
+            {
+                context.LogMessage($"Convert emf or wmf to svg by libwmf failed. File:'{file}' ExitCode:{process?.ExitCode}");
+            }
         }
         catch (Exception e)
         {
