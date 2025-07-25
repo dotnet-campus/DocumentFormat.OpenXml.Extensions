@@ -42,6 +42,9 @@ class Program
                 ConvertConfigurationFile = configurationFile,
                 WorkingFolder = testFolder.FullName,
                 OutputFile = outputFile,
+
+                ShouldLogToConsole = true,
+                ShouldLogToFile = true,
             });
         }
 
@@ -52,6 +55,8 @@ class Program
 
     internal static async Task<ErrorCode> RunAsync(Options options)
     {
+        var stopwatch = Stopwatch.StartNew();
+
         var jsonText = await File.ReadAllTextAsync(options.ConvertConfigurationFile);
 
         var imageConvertContext = ImageConvertContext.FromJsonText(jsonText);
@@ -68,7 +73,14 @@ class Program
 
         var useAreaSizeLimit = imageConvertContext.UseAreaSizeLimit ?? true;
         var copyNewFile = imageConvertContext.ShouldCopyNewFile ?? true;
-        using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(inputFile, workingFolder, imageConvertContext.MaxImageWidth, imageConvertContext.MaxImageHeight, useAreaSizeLimit, copyNewFile);
+
+        var context = new ImageFileOptimizationContext(inputFile, workingFolder, imageConvertContext.MaxImageWidth,
+            imageConvertContext.MaxImageHeight)
+        {
+            ShouldLogToConsole = options.ShouldLogToConsole ?? false,
+            ShouldLogToFile = options.ShouldLogToFile ?? false,
+        };
+        using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(context, useAreaSizeLimit, copyNewFile);
 
         if (!imageFileOptimizationResult.IsSuccess)
         {
@@ -118,6 +130,9 @@ class Program
         {
             optimizedImageFile.CopyTo(options.OutputFile, overwrite: true);
         }
+
+        stopwatch.Stop();
+        context.LogMessage($"Success converted image. Cost {stopwatch.ElapsedMilliseconds}ms. OutputFile='{options.OutputFile}'");
 
         return ErrorCode.Success;
     }

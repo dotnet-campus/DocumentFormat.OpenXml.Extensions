@@ -25,16 +25,19 @@ public static class ImageFileOptimization
     /// 其中，最大宽高是图片为 96.0 DPI 下的逻辑宽高。
     /// 在处理完后，将返回一张新的图片路径。
     /// </summary>
-    /// <param name="imageFile"></param>
-    /// <param name="maxImageWidth">限制图片的最大宽度。为空则表示不限制</param>
-    /// <param name="maxImageHeight">限制图片的最大高度。为空则表示不限制</param>
     /// <param name="copyNewFile">是否先行拷贝新的文件，再进行处理，避免图片占用。默认为 true。</param>
-    /// <param name="workingFolder"></param>
+    /// <param name="context"></param>
     /// <param name="useAreaSizeLimit">当包含宽度高度限制时，采用面积限制。采用面积限制时，可能宽度或高度依然超过限制的最大宽度高度。采用面积限制时，可以保证最大像素数量小于限制数量的同时，让图片可以达到最大尺寸</param>
     /// <returns></returns>
-    public static async Task<ImageFileOptimizationResult> OptimizeImageFileAsync(FileInfo imageFile,
-        DirectoryInfo workingFolder, int? maxImageWidth = null, int? maxImageHeight = null, bool useAreaSizeLimit = true, bool copyNewFile = true)
+    public static async Task<ImageFileOptimizationResult> OptimizeImageFileAsync(ImageFileOptimizationContext context, bool useAreaSizeLimit = true, bool copyNewFile = true)
     {
+        var imageFile = context.ImageFile;
+        var workingFolder = context.WorkingFolder;
+        var maxImageWidth = context.MaxImageWidth;
+        var maxImageHeight = context.MaxImageHeight;
+
+        context.LogMessage($"Start optimize image file. File='{imageFile}'");
+
         if (!File.Exists(imageFile.FullName))
         {
             // 不能依靠 imageFile.Exists 属性，因为属性可能还没更新
@@ -47,38 +50,66 @@ public static class ImageFileOptimization
 
         Directory.CreateDirectory(workingFolder.FullName);
 
-        var file = imageFile;
         if (copyNewFile)
         {
+            var file = imageFile;
             var newFilePath = Path.Join(workingFolder.FullName, $"Copy_{Path.GetRandomFileName()}_{imageFile.Name}");
             file.CopyTo(newFilePath);
+            context.LogMessage($"Copy new file to '{newFilePath}'");
             file = new FileInfo(newFilePath);
+
+            context = context with
+            {
+                ImageFile = file
+            };
         }
 
         if (IsExtension(".svg"))
         {
             // 如果是 svg 那就直接转换了，因为后续叠加特效等逻辑都不能支持 SVG 格式
-            var outputFilePath = ConvertSvgToPngFile(file, workingFolder);
-            if (outputFilePath is null)
+            try
             {
+                var outputFilePath = ConvertSvgToPngFile(context);
+                if (outputFilePath is null)
+                {
+                    return new ImageFileOptimizationResult()
+                    {
+                        OptimizedImageFile = null,
+                        FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                    };
+                }
+                else
+                {
+                    context.LogMessage($"Success ConvertSvgToPngFile. Update current image file to '{outputFilePath.FullName}'");
+                    context = context with
+                    {
+                        ImageFile = outputFilePath
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                context.LogMessage($"Convert SVG to PNG failed: {e}");
+
                 return new ImageFileOptimizationResult()
                 {
                     OptimizedImageFile = null,
+                    Exception = e,
                     FailureReason = ImageFileOptimizationFailureReason.NotSupported
                 };
-            }
-            else
-            {
-                file = outputFilePath;
             }
         }
         else if (IsExtension(".wmf") ||
                  IsExtension(".emf"))
         {
-            var result = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(file, workingFolder);
+            var result = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(context);
             if (result.OptimizedImageFile is not null)
             {
-                file = result.OptimizedImageFile;
+                context.LogMessage($"Success ConvertWmfOrEmfToPngFile. Update current image file to '{result.OptimizedImageFile}'");
+                context = context with
+                {
+                    ImageFile = result.OptimizedImageFile
+                };
             }
             else
             {
@@ -86,15 +117,21 @@ public static class ImageFileOptimization
             }
         }
 
+        context.LogMessage($"Start optimize image with ImageSharp. ImageFile: '{context.ImageFile.FullName}'");
+
         Image<Rgba32> image;
         try
         {
-            await using var fileStream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            await using var fileStream = new FileStream(context.ImageFile.FullName, FileMode.Open, FileAccess.Read,
+                FileShare.Read);
 
             image = await Image.LoadAsync<Rgba32>(fileStream);
         }
         catch (ImageFormatException e)
         {
+            context.LogMessage(
+                $"Fail to load image with ImageSharp. ImageFile: '{context.ImageFile.FullName}' Exception: {e}");
+
             // 这里是明确的图片处理的错误，可以转换为输出信息。如果是其他错误，继续抛出
             ImageFileOptimizationFailureReason failureReason = default;
 
@@ -114,11 +151,19 @@ public static class ImageFileOptimization
                 FailureReason = failureReason
             };
         }
+        catch (Exception e)
+        {
+            context.LogMessage($"Fail to load image with ImageSharp. ImageFile: '{context.ImageFile.FullName}' Exception: {e}");
+
+            throw;
+        }
 
         try
         {
             if (image.Metadata.DecodedImageFormat is GifFormat)
             {
+                context.LogMessage($"Image format is Gif. NotSupported.");
+
                 image.Dispose();
                 return new ImageFileOptimizationResult()
                 {
@@ -144,15 +189,17 @@ public static class ImageFileOptimization
                 FailureReason = ImageFileOptimizationFailureReason.Ok
             };
         }
-        catch
+        catch (Exception e)
         {
+            context.LogMessage($"Fail to optimize image with ImageSharp. ImageFile: '{context.ImageFile.FullName}' Exception: {e}");
+
             image.Dispose();
             throw;
         }
 
         bool IsExtension(string extension)
         {
-            return string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(context.ImageFile.Extension, extension, StringComparison.OrdinalIgnoreCase);
         }
     }
 
@@ -267,16 +314,17 @@ public static class ImageFileOptimization
     /// <summary>
     /// 转换 svg 文件为 png 文件
     /// </summary>
-    /// <param name="imageFile"></param>
-    /// <param name="workingFolder"></param>
     /// <returns></returns>
-    public static FileInfo? ConvertSvgToPngFile(FileInfo imageFile,
-        DirectoryInfo workingFolder)
+    public static FileInfo? ConvertSvgToPngFile(ImageFileOptimizationContext context)
     {
+        var imageFile = context.ImageFile;
+        var workingFolder = context.WorkingFolder;
+
         using var skSvg = new SKSvg();
         using var skPicture = skSvg.Load(imageFile.FullName);
         var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(imageFile.Name);
-        var outputFile = Path.Join(workingFolder.FullName, $"SVG_{Path.GetRandomFileName()}_{fileNameWithoutExtension}.png");
+        var outputFile = Path.Join(workingFolder.FullName,
+            $"SVG_{Path.GetRandomFileName()}_{fileNameWithoutExtension}.png");
         var canSave = skSvg.Save(outputFile, SKColors.Transparent);
         if (canSave && File.Exists(outputFile))
         {
@@ -321,9 +369,11 @@ public static class ImageFileOptimization
         return svgFile;
     }
 
-    public static FileInfo FixSvgInvalidCharacter(FileInfo svgFile,
-        DirectoryInfo workingFolder)
+    public static FileInfo FixSvgInvalidCharacter(ImageFileOptimizationContext context)
     {
+        FileInfo svgFile = context.ImageFile;
+        DirectoryInfo workingFolder = context.WorkingFolder;
+
         using var fileStream = svgFile.OpenRead();
         using var streamReader = new StreamReader(fileStream);
 

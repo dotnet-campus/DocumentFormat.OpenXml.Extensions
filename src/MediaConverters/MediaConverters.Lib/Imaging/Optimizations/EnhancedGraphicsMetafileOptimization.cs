@@ -12,18 +12,32 @@ namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 /// </summary>
 public static class EnhancedGraphicsMetafileOptimization
 {
-    public static ImageFileOptimizationResult ConvertWmfOrEmfToPngFile(FileInfo file, DirectoryInfo workingFolder)
+    public static ImageFileOptimizationResult ConvertWmfOrEmfToPngFile(ImageFileOptimizationContext context)
     {
         // 在 Windows 上，直接使用 GDI+ 将 WMF 或 EMF 文件转换为 PNG 文件
         if (OperatingSystem.IsWindowsVersionAtLeast(6, 1))
         {
-            return ConvertInWindows(file, workingFolder);
+            return ConvertInWindows(context);
         }
 
         if (OperatingSystem.IsLinux())
         {
             // 在 Linux 上，先尝试使用 Inkscape 进行转换，如失败，再使用 libwmf 进行转换
-            return ConvertInLinux(file, workingFolder);
+            try
+            {
+                return ConvertInLinux(context);
+            }
+            catch (Exception e)
+            {
+                context.LogMessage($"Convert wmf or emf in linux Fail. Exception: {e}");
+
+                return new ImageFileOptimizationResult()
+                {
+                    OptimizedImageFile = null,
+                    Exception = e,
+                    FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                };
+            }
         }
 
         return new ImageFileOptimizationResult()
@@ -34,12 +48,16 @@ public static class EnhancedGraphicsMetafileOptimization
     }
 
     [SupportedOSPlatform("linux")]
-    private static ImageFileOptimizationResult ConvertInLinux(FileInfo file, DirectoryInfo workingFolder)
+    private static ImageFileOptimizationResult ConvertInLinux(ImageFileOptimizationContext context)
     {
+        var file = context.ImageFile;
+        var workingFolder = context.WorkingFolder;
+
         // 在 Linux 上，先尝试使用 Inkscape 进行转换，如失败，再使用 libwmf 进行转换
         // 调用 Inkscape 进行转换
         var svgFile = Path.Join(workingFolder.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_{Path.GetRandomFileName()}.svg");
 
+        context.LogMessage($"Start convert emf or wmf to png by Inkscape. File='{file}'");
         {
             var processStartInfo = new ProcessStartInfo("inkscape")
             {
@@ -57,19 +75,13 @@ public static class EnhancedGraphicsMetafileOptimization
                 if (process?.ExitCode == 0 && File.Exists(svgFile))
                 {
                     // 转换成功，再次执行 SVG 转 PNG 的转换
-                    var convertSvgToPngFile = ImageFileOptimization.ConvertSvgToPngFile(new FileInfo(svgFile), workingFolder);
-                    if (convertSvgToPngFile is not null)
-                    {
-                        return new ImageFileOptimizationResult()
-                        {
-                            OptimizedImageFile = convertSvgToPngFile
-                        };
-                    }
+                    return ConvertSvgToPngFile(new FileInfo(svgFile));
                 }
             }
             catch (Exception e)
             {
                 // 失败了，继续调用 libwmf 进行转换
+                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File='{file}' Exception: {e}");
             }
         }
 
@@ -108,16 +120,12 @@ public static class EnhancedGraphicsMetafileOptimization
             if (process?.ExitCode == 0 && File.Exists(svgFile))
             {
                 // 转换成功，再次执行 SVG 转 PNG 的转换
-                var convertedFile = ImageFileOptimization.FixSvgInvalidCharacter(new FileInfo(svgFile),workingFolder);
-
-                var convertSvgToPngFile = ImageFileOptimization.ConvertSvgToPngFile(convertedFile, workingFolder);
-                if (convertSvgToPngFile is not null)
+                var convertedFile = ImageFileOptimization.FixSvgInvalidCharacter(context with
                 {
-                    return new ImageFileOptimizationResult()
-                    {
-                        OptimizedImageFile = convertSvgToPngFile
-                    };
-                }
+                    ImageFile = new FileInfo(svgFile)
+                });
+
+                return ConvertSvgToPngFile(convertedFile);
             }
         }
 
@@ -126,11 +134,53 @@ public static class EnhancedGraphicsMetafileOptimization
             OptimizedImageFile = null,
             FailureReason = ImageFileOptimizationFailureReason.NotSupported
         };
+
+        ImageFileOptimizationResult ConvertSvgToPngFile(FileInfo svgImageFile)
+        {
+            try
+            {
+                var convertSvgToPngFile = ImageFileOptimization.ConvertSvgToPngFile(context with
+                {
+                    ImageFile = svgImageFile
+                });
+                if (convertSvgToPngFile is not null)
+                {
+                    return new ImageFileOptimizationResult()
+                    {
+                        OptimizedImageFile = convertSvgToPngFile
+                    };
+                }
+                else
+                {
+                    return new ImageFileOptimizationResult()
+                    {
+                        OptimizedImageFile = null,
+                        FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                context.LogMessage($"Convert svg to png file failed. File: '{svgImageFile.FullName}' Exception: {e}");
+
+                return new ImageFileOptimizationResult()
+                {
+                    OptimizedImageFile = null,
+                    Exception = e,
+                    FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                };
+            }
+        }
     }
 
     [SupportedOSPlatform("windows6.1")]
-    private static ImageFileOptimizationResult ConvertInWindows(FileInfo file, DirectoryInfo workingFolder)
+    private static ImageFileOptimizationResult ConvertInWindows(ImageFileOptimizationContext context)
     {
+        var file = context.ImageFile;
+        var workingFolder = context.WorkingFolder;
+
+        context.LogMessage($"Start convert emf or wmf to png by GDI. File='{file}'");
+
         try
         {
             using var emf = new Bitmap(file.FullName);
@@ -146,6 +196,8 @@ public static class EnhancedGraphicsMetafileOptimization
         }
         catch (Exception e)
         {
+            context.LogMessage($"Fail convert emf or wmf to png by GDI. File='{file}' Exception={e}");
+
             return new ImageFileOptimizationResult
             {
                 OptimizedImageFile = null,
