@@ -39,7 +39,6 @@ public static class ImageFileOptimization
 
         context.LogMessage($"Start optimize image file. File='{imageFile}'");
 
-        // Check imageFile Exists Cost 179ms. Total Cost 184ms
         if (!File.Exists(imageFile.FullName))
         {
             // 不能依靠 imageFile.Exists 属性，因为属性可能还没更新
@@ -50,15 +49,7 @@ public static class ImageFileOptimization
             };
         }
 
-        stopwatch.Stop();
-        context.LogMessage($"Check imageFile Exists Cost {stopwatch.ElapsedMilliseconds}ms.");
-        stopwatch.Restart();
-
-
         Directory.CreateDirectory(workingFolder.FullName);
-        stopwatch.Stop();
-        context.LogMessage($"CreateDirectory workingFolder Cost {stopwatch.ElapsedMilliseconds}ms.");
-        stopwatch.Restart();
 
         if (copyNewFile)
         {
