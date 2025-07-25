@@ -34,7 +34,7 @@ public static class ImageFileOptimization
         var maxImageWidth = context.MaxImageWidth;
         var maxImageHeight = context.MaxImageHeight;
 
-        context.LogMessage($"Start optimize image file. File='{imageFile}'");
+        context.LogMessage($"Start optimize image file. File:'{imageFile}'");
 
         if (!File.Exists(imageFile.FullName))
         {

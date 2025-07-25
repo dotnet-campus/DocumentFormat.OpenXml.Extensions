@@ -138,7 +138,7 @@ class Program
         }
 
         stopwatch.Stop();
-        context.LogMessage($"Success converted image. Cost {stopwatch.ElapsedMilliseconds}ms. OutputFile='{options.OutputFile}'");
+        context.LogMessage($"Success converted image. Cost {stopwatch.ElapsedMilliseconds}ms. OutputFile:'{options.OutputFile}'");
 
         return ErrorCode.Success;
     }

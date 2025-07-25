@@ -63,7 +63,7 @@ public static class EnhancedGraphicsMetafileOptimization
         // 继续执行 libwmf 的转换，此时不支持 emf 格式
         if (string.Equals(file.Extension, ".emf"))
         {
-            context.LogMessage($"Convert emf to png is not supported with libwmf. File='{context.ImageFile.FullName}'");
+            context.LogMessage($"Convert emf to png is not supported with libwmf. File:'{context.ImageFile.FullName}'");
 
             return new ImageFileOptimizationResult()
             {
@@ -142,21 +142,30 @@ public static class EnhancedGraphicsMetafileOptimization
             processStartInfo.ArgumentList.Add($"--wmf-fontdir={fontFolder}");
         }
 
-        using var process = Process.Start(processStartInfo);
-        process?.WaitForExit(TimeSpan.FromSeconds(5));
-        if (process?.ExitCode == 0 && File.Exists(svgFile))
+        try
         {
-            // 转换成功，再次执行 SVG 转 PNG 的转换
-            // 由于可能存在 SVG 文件中包含无效字符的问题，因此需要修复一下
-            var convertedFile = ImageFileOptimization.FixSvgInvalidCharacter(context with
+            using var process = Process.Start(processStartInfo);
+            process?.WaitForExit(TimeSpan.FromSeconds(5));
+            if (process?.ExitCode == 0 && File.Exists(svgFile))
             {
-                ImageFile = new FileInfo(svgFile)
-            });
+                // 转换成功，再次执行 SVG 转 PNG 的转换
+                // 由于可能存在 SVG 文件中包含无效字符的问题，因此需要修复一下
+                var convertedFile = ImageFileOptimization.FixSvgInvalidCharacter(context with
+                {
+                    ImageFile = new FileInfo(svgFile)
+                });
 
-            return new ImageFileOptimizationResult()
-            {
-                OptimizedImageFile = convertedFile
-            };
+                return new ImageFileOptimizationResult()
+                {
+                    OptimizedImageFile = convertedFile
+                };
+            }
+        }
+        catch (Exception e)
+        {
+            // 比如 wmf2svg: error while loading shared libraries: libwmf-0.2.so.7: cannot open shared object file: No such file or directory 等错误
+            context.LogMessage($"Convert emf or wmf to svg by libwmf failed. File:'{file}' Exception: {e}");
+            return ImageFileOptimizationResult.FailException(e);
         }
 
         return new ImageFileOptimizationResult()
@@ -174,7 +183,7 @@ public static class EnhancedGraphicsMetafileOptimization
 
         var svgFile = Path.Join(workingFolder.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_{Path.GetRandomFileName()}.svg");
 
-        context.LogMessage($"Start convert emf or wmf to png by Inkscape. File='{file}'");
+        context.LogMessage($"Start convert emf or wmf to png by Inkscape. File:'{file}'");
         
         var processStartInfo = new ProcessStartInfo("inkscape")
         {
@@ -199,7 +208,7 @@ public static class EnhancedGraphicsMetafileOptimization
             }
             else
             {
-                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. File='{file}' ExitCode={process?.ExitCode}");
+                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. File:'{file}' ExitCode:{process?.ExitCode}");
             }
         }
         catch (Exception e)
@@ -214,7 +223,7 @@ public static class EnhancedGraphicsMetafileOptimization
             }
             else
             {
-                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File='{file}' Exception: {e}");
+                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File:'{file}' Exception: {e}");
             }
                 
             return ImageFileOptimizationResult.FailException(e);
@@ -233,7 +242,7 @@ public static class EnhancedGraphicsMetafileOptimization
         var file = context.ImageFile;
         var workingFolder = context.WorkingFolder;
 
-        context.LogMessage($"Start convert emf or wmf to png by GDI. File='{file}'");
+        context.LogMessage($"Start convert emf or wmf to png by GDI. File:'{file}'");
 
         try
         {
@@ -250,7 +259,7 @@ public static class EnhancedGraphicsMetafileOptimization
         }
         catch (Exception e)
         {
-            context.LogMessage($"Fail convert emf or wmf to png by GDI. File='{file}' Exception={e}");
+            context.LogMessage($"Fail convert emf or wmf to png by GDI. File:'{file}' Exception:{e}");
 
             return new ImageFileOptimizationResult
             {
