@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -204,7 +205,18 @@ public static class EnhancedGraphicsMetafileOptimization
         catch (Exception e)
         {
             // 失败了，继续调用 libwmf 进行转换
-            context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File='{file}' Exception: {e}");
+            const int NoSuchFileErrorCode = 2;
+            if (e is Win32Exception win32Exception && win32Exception.NativeErrorCode == NoSuchFileErrorCode)
+            {
+                // 明确不存在，那就不记录错误信息了
+                // 大概耗时 17 毫秒
+                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. Because not found Inkscape application. Please make sure Inkscape be installed. We will continue use libwmf to convert the image.");
+            }
+            else
+            {
+                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File='{file}' Exception: {e}");
+            }
+                
             return ImageFileOptimizationResult.FailException(e);
         }
 
