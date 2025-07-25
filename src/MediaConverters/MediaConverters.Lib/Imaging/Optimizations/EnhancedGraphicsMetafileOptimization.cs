@@ -51,44 +51,23 @@ public static class EnhancedGraphicsMetafileOptimization
     private static ImageFileOptimizationResult ConvertInLinux(ImageFileOptimizationContext context)
     {
         var file = context.ImageFile;
-        var workingFolder = context.WorkingFolder;
 
         // 在 Linux 上，先尝试使用 Inkscape 进行转换，如失败，再使用 libwmf 进行转换
         // 调用 Inkscape 进行转换
-        var svgFile = Path.Join(workingFolder.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_{Path.GetRandomFileName()}.svg");
-
-        context.LogMessage($"Start convert emf or wmf to png by Inkscape. File='{file}'");
+        ImageFileOptimizationResult result = ConvertWithInkscape(context);
+        if (result.OptimizedImageFile is { } svgFile)
         {
-            var processStartInfo = new ProcessStartInfo("inkscape")
-            {
-                ArgumentList =
-                {
-                    "--export-plain-svg",
-                    $"--export-filename={svgFile}",
-                    file.FullName,
-                }
-            };
-            try
-            {
-                using var process = Process.Start(processStartInfo);
-                process?.WaitForExit(TimeSpan.FromSeconds(5));
-                if (process?.ExitCode == 0 && File.Exists(svgFile))
-                {
-                    // 转换成功，再次执行 SVG 转 PNG 的转换
-                    return ConvertSvgToPngFile(new FileInfo(svgFile));
-                }
-            }
-            catch (Exception e)
-            {
-                // 失败了，继续调用 libwmf 进行转换
-                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File='{file}' Exception: {e}");
-            }
+            return ConvertSvgToPngFile(svgFile);
+        }
+        else
+        {
+            // 失败了，没关系，继续使用 libwmf 进行转换
         }
 
         // 继续执行 libwmf 的转换，此时不支持 emf 格式
         if (string.Equals(file.Extension, ".emf"))
         {
-            context.LogMessage($"Convert emf to png is not supported with libwmf. File='{file}'");
+            context.LogMessage($"Convert emf to png is not supported with libwmf. File='{context.ImageFile.FullName}'");
 
             return new ImageFileOptimizationResult()
             {
@@ -99,43 +78,15 @@ public static class EnhancedGraphicsMetafileOptimization
 
         // 使用 libwmf 进行转换
 
+        result = ConvertWithInkscapeLibWmf(context);
+        if (result.OptimizedImageFile is { } svgLibWmfFile)
         {
-            // ./wmf2svg -o 1.svg image.wmf
-            var processStartInfo = new ProcessStartInfo("wmf2svg")
-            {
-                ArgumentList =
-                {
-                    "-o",
-                    svgFile,
-                    file.FullName,
-                }
-            };
-
-            var fontFolder = Path.Join(AppContext.BaseDirectory, "fonts");
-            if (Directory.Exists(fontFolder))
-            {
-                processStartInfo.ArgumentList.Add($"--wmf-fontdir={fontFolder}");
-            }
-
-            using var process = Process.Start(processStartInfo);
-            process?.WaitForExit(TimeSpan.FromSeconds(5));
-            if (process?.ExitCode == 0 && File.Exists(svgFile))
-            {
-                // 转换成功，再次执行 SVG 转 PNG 的转换
-                var convertedFile = ImageFileOptimization.FixSvgInvalidCharacter(context with
-                {
-                    ImageFile = new FileInfo(svgFile)
-                });
-
-                return ConvertSvgToPngFile(convertedFile);
-            }
+            return ConvertSvgToPngFile(svgLibWmfFile);
         }
-
-        return new ImageFileOptimizationResult()
+        else
         {
-            OptimizedImageFile = null,
-            FailureReason = ImageFileOptimizationFailureReason.NotSupported
-        };
+            return result;
+        }
 
         ImageFileOptimizationResult ConvertSvgToPngFile(FileInfo svgImageFile)
         {
@@ -173,6 +124,109 @@ public static class EnhancedGraphicsMetafileOptimization
                 };
             }
         }
+    }
+
+    [SupportedOSPlatform("linux")]
+    private static ImageFileOptimizationResult ConvertWithInkscapeLibWmf(ImageFileOptimizationContext context)
+    {
+        var file = context.ImageFile;
+        var workingFolder = context.WorkingFolder;
+
+        var svgFile = Path.Join(workingFolder.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_{Path.GetRandomFileName()}.svg");
+
+        // ./wmf2svg -o 1.svg image.wmf
+        var processStartInfo = new ProcessStartInfo("wmf2svg")
+        {
+            ArgumentList =
+            {
+                "-o",
+                svgFile,
+                file.FullName,
+            }
+        };
+
+        var fontFolder = Path.Join(AppContext.BaseDirectory, "fonts");
+        if (Directory.Exists(fontFolder))
+        {
+            processStartInfo.ArgumentList.Add($"--wmf-fontdir={fontFolder}");
+        }
+
+        using var process = Process.Start(processStartInfo);
+        process?.WaitForExit(TimeSpan.FromSeconds(5));
+        if (process?.ExitCode == 0 && File.Exists(svgFile))
+        {
+            // 转换成功，再次执行 SVG 转 PNG 的转换
+            var convertedFile = ImageFileOptimization.FixSvgInvalidCharacter(context with
+            {
+                ImageFile = new FileInfo(svgFile)
+            });
+
+            return new ImageFileOptimizationResult()
+            {
+                OptimizedImageFile = convertedFile
+            };
+        }
+
+        return new ImageFileOptimizationResult()
+        {
+            OptimizedImageFile = null,
+            FailureReason = ImageFileOptimizationFailureReason.NotSupported,
+        };
+    }
+
+    [SupportedOSPlatform("linux")]
+    private static ImageFileOptimizationResult ConvertWithInkscape(ImageFileOptimizationContext context)
+    {
+        var file = context.ImageFile;
+        var workingFolder = context.WorkingFolder;
+
+        var svgFile = Path.Join(workingFolder.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_{Path.GetRandomFileName()}.svg");
+
+        context.LogMessage($"Start convert emf or wmf to png by Inkscape. File='{file}'");
+        
+        var processStartInfo = new ProcessStartInfo("inkscape")
+        {
+            ArgumentList =
+            {
+                "--export-plain-svg",
+                $"--export-filename={svgFile}",
+                file.FullName,
+            }
+        };
+        try
+        {
+            using var process = Process.Start(processStartInfo);
+            process?.WaitForExit(TimeSpan.FromSeconds(5));
+            if (process?.ExitCode == 0 && File.Exists(svgFile))
+            {
+                // 转换成功，再次执行 SVG 转 PNG 的转换
+                return new ImageFileOptimizationResult()
+                {
+                    OptimizedImageFile = new FileInfo(svgFile)
+                };
+            }
+            else
+            {
+                context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. File='{file}' ExitCode={process?.ExitCode}");
+            }
+        }
+        catch (Exception e)
+        {
+            // 失败了，继续调用 libwmf 进行转换
+            context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File='{file}' Exception: {e}");
+            return new ImageFileOptimizationResult()
+            {
+                OptimizedImageFile = null,
+                Exception = e,
+                FailureReason = ImageFileOptimizationFailureReason.NotSupported,
+            };
+        }
+
+        return new ImageFileOptimizationResult()
+        {
+            OptimizedImageFile = null,
+            FailureReason = ImageFileOptimizationFailureReason.NotSupported,
+        };
     }
 
     [SupportedOSPlatform("windows6.1")]
