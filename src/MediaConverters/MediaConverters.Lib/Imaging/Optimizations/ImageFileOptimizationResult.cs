@@ -20,8 +20,8 @@ public readonly record struct ImageFileOptimizationResult() : IDisposable
     public Exception? Exception { get; init; }
     public ImageFileOptimizationFailureReason FailureReason { get; init; } = ImageFileOptimizationFailureReason.Ok;
 
-    [MemberNotNullWhen(true, nameof(OptimizedImageFile), nameof(Image))]
-    public bool IsSuccess => OptimizedImageFile is not null && Image is not null;
+    [MemberNotNullWhen(true, nameof(OptimizedImageFile))]
+    public bool IsSuccess => OptimizedImageFile is not null;
 
     public Image<Rgba32>? Image { get; init; }
 

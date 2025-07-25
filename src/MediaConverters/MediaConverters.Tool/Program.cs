@@ -115,10 +115,10 @@ class Program
         }
 
         FileInfo optimizedImageFile = imageFileOptimizationResult.OptimizedImageFile;
+        var image = imageFileOptimizationResult.Image;
 
-        if (imageConvertContext.ImageConvertTaskList is { } list)
+        if (image is not null && imageConvertContext.ImageConvertTaskList is { } list)
         {
-            var image = imageFileOptimizationResult.Image;
             var workerProvider = new WorkerProvider();
 
             foreach (IImageConvertTask imageConvertTask in list)
