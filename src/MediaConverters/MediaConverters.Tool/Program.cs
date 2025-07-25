@@ -40,7 +40,9 @@ class Program
 
         var workingFolder = Directory.CreateDirectory(options.WorkingFolder);
 
-        using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(inputFile, workingFolder, imageConvertContext.MaxImageWidth, imageConvertContext.MaxImageHeight, imageConvertContext.UseAreaSizeLimit ?? true);
+        var useAreaSizeLimit = imageConvertContext.UseAreaSizeLimit ?? true;
+        var copyNewFile = imageConvertContext.ShouldCopyNewFile ?? true;
+        using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(inputFile, workingFolder, imageConvertContext.MaxImageWidth, imageConvertContext.MaxImageHeight, useAreaSizeLimit, copyNewFile);
 
         if (!imageFileOptimizationResult.IsSuccess)
         {
@@ -84,7 +86,6 @@ class Program
                 BitDepth = PngBitDepth.Bit8,
             });
         }
-
         else
         {
             optimizedImageFile.CopyTo(options.OutputFile, overwrite: true);

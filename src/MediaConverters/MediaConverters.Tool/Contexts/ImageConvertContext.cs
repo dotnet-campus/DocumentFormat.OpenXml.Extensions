@@ -11,6 +11,11 @@ public class ImageConvertContext
 
     public bool? UseAreaSizeLimit { get; init; }
 
+    /// <summary>
+    /// 是否先行拷贝新的文件，再进行处理，避免图片占用
+    /// </summary>
+    public bool? ShouldCopyNewFile { get; init; }
+
     public List<IImageConvertTask>? ImageConvertTaskList { get; init; }
 
     public string ToJsonText()
