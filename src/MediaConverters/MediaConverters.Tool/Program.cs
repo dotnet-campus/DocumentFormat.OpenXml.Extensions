@@ -44,7 +44,7 @@ class Program
                 OutputFile = outputFile,
 
                 ShouldLogToConsole = true,
-                ShouldLogToFile = true,
+                ShouldLogToFile = false,
             });
         }
 
