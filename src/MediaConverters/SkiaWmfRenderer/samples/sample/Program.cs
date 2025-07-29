@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using System.Text;
 
 using DocSharp.Markdown;
-
+using SkiaSharp;
 using SkiaWmfRenderer;
 
 var markdownText = new StringBuilder();
@@ -31,15 +31,45 @@ if (args.Length == 1)
         Console.WriteLine($"Can not recognition '{args[0]}' as File or Folder");
     }
 }
-else 
+else
 {
-    // Debug mode
-    var folder = @"C:\lindexi\wmf公式\";
+    using var skBitmap = new SKBitmap(300,300,SKColorType.Bgra8888,SKAlphaType.Premul);
+    skBitmap.Erase(SKColors.White);
+    using var skCanvas = new SKCanvas(skBitmap);
+    var text = "p";
+    using var skPaint = new SKPaint();
+    skPaint.TextSize = 50;
+    var symbolFontFile = Path.Join(AppContext.BaseDirectory, "symbol.ttf");
+    var skTypeface = SKTypeface.FromFile(symbolFontFile);
+    Console.WriteLine($"Font='{symbolFontFile}' SKTypeface={skTypeface.FamilyName} GlyphCount={skTypeface.GlyphCount}");
+    Console.WriteLine($"ContainsGlyph={skTypeface.ContainsGlyph('p')}");
+    skPaint.Typeface = skTypeface;
+    skPaint.Color = SKColors.Black;
+    skPaint.IsAntialias = true;
+    skCanvas.DrawText(text, 50, 100, skPaint);
+    var outputFile = Path.Join(outputFolder, $"{DateTime.Now:HHmmss}.png");
+    using var outputStream = File.OpenWrite(outputFile);
+    skBitmap.Encode(outputStream, SKEncodedImageFormat.Png, 100);
+    if (File.Exists(outputFile))
+    {
+        return;
+    }
 
-    ConvertImageFolder(folder);
+    if (OperatingSystem.IsWindows())
+    {
+        // Debug mode
+        var folder = @"C:\lindexi\wmf公式\";
+
+        ConvertImageFolder(folder);
+    }
+    else
+    {
+        var file = Path.Join(AppContext.BaseDirectory, "image.wmf");
+        ConvertImageFile(file);
+    }
 }
 
-    var markdownFile = Path.Join(outputFolder, "README.md");
+var markdownFile = Path.Join(outputFolder, "README.md");
 var markdown = markdownText.ToString();
 File.WriteAllText(markdownFile, markdown);
 

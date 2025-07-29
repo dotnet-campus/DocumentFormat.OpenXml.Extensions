@@ -62,15 +62,29 @@ class WmfRenderStatus : IDisposable
 
         skFont.Typeface?.Dispose();
 
-        SKTypeface? typeface = SKTypeface.FromFamilyName(CurrentFontName, (SKFontStyleWeight) FontWeight,
-            SKFontStyleWidth.Normal, IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+        SKTypeface? typeface;
+        if (CurrentFontName == "Symbol")
+        {
+            var symbolFontFile = Path.Join(AppContext.BaseDirectory, "StandardSymbolsPS.ttf");
+            symbolFontFile = Path.Join(AppContext.BaseDirectory, "symbol.ttf");
+            typeface = SKTypeface.FromFile(symbolFontFile);
+        }
+        else
+        {
+            typeface = SKTypeface.FromFamilyName(CurrentFontName, (SKFontStyleWeight) FontWeight,
+           SKFontStyleWidth.Normal, IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+        }
 
-        Console.WriteLine($"CurrentFontName='{CurrentFontName}' get the SKTypeface {(typeface is null ? "is null" : "not null")}. Text={text}");
+
+
+        Console.WriteLine($"CurrentFontName='{CurrentFontName}' get the SKTypeface {(typeface is null ? "is null" : "not null")}. SKTypeface={typeface?.FamilyName} GlyphCount={typeface?.GlyphCount}. Text={text}");
 
         skFont.Typeface = typeface;
 
         Paint.Style = SKPaintStyle.Fill;
         Paint.Color = CurrentTextColor;
+
+        Paint.Typeface = typeface;
     }
 
     public void UpdateSkiaStrokeStatus()
