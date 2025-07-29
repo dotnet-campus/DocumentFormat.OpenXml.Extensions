@@ -1,17 +1,19 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
+
 using Oxage.Wmf;
 
 using SkiaSharp;
+
 using SkiaWmfRenderer.Rendering;
 
 namespace SkiaWmfRenderer;
 
 public static class SkiaWmfRenderHelper
 {
-    public static bool TryConvertToPng(FileInfo wmfFile, FileInfo outputPngFile)
+    public static bool TryConvertToPng(FileInfo wmfFile, FileInfo outputPngFile, int requestWidth = 0, int requestHeight = 0)
     {
-        if (!TryRender(wmfFile, 0, 0, out var skBitmap))
+        if (!TryRender(wmfFile, requestWidth, requestHeight, out var skBitmap))
         {
             return false;
         }

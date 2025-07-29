@@ -16,14 +16,30 @@ Directory.CreateDirectory(outputFolder);
 //var testFile = @"C:\lindexi\wmf公式\sample.wmf";
 //ConvertImageFile(testFile);
 
-var folder = @"C:\lindexi\wmf公式\";
-
-foreach (var file in Directory.EnumerateFiles(folder, "*.wmf"))
+if (args.Length == 1)
 {
-    ConvertImageFile(file);
+    if (File.Exists(args[0]))
+    {
+        ConvertImageFile(args[0]);
+    }
+    else if (Directory.Exists(args[0]))
+    {
+        ConvertImageFolder(args[0]);
+    }
+    else
+    {
+        Console.WriteLine($"Can not recognition '{args[0]}' as File or Folder");
+    }
+}
+else 
+{
+    // Debug mode
+    var folder = @"C:\lindexi\wmf公式\";
+
+    ConvertImageFolder(folder);
 }
 
-var markdownFile = Path.Join(outputFolder, "README.md");
+    var markdownFile = Path.Join(outputFolder, "README.md");
 var markdown = markdownText.ToString();
 File.WriteAllText(markdownFile, markdown);
 
@@ -37,6 +53,14 @@ MarkdownSource markdownSource = MarkdownSource.FromMarkdownString(markdown);
 markdownConverter.ToDocx(markdownSource, docxFile);
 
 Console.WriteLine("Hello, World!");
+
+void ConvertImageFolder(string folder)
+{
+    foreach (var file in Directory.EnumerateFiles(folder, "*.wmf"))
+    {
+        ConvertImageFile(file);
+    }
+}
 
 void ConvertImageFile(string file)
 {
@@ -55,6 +79,8 @@ void ConvertImageFile(string file)
     var wmfFileName = $"WMF_{fileNameWithoutExtension}.png";
     var testOutputFile = Path.Join(outputFolder, wmfFileName);
     var stopwatch = Stopwatch.StartNew();
+
+    Console.WriteLine($"Finish convert '{file}' to '{testOutputFile}'");
 
     var success = SkiaWmfRenderHelper.TryConvertToPng(new FileInfo(file), new FileInfo(testOutputFile));
     stopwatch.Stop();
