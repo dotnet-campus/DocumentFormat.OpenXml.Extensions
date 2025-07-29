@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Oxage.Wmf.Records
@@ -142,7 +143,17 @@ namespace Oxage.Wmf.Records
 			if (left > 0)
 			{
 				byte[] buffer = reader.ReadBytes(left);
-				this.FaceName = AnsiEncoding.GetString(buffer);
+                var terminatingNullIndex = buffer.Length;
+                for (var i = 0; i < buffer.Length; i++)
+                {
+                    if (buffer[i] == 0x00)
+                    {
+                        terminatingNullIndex = i;
+                        break;
+                    }
+                }
+
+                this.FaceName = AnsiEncoding.GetString(buffer, 0, terminatingNullIndex);
 			}
 		}
 
