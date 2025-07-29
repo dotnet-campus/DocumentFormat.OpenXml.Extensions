@@ -44,7 +44,8 @@ else
         SKFontManager.Default.CreateTypeface(symbolFontFile);
     //skTypeface = SKTypeface.FromFamilyName("Symbol");
     Console.WriteLine($"Font='{symbolFontFile}' SKTypeface={skTypeface.FamilyName} GlyphCount={skTypeface.GlyphCount}");
-    Console.WriteLine($"ContainsGlyph={skTypeface.ContainsGlyph('p')}");
+    Console.WriteLine($"ContainsGlyph={skTypeface.ContainsGlyph('p')} {skTypeface.GetGlyph('p')}");
+
     skPaint.Typeface = skTypeface;
     skPaint.Color = SKColors.Black;
     skPaint.IsAntialias = true;
