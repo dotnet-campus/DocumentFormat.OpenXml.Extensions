@@ -1,23 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using DocSharp.Markdown;
-
-using Markdig;
-
-using Oxage.Wmf;
-using Oxage.Wmf.Records;
-
-using SkiaSharp;
-
-using SkiaWmfRenderer;
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
-using DocSharp;
-using Markdig.Extensions.Figures;
-using Markdig.Syntax;
+
+using DocSharp.Markdown;
+
+using SkiaWmfRenderer;
 
 var markdownText = new StringBuilder();
 var outputFolder = Path.Join(AppContext.BaseDirectory, $"Output_{Path.GetRandomFileName()}");
@@ -87,7 +77,7 @@ void ConvertImageFile(string file)
 
     if (success)
     {
-        markdownText.AppendLine($"![](./{wmfFileName})"+ "{width=250 height=120}");
+        markdownText.AppendLine($"![](./{wmfFileName})" + "{width=250 height=120}");
     }
     else
     {
