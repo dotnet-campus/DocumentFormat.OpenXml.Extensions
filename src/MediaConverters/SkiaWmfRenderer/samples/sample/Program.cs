@@ -1,13 +1,22 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using DocSharp.Markdown;
+
+using HarfBuzzSharp;
+
+using SkiaSharp;
+
+using SkiaWmfRenderer;
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
-using DocSharp.Markdown;
-using SkiaSharp;
-using SkiaWmfRenderer;
+using Buffer = HarfBuzzSharp.Buffer;
 
 var markdownText = new StringBuilder();
 var outputFolder = Path.Join(AppContext.BaseDirectory, $"Output_{Path.GetRandomFileName()}");
@@ -42,16 +51,58 @@ else
     var symbolFontFile = Path.Join(AppContext.BaseDirectory, "StandardSymbolsPS.ttf");
     var skTypeface =
         SKFontManager.Default.CreateTypeface(symbolFontFile);
+
     //skTypeface = SKTypeface.FromFamilyName("Symbol");
     Console.WriteLine($"Font='{symbolFontFile}' SKTypeface={skTypeface.FamilyName} GlyphCount={skTypeface.GlyphCount}");
     Console.WriteLine($"ContainsGlyph={skTypeface.ContainsGlyph('p')} {skTypeface.GetGlyph('p')}");
-
+    
     skPaint.Typeface = skTypeface;
     var skFont = skTypeface.ToFont(50);
     skPaint.Color = SKColors.Black;
     skPaint.IsAntialias = true;
     var skTextBlob = SKTextBlob.Create("p",skFont);
     skCanvas.DrawText(skTextBlob, 50, 100, skPaint);
+
+    using (var buffer = new Buffer())
+    {
+        buffer.AddUtf16("p");
+        buffer.GuessSegmentProperties();
+        buffer.Language = new Language(CultureInfo.CurrentCulture);
+
+        var face = new HarfBuzzSharp.Face(GetTable);
+
+        Blob? GetTable(Face f, Tag tag)
+        {
+            var size = skTypeface.GetTableSize(tag);
+            var data = Marshal.AllocCoTaskMem(size);
+            if (skTypeface.TryGetTableData(tag, 0, size, data))
+            {
+                return new Blob(data, size, MemoryMode.ReadOnly, () => Marshal.FreeCoTaskMem(data));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        var font = new HarfBuzzSharp.Font(face);
+        font.SetFunctionsOpenType();
+
+        var tryGetGlyph = font.TryGetGlyph('p',out uint glyph);
+        Console.WriteLine($"TryGetGlyph={tryGetGlyph} {glyph}");
+
+        if (tryGetGlyph)
+        {
+            var bytes = BitConverter.GetBytes(glyph);
+            //SKTextEncoding.GlyphId
+            
+
+            skTextBlob = SKTextBlob.Create(bytes,SKTextEncoding.GlyphId,skFont);
+            skCanvas.DrawText(skTextBlob, 100, 100, skPaint);
+        }
+
+        font.Shape(buffer);
+    }
 
     var outputFile = Path.Join(outputFolder, $"{DateTime.Now:HHmmss}.png");
     using var outputStream = File.OpenWrite(outputFile);
