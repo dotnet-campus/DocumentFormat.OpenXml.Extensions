@@ -2,6 +2,7 @@
 using Oxage.Wmf.Records;
 using SkiaSharp;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SkiaWmfRenderer.Rendering;
@@ -410,7 +411,7 @@ class WmfRenderer
 
             var currentXOffset = renderStatus.CurrentX + extTextoutRecord.X + renderStatus.LastDxOffset;
 
-            renderStatus.UpdateSkiaTextStatus();
+            renderStatus.UpdateSkiaTextStatus(text);
 
             if (extTextoutRecord.Dx is null)
             {
@@ -449,6 +450,8 @@ class WmfRenderer
             {
                 case RecordType.META_EXTTEXTOUT:
                 {
+                    Debug.Fail("当前已经有 WmfExtTextoutRecord 类型了");
+
                     renderStatus.IsIncludeText = true;
 
                     // 关于字间距的规则： 
@@ -487,7 +490,7 @@ class WmfRenderer
                     //Debug.Assert(st == unknownRecord.RecordSize);
                     var dxLength = unknownRecord.Data.Length - st;
 
-                    renderStatus.UpdateSkiaTextStatus();
+                    renderStatus.UpdateSkiaTextStatus(text);
 
                     var currentXOffset = renderStatus.CurrentX + tx + renderStatus.LastDxOffset;
 

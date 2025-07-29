@@ -55,12 +55,19 @@ class WmfRenderStatus : IDisposable
     public SKFont SKFont { get; } = new SKFont();
 
 
-    public void UpdateSkiaTextStatus()
+    public void UpdateSkiaTextStatus(string text)
     {
         var skFont = SKFont;
         skFont.Size = CurrentFontSize;
-        skFont.Typeface = SKTypeface.FromFamilyName(CurrentFontName, (SKFontStyleWeight) FontWeight,
+
+        skFont.Typeface?.Dispose();
+
+        SKTypeface? typeface = SKTypeface.FromFamilyName(CurrentFontName, (SKFontStyleWeight) FontWeight,
             SKFontStyleWidth.Normal, IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+
+        Console.WriteLine($"CurrentFontName='{CurrentFontName}' get the SKTypeface {(typeface is null ? "is null" : "not null")}. Text={text}");
+
+        skFont.Typeface = typeface;
 
         Paint.Style = SKPaintStyle.Fill;
         Paint.Color = CurrentTextColor;
@@ -87,6 +94,7 @@ class WmfRenderStatus : IDisposable
     public void Dispose()
     {
         Paint.Dispose();
+        SKFont.Typeface?.Dispose();
         SKFont.Dispose();
     }
 }
