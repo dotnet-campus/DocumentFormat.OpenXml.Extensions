@@ -17,3 +17,8 @@ You can use this project in commercial projects without payment or any copyright
 - The annual revenue of the for-profit company or individual is less than $1,000,000 USD.
 
 Otherwise, if you do not meet any of the above conditions, you will need to purchase a commercial license from Six Labors.
+
+## Thanks
+
+- [Six Labors](https://sixlabors.com/) for providing the ImageSharp library, which is used as the infrastructure for this project.
+- [wieslawsoltes/wmf](https://github.com/wieslawsoltes/wmf)

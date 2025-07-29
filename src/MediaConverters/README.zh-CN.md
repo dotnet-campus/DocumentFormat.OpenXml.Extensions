@@ -172,3 +172,8 @@
 - 年总收入少于 100 万美元的营利性公司或个人
 
 反之，若您不满足上述任一条件，则需要购买 Six Labors 的商业许可
+
+## 感谢
+
+- [Six Labors](https://sixlabors.com/) 提供了 ImageSharp 库，作为本项目的基础设施
+- [wieslawsoltes/wmf](https://github.com/wieslawsoltes/wmf)
