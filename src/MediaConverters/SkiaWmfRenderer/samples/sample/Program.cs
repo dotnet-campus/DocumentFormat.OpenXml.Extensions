@@ -36,11 +36,13 @@ else
     using var skBitmap = new SKBitmap(300,300,SKColorType.Bgra8888,SKAlphaType.Premul);
     skBitmap.Erase(SKColors.White);
     using var skCanvas = new SKCanvas(skBitmap);
-    var text = "p";
+    var text = "p"; // 这里的 p 是 Symbol 字体中的 Pi 符号
     using var skPaint = new SKPaint();
     skPaint.TextSize = 50;
     var symbolFontFile = Path.Join(AppContext.BaseDirectory, "symbol.ttf");
-    var skTypeface = SKTypeface.FromFile(symbolFontFile);
+    var skTypeface =
+        SKFontManager.Default.CreateTypeface(symbolFontFile);
+    //skTypeface = SKTypeface.FromFamilyName("Symbol");
     Console.WriteLine($"Font='{symbolFontFile}' SKTypeface={skTypeface.FamilyName} GlyphCount={skTypeface.GlyphCount}");
     Console.WriteLine($"ContainsGlyph={skTypeface.ContainsGlyph('p')}");
     skPaint.Typeface = skTypeface;
