@@ -47,9 +47,12 @@ else
     Console.WriteLine($"ContainsGlyph={skTypeface.ContainsGlyph('p')} {skTypeface.GetGlyph('p')}");
 
     skPaint.Typeface = skTypeface;
+    var skFont = skTypeface.ToFont(50);
     skPaint.Color = SKColors.Black;
     skPaint.IsAntialias = true;
-    skCanvas.DrawText(text, 50, 100, skPaint);
+    var skTextBlob = SKTextBlob.Create("p",skFont);
+    skCanvas.DrawText(skTextBlob, 50, 100, skPaint);
+
     var outputFile = Path.Join(outputFolder, $"{DateTime.Now:HHmmss}.png");
     using var outputStream = File.OpenWrite(outputFile);
     skBitmap.Encode(outputStream, SKEncodedImageFormat.Png, 100);
