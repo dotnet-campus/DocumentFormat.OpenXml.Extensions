@@ -93,11 +93,9 @@ else
 
         if (tryGetGlyph)
         {
-            var bytes = BitConverter.GetBytes(glyph);
-            //SKTextEncoding.GlyphId
-            
+            var bytes = BitConverter.GetBytes((ushort)glyph);
 
-            skTextBlob = SKTextBlob.Create(bytes,SKTextEncoding.GlyphId,skFont);
+            skTextBlob = SKTextBlob.Create(bytes, SKTextEncoding.GlyphId, skFont);
             skCanvas.DrawText(skTextBlob, 100, 100, skPaint);
         }
 
