@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net9.0;</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Oxage.Wmf</RootNamespace>
+    <AssemblyName>Oxage.Wmf</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>0.6.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Authors>Oxage</Authors>
+    <Company>Oxage</Company>
+    <Copyright>Copyright © Oxage 2012</Copyright>
+    <Description>WMF Reader and Writer</Description>
+    <PackageId>Oxage.Wmf</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/wieslawsoltes/wmf</PackageProjectUrl>
+    <PackageTags>wmf;emf;windows;metafile;reader;writer;gdi;drawing</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="dotnetCampus.LatestCSharpFeatures" Version="12.0.1" />
+    <PackageReference Include="dotnetCampus.Telescope.SourceGeneratorAnalyzers" Version="0.10.7-alpha21">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
