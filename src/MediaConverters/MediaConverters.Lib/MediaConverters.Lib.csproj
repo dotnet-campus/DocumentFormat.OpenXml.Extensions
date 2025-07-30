@@ -17,6 +17,10 @@
     <PackageReference Include="System.Drawing.Common" Version="9.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SkiaWmfRenderer\src\SkiaWmfRenderer\SkiaWmfRenderer.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <!-- 不要在 debug 开启 EmbedAllSources 或 EmbedUntrackedSources：
          1. NuGet 包会提示包含未追踪的源，但实际列出的未追踪的源是空的（所以其实都已经追踪了？）

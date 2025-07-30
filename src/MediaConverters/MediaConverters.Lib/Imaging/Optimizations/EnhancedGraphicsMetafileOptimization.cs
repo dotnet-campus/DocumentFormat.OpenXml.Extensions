@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using SkiaWmfRenderer;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 
@@ -49,7 +50,10 @@ public static class EnhancedGraphicsMetafileOptimization
     {
         var file = context.ImageFile;
 
-        // 在 Linux 上，先尝试使用 Inkscape 进行转换，如失败，再使用 libwmf 进行转换
+        // 在 Linux 上，先尝试使用 Inkscape 进行转换，如失败，
+        // 先尝试 Oxage.Wmf 的 SkiaWmfRenderer 进行转换，如果发现不能很好支持，
+        // 再使用 libwmf 进行转换
+
         // 调用 Inkscape 进行转换
         ImageFileOptimizationResult result = ConvertWithInkscape(context);
         if (result.OptimizedImageFile is { } svgFile)
@@ -61,7 +65,7 @@ public static class EnhancedGraphicsMetafileOptimization
             // 失败了，没关系，继续使用 libwmf 进行转换
         }
 
-        // 继续执行 libwmf 的转换，此时不支持 emf 格式
+        // 继续执行 Oxage.Wmf 或 libwmf 的转换，此时不支持 emf 格式
         if (string.Equals(file.Extension, ".emf"))
         {
             context.LogMessage($"Convert emf to png is not supported with libwmf. File:'{context.ImageFile.FullName}'");
@@ -73,9 +77,21 @@ public static class EnhancedGraphicsMetafileOptimization
             };
         }
 
+        // 使用 SkiaWmfRenderer 进行转换
+        result = ConvertWithSkiaWmfRenderer(context);
+        if (result.IsSuccess)
+        {
+            return result;
+        }
+        else
+        {
+            // 失败了，继续使用 libwmf 进行转换
+            // 使用 libwmf 进行转换时，对于文本绘制支持很弱。这就是为什么优先使用  SkiaWmfRenderer 的原因
+        }
+
         // 使用 libwmf 进行转换
 
-        result = ConvertWithInkscapeLibWmf(context);
+        result = ConvertWithLibWmf(context);
         if (result.OptimizedImageFile is { } svgLibWmfFile)
         {
             return ConvertSvgToPngFile(svgLibWmfFile);
@@ -118,8 +134,42 @@ public static class EnhancedGraphicsMetafileOptimization
         }
     }
 
+    /// <summary>
+    /// 使用自己写的基于 Oxage.Wmf 的 SkiaWmfRenderer 进行转换，可以比较好处理公式内容
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    private static ImageFileOptimizationResult ConvertWithSkiaWmfRenderer(ImageFileOptimizationContext context)
+    {
+        int requestWidth = context.MaxImageWidth ?? 0;
+        int requestHeight = context.MaxImageHeight ?? 0;
+
+        var outputPngFile = new FileInfo(Path.Join(context.WorkingFolder.FullName, $"WmfRender_{Path.GetRandomFileName()}.png"));
+
+        var file = context.ImageFile;
+
+        context.LogMessage($"Start convert wmf to png by SkiaWmfRenderer. File:'{file}'");
+
+        if (SkiaWmfRenderHelper.TryConvertToPng(file, outputPngFile, requestWidth, requestHeight) && File.Exists(outputPngFile.FullName))
+        {
+            context.LogMessage($"Success converted wmf to png by SkiaWmfRenderer. File:'{file}' Output:'{outputPngFile}'");
+
+            return new ImageFileOptimizationResult()
+            {
+                OptimizedImageFile = outputPngFile
+            };
+        }
+
+        context.LogMessage($"Fail convert wmf to png by SkiaWmfRenderer. File:'{file}'");
+        return new ImageFileOptimizationResult()
+        {
+            OptimizedImageFile = null,
+            FailureReason = ImageFileOptimizationFailureReason.NotSupported
+        };
+    }
+
     [SupportedOSPlatform("linux")]
-    private static ImageFileOptimizationResult ConvertWithInkscapeLibWmf(ImageFileOptimizationContext context)
+    private static ImageFileOptimizationResult ConvertWithLibWmf(ImageFileOptimizationContext context)
     {
         var file = context.ImageFile;
         var workingFolder = context.WorkingFolder;
