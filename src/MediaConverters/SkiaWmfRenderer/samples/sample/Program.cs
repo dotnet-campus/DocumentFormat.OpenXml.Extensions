@@ -61,7 +61,7 @@ else
     skPaint.Color = SKColors.Black;
     skPaint.IsAntialias = true;
     var skTextBlob = SKTextBlob.Create("p",skFont);
-    skCanvas.DrawText(skTextBlob, 50, 100, skPaint);
+    //skCanvas.DrawText(skTextBlob, 50, 100, skPaint);
 
     using (var buffer = new Buffer())
     {
@@ -93,9 +93,10 @@ else
 
         if (tryGetGlyph)
         {
-            var bytes = BitConverter.GetBytes((ushort)glyph);
+            Span<byte> byteBuffer = stackalloc byte[sizeof(ushort)];
+            BitConverter.TryWriteBytes(byteBuffer, (ushort)glyph);
 
-            skTextBlob = SKTextBlob.Create(bytes, SKTextEncoding.GlyphId, skFont);
+            skTextBlob = SKTextBlob.Create(byteBuffer, SKTextEncoding.GlyphId, skFont);
             skCanvas.DrawText(skTextBlob, 100, 100, skPaint);
         }
 

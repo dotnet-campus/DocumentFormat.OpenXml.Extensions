@@ -1,8 +1,11 @@
-﻿using System.Text;
+﻿using HarfBuzzSharp;
 
 using Oxage.Wmf;
 
 using SkiaSharp;
+
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace SkiaWmfRenderer.Rendering;
 
@@ -54,6 +57,40 @@ class WmfRenderStatus : IDisposable
 
     public SKFont SKFont { get; } = new SKFont();
 
+    public HarfBuzzSharp.Font HarfBuzzFont
+    {
+        get
+        {
+            if (_harfBuzzFont is null)
+            {
+                _harfBuzzFace = new HarfBuzzSharp.Face(GetTable);
+
+                Blob? GetTable(Face f, Tag tag)
+                {
+                    var skTypeface = SKFont.Typeface ?? SKTypeface.Default;
+
+                    var size = skTypeface.GetTableSize(tag);
+                    var data = Marshal.AllocCoTaskMem(size);
+                    if (skTypeface.TryGetTableData(tag, 0, size, data))
+                    {
+                        return new Blob(data, size, MemoryMode.ReadOnly, () => Marshal.FreeCoTaskMem(data));
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+
+                var font = new HarfBuzzSharp.Font(_harfBuzzFace);
+                font.SetFunctionsOpenType();
+                _harfBuzzFont = font;
+            }
+            return _harfBuzzFont;
+        }
+    }
+
+    private HarfBuzzSharp.Font? _harfBuzzFont;
+    private HarfBuzzSharp.Face? _harfBuzzFace;
 
     public void UpdateSkiaTextStatus(string text)
     {
@@ -61,12 +98,16 @@ class WmfRenderStatus : IDisposable
         skFont.Size = CurrentFontSize;
 
         skFont.Typeface?.Dispose();
+        _harfBuzzFont?.Dispose();
+        _harfBuzzFace?.Dispose();
+        _harfBuzzFont = null;
+        _harfBuzzFace = null;
 
         SKTypeface? typeface;
         if (CurrentFontName == "Symbol")
         {
             var symbolFontFile = Path.Join(AppContext.BaseDirectory, "StandardSymbolsPS.ttf");
-            symbolFontFile = Path.Join(AppContext.BaseDirectory, "symbol.ttf");
+            //symbolFontFile = Path.Join(AppContext.BaseDirectory, "symbol.ttf");
             typeface = SKTypeface.FromFile(symbolFontFile);
         }
         else
@@ -84,7 +125,7 @@ class WmfRenderStatus : IDisposable
         Paint.Style = SKPaintStyle.Fill;
         Paint.Color = CurrentTextColor;
 
-        Paint.Typeface = typeface;
+        //Paint.Typeface = typeface;
     }
 
     public void UpdateSkiaStrokeStatus()
@@ -110,5 +151,8 @@ class WmfRenderStatus : IDisposable
         Paint.Dispose();
         SKFont.Typeface?.Dispose();
         SKFont.Dispose();
+
+        _harfBuzzFont?.Dispose();
+        _harfBuzzFace?.Dispose();
     }
 }
