@@ -152,8 +152,9 @@ public static class EnhancedGraphicsMetafileOptimization
 
         var skiaWmfRenderConfiguration = new SkiaWmfRenderConfiguration()
         {
-            RequestWidth = requestWidth, 
-            RequestHeight = requestHeight
+            RequestWidth = requestWidth,
+            RequestHeight = requestHeight,
+            FontFolder = new DirectoryInfo(Path.Join(AppContext.BaseDirectory, "Assets", "Fonts"))
         };
         if (SkiaWmfRenderHelper.TryConvertToPng(file, outputPngFile, skiaWmfRenderConfiguration) && File.Exists(outputPngFile.FullName))
         {

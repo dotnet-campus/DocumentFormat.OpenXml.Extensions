@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" />
     <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

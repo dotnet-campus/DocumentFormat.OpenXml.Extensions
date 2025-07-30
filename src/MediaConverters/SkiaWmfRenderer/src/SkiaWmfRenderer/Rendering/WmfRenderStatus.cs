@@ -110,27 +110,8 @@ class WmfRenderStatus : IDisposable
         _harfBuzzFont = null;
         _harfBuzzFace = null;
 
-        SKTypeface? typeface;
-        if (CurrentFontName == "Symbol")
-        {
-            var symbolFontFile = Path.Join(AppContext.BaseDirectory, "StandardSymbolsPS.ttf");
-            //symbolFontFile = Path.Join(AppContext.BaseDirectory, "symbol.ttf");
-            typeface = SKTypeface.FromFile(symbolFontFile);
-        }
-        else
-        {
-            typeface = SKTypeface.FromFamilyName(CurrentFontName, (SKFontStyleWeight) FontWeight,
-           SKFontStyleWidth.Normal, IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
-
-            if (typeface is null || typeface.GlyphCount == 0)
-            {
-                var fontFile = Path.Join(AppContext.BaseDirectory, $"{CurrentFontName}.ttf");
-                if (File.Exists(fontFile))
-                {
-                    typeface = SKTypeface.FromFile(fontFile);
-                }
-            }
-        }
+        SKTypeface? typeface = TryGetTypeface();
+       
 
         RenderConfiguration.LogMessage($"CurrentFontName='{CurrentFontName}' get the SKTypeface {(typeface is null ? "is null" : "not null")}. SKTypeface={typeface?.FamilyName} GlyphCount={typeface?.GlyphCount}. Text={text}");
 
@@ -140,6 +121,48 @@ class WmfRenderStatus : IDisposable
         Paint.Color = CurrentTextColor;
 
         //Paint.Typeface = typeface;
+
+    }
+    private SKTypeface? TryGetTypeface()
+    {
+        if (CurrentFontName == "Symbol")
+        {
+            if (RenderConfiguration.SymbolFontFile?.Exists is true)
+            {
+                return SKTypeface.FromFile(RenderConfiguration.SymbolFontFile.FullName);
+            }
+
+            if (RenderConfiguration.FontFolder is { } fontFolder)
+            {
+                var symbolFontFile = Path.Join(fontFolder.FullName, "symbol.ttf");
+
+                if (File.Exists(symbolFontFile))
+                {
+                    return SKTypeface.FromFile(symbolFontFile);
+                }
+
+                symbolFontFile = Path.Join(fontFolder.FullName, "StandardSymbolsPS.ttf");
+
+                if (File.Exists(symbolFontFile))
+                {
+                    return SKTypeface.FromFile(symbolFontFile);
+                }
+            }
+        }
+
+        var typeface = SKTypeface.FromFamilyName(CurrentFontName, (SKFontStyleWeight) FontWeight,
+            SKFontStyleWidth.Normal, IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+
+        if ((typeface is null || typeface.GlyphCount == 0) && RenderConfiguration.FontFolder is not null)
+        {
+            var fontFile = Path.Join(RenderConfiguration.FontFolder.FullName, $"{CurrentFontName}.ttf");
+            if (File.Exists(fontFile))
+            {
+                typeface = SKTypeface.FromFile(fontFile);
+            }
+        }
+
+        return typeface;
     }
 
     public void UpdateSkiaStrokeStatus()
