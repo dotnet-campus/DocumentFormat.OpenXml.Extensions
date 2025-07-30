@@ -10,8 +10,9 @@ namespace SkiaWmfRenderer.Rendering;
 class WmfRenderer
 {
     public required WmfDocument WmfDocument { get; init; }
-    public required int RequestWidth { get; init; }
-    public required int RequestHeight { get; init; }
+    public required SkiaWmfRenderConfiguration RenderConfiguration { get; init; }
+    private int RequestWidth => RenderConfiguration.RequestWidth;
+    private int RequestHeight => RenderConfiguration.RequestHeight;
 
     /// <summary>
     /// 图片压缩的最大宽度
@@ -35,7 +36,7 @@ class WmfRenderer
         var width = Math.Abs(format.Right - format.Left);
         var height = Math.Abs(format.Bottom - format.Top);
 
-        using WmfRenderStatus renderStatus = new()
+        using WmfRenderStatus renderStatus = new(RenderConfiguration)
         {
             CurrentX = x,
             CurrentY = y,
@@ -52,6 +53,8 @@ class WmfRenderer
         try
         {
             var result = TryRenderInner(canvas, renderStatus);
+
+            RenderConfiguration.LogMessage($"[WmfRenderer] TryRenderInner={result}; IsIncludeText={renderStatus.IsIncludeText} && (IsIncludeOtherEncoding={renderStatus.IsIncludeOtherEncoding} || IsIncludeTextWithDx={renderStatus.IsIncludeTextWithDx})");
 
             if (result)
             {

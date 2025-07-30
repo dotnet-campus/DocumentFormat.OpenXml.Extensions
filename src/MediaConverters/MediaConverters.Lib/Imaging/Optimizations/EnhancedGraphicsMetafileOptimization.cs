@@ -150,7 +150,12 @@ public static class EnhancedGraphicsMetafileOptimization
 
         context.LogMessage($"Start convert wmf to png by SkiaWmfRenderer. File:'{file}'");
 
-        if (SkiaWmfRenderHelper.TryConvertToPng(file, outputPngFile, requestWidth, requestHeight) && File.Exists(outputPngFile.FullName))
+        var skiaWmfRenderConfiguration = new SkiaWmfRenderConfiguration()
+        {
+            RequestWidth = requestWidth, 
+            RequestHeight = requestHeight
+        };
+        if (SkiaWmfRenderHelper.TryConvertToPng(file, outputPngFile, skiaWmfRenderConfiguration) && File.Exists(outputPngFile.FullName))
         {
             context.LogMessage($"Success converted wmf to png by SkiaWmfRenderer. File:'{file}' Output:'{outputPngFile}'");
 

@@ -11,9 +11,10 @@ namespace SkiaWmfRenderer;
 
 public static class SkiaWmfRenderHelper
 {
-    public static bool TryConvertToPng(FileInfo wmfFile, FileInfo outputPngFile, int requestWidth = 0, int requestHeight = 0)
+    public static bool TryConvertToPng(FileInfo wmfFile, FileInfo outputPngFile, SkiaWmfRenderConfiguration? configuration = null)
     {
-        if (!TryRender(wmfFile, requestWidth, requestHeight, out var skBitmap))
+        configuration ??= new SkiaWmfRenderConfiguration();
+        if (!TryRender(wmfFile, configuration, out var skBitmap))
         {
             return false;
         }
@@ -24,7 +25,7 @@ public static class SkiaWmfRenderHelper
         return true;
     }
 
-    public static bool TryRender(FileInfo wmfFile, int requestWidth, int requestHeight, [NotNullWhen(true)] out SKBitmap? skBitmap)
+    public static bool TryRender(FileInfo wmfFile, SkiaWmfRenderConfiguration configuration, [NotNullWhen(true)] out SKBitmap? skBitmap)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -46,8 +47,7 @@ public static class SkiaWmfRenderHelper
         var wmfRenderer = new WmfRenderer()
         {
             WmfDocument = wmfDocument,
-            RequestWidth = requestWidth,
-            RequestHeight = requestHeight,
+            RenderConfiguration = configuration
         };
 
         return wmfRenderer.TryRender(out skBitmap);

@@ -11,6 +11,13 @@ namespace SkiaWmfRenderer.Rendering;
 
 class WmfRenderStatus : IDisposable
 {
+    public WmfRenderStatus(SkiaWmfRenderConfiguration renderConfiguration)
+    {
+        RenderConfiguration = renderConfiguration;
+    }
+
+    public SkiaWmfRenderConfiguration RenderConfiguration { get; }
+
     public required float CurrentX { get; set; }
     public required float CurrentY { get; set; }
 
@@ -114,9 +121,18 @@ class WmfRenderStatus : IDisposable
         {
             typeface = SKTypeface.FromFamilyName(CurrentFontName, (SKFontStyleWeight) FontWeight,
            SKFontStyleWidth.Normal, IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+
+            if (typeface is null || typeface.GlyphCount == 0)
+            {
+                var fontFile = Path.Join(AppContext.BaseDirectory, $"{CurrentFontName}.ttf");
+                if (File.Exists(fontFile))
+                {
+                    typeface = SKTypeface.FromFile(fontFile);
+                }
+            }
         }
 
-        Console.WriteLine($"CurrentFontName='{CurrentFontName}' get the SKTypeface {(typeface is null ? "is null" : "not null")}. SKTypeface={typeface?.FamilyName} GlyphCount={typeface?.GlyphCount}. Text={text}");
+        RenderConfiguration.LogMessage($"CurrentFontName='{CurrentFontName}' get the SKTypeface {(typeface is null ? "is null" : "not null")}. SKTypeface={typeface?.FamilyName} GlyphCount={typeface?.GlyphCount}. Text={text}");
 
         skFont.Typeface = typeface;
 
