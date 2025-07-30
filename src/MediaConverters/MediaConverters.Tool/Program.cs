@@ -20,9 +20,15 @@ class Program
 {
     static async Task<int> Main(string[] args)
     {
-        if (args.Length == 0)
+        if (args.Length == 0 || args.Length == 1)
         {
             // 调试模式
+            var inputFile = "image.wmf";
+            if (args.Length == 1)
+            {
+                inputFile = args[0];
+            }
+
             var imageConvertContext = new ImageConvertContext()
             {
                 MaxImageWidth = 1000,
@@ -38,7 +44,7 @@ class Program
 
             return await RunAsync(new Options()
             {
-                InputFile = "image.wmf",
+                InputFile = inputFile,
                 ConvertConfigurationFile = configurationFile,
                 WorkingFolder = testFolder.FullName,
                 OutputFile = outputFile,
