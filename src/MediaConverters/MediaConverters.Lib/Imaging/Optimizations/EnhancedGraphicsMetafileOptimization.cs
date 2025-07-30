@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
@@ -125,18 +126,25 @@ public static class EnhancedGraphicsMetafileOptimization
 
         var svgFile = Path.Join(workingFolder.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_{Path.GetRandomFileName()}.svg");
 
+        var wmf2svgFolder = Path.Join(AppContext.BaseDirectory, "Assets", RuntimeInformation.RuntimeIdentifier);
+        var wmf2svgFile = Path.Join(wmf2svgFolder, "wmf2svg");
+
         // ./wmf2svg -o 1.svg image.wmf
-        var processStartInfo = new ProcessStartInfo("wmf2svg")
+        var processStartInfo = new ProcessStartInfo(wmf2svgFile)
         {
             ArgumentList =
             {
                 "-o",
                 svgFile,
                 file.FullName,
+            },
+            Environment =
+            {
+                {"LD_LIBRARY_PATH", AppContext.BaseDirectory}
             }
         };
 
-        var fontFolder = Path.Join(AppContext.BaseDirectory, "fonts");
+        var fontFolder = Path.Join(AppContext.BaseDirectory, "Assets", "gsfonts");
         if (Directory.Exists(fontFolder))
         {
             processStartInfo.ArgumentList.Add($"--wmf-fontdir={fontFolder}");

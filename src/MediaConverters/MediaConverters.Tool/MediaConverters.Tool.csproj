@@ -14,7 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest"/>
+    <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
