@@ -39,6 +39,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "SkiaWmfRenderer\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkiaWmfRenderer", "SkiaWmfRenderer\src\SkiaWmfRenderer\SkiaWmfRenderer.csproj", "{F954FBBA-DAA9-0C2C-D456-946E60951601}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Action", "GitHub Action", "{FEBFC370-5A97-2074-5438-C062271FB6E1}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.github\workflows\dotnet-format.yml = ..\..\.github\workflows\dotnet-format.yml
+		..\..\.github\workflows\dotnetcore.yml = ..\..\.github\workflows\dotnetcore.yml
+		..\..\.github\workflows\MediaConverters.yml = ..\..\.github\workflows\MediaConverters.yml
+		..\..\.github\workflows\NuGet-tag-publish-MediaConverters.yml = ..\..\.github\workflows\NuGet-tag-publish-MediaConverters.yml
+		..\..\.github\workflows\NuGet-tag-publish.yml = ..\..\.github\workflows\NuGet-tag-publish.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
