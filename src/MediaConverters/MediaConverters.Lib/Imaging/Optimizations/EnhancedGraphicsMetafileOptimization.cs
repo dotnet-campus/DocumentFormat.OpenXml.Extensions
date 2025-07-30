@@ -140,7 +140,7 @@ public static class EnhancedGraphicsMetafileOptimization
             },
             Environment =
             {
-                {"LD_LIBRARY_PATH", AppContext.BaseDirectory}
+                {"LD_LIBRARY_PATH", wmf2svgFolder}
             }
         };
 
