@@ -87,11 +87,11 @@ class Program
             var errorMessage = $"Failed to convert image file '{inputFile.FullName}'. Reason: {imageFileOptimizationResult.FailureReason}";
             if (imageFileOptimizationResult.Exception is { } exception)
             {
-                errorMessage += $" Exception: {exception}";
+                errorMessage += $". Exception: {exception}";
             }
 
             Console.Error.WriteLine(errorMessage);
-
+            
             switch (imageFileOptimizationResult.FailureReason)
             {
                 case ImageFileOptimizationFailureReason.Ok:
@@ -107,8 +107,10 @@ class Program
                     return ErrorCode.NotSupported;
                 case ImageFileOptimizationFailureReason.GdiException:
                     return ErrorCode.GdiException;
+                case ImageFileOptimizationFailureReason.Exception:
+                    return ErrorCode.UnknownException;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Unknown FailureReason. FailureReason={imageFileOptimizationResult.FailureReason}");
             }
 
             return ErrorCode.UnknownError;
