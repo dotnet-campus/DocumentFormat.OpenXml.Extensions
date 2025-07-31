@@ -94,8 +94,8 @@ public class ImageFileOptimizationTests
     {
         var file = TestFileProvider.GetTestFile("sample.wmf");
         var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory));
-        Assert.AreEqual(false, imageFileOptimizationResult.IsSuccess);
-        Assert.AreEqual(ImageFileOptimizationFailureReason.UnknownImageFormat, imageFileOptimizationResult.FailureReason);
+        Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
+        Assert.AreEqual(ImageFileOptimizationFailureReason.Ok, imageFileOptimizationResult.FailureReason);
     }
 
     [TestMethod()]
