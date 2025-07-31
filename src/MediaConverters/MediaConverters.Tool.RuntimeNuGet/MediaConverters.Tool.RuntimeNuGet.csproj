@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\MediaConverters.Tool\bin\Release\net9.0\$(RuntimeIdentifier)\publish\*" LinkBase="Publish" Pack="True" PackagePath="\runtimes\$(RuntimeIdentifier)\native"/>
+    <None Include="..\MediaConverters.Tool\bin\Release\net9.0\$(RuntimeIdentifier)\publish\**\*" LinkBase="Publish" Pack="True" PackagePath="\runtimes\$(RuntimeIdentifier)\native"/>
     <None Include="..\README.md" Link="README.md" Pack="True" PackagePath="\" />
   </ItemGroup>
 

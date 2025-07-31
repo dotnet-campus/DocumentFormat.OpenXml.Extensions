@@ -185,6 +185,8 @@ public static class EnhancedGraphicsMetafileOptimization
         var wmf2svgFolder = Path.Join(AppContext.BaseDirectory, "Assets", RuntimeInformation.RuntimeIdentifier);
         var wmf2svgFile = Path.Join(wmf2svgFolder, "wmf2svg");
 
+        context.LogMessage($"Start convert wmf to svg by libwmf. File:'{file}' wmf2svg='{wmf2svgFile}'");
+
         try
         {
             File.SetUnixFileMode(wmf2svgFile, UnixFileMode.UserExecute);
