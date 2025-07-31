@@ -6,20 +6,25 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
-
-    <PackageId>DotNetCampus.MediaConverter.SkiaWmfRenderer</PackageId>
   </PropertyGroup>
 
+  <!--以下为 NuGet 包的属性-->
+  <PropertyGroup>
+    <PackageId>DotNetCampus.MediaConverter.SkiaWmfRenderer</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\wieslawsoltes-wmf\src\library\**\*.cs" LinkBase="wieslawsoltes-wmf" />
+    <None Include="README.md" Pack="True" PackagePath="\"/>
+
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="..\wieslawsoltes-wmf\src\library\obj\**" />
+    <Compile Include="..\wieslawsoltes-wmf\src\library\**\*.cs" Exclude="..\wieslawsoltes-wmf\src\library\obj\**" LinkBase="wieslawsoltes-wmf" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="dotnetCampus.LatestCSharpFeatures" Version="12.0.1" >
+    <PackageReference Include="dotnetCampus.LatestCSharpFeatures" Version="12.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -35,10 +40,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wieslawsoltes-wmf\" />
   </ItemGroup>
 
 </Project>
