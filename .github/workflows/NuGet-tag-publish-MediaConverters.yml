@@ -25,6 +25,9 @@ jobs:
     - name: Pack MediaConverters.Tool.ContextNuGet
       run: dotnet pack --no-build true --configuration Release src\MediaConverters\MediaConverters.Tool.ContextNuGet\MediaConverters.Tool.ContextNuGet.csproj
 
+    - name: Pack DotNetCampus.MediaConverter.SkiaWmfRenderer
+      run: dotnet pack --no-build true --configuration Release src\MediaConverters\SkiaWmfRenderer\src\SkiaWmfRenderer\SkiaWmfRenderer.csproj
+
     - name: Publish and Pack win-x86
       run: |
         dotnet publish -c Release -r win-x86 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
