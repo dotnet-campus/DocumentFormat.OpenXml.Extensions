@@ -6,17 +6,24 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+    <AssemblyName>DotNetCampus.MediaConverter.SkiaWmfRenderer</AssemblyName>
+    <RootNamespace>DotNetCampus.MediaConverter.SkiaWmfRenderer</RootNamespace>
   </PropertyGroup>
 
   <!--以下为 NuGet 包的属性-->
   <PropertyGroup>
-    <PackageId>DotNetCampus.MediaConverter.SkiaWmfRenderer</PackageId>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EmbedAllSources Condition="'$(Configuration)' != 'Debug'">true</EmbedAllSources>
+    <!-- 输出 pdb 文件 NuGet 包 -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <!-- 输出符号文件 -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="README.md" Pack="True" PackagePath="\"/>
-
+    <None Include="README.md" Pack="True" PackagePath="\" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Condition="'$(GITHUB_ACTIONS)' == 'true'"/>
   </ItemGroup>
 
   <ItemGroup>
