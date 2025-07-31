@@ -1,13 +1,10 @@
-﻿using HarfBuzzSharp;
-
+﻿using System.Runtime.InteropServices;
+using System.Text;
+using HarfBuzzSharp;
 using Oxage.Wmf;
-
 using SkiaSharp;
 
-using System.Runtime.InteropServices;
-using System.Text;
-
-namespace SkiaWmfRenderer.Rendering;
+namespace DotNetCampus.MediaConverter.SkiaWmfRenderer.Rendering;
 
 class WmfRenderStatus : IDisposable
 {

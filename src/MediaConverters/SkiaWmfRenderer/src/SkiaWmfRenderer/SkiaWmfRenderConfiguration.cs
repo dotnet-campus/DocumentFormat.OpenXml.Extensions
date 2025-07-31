@@ -1,5 +1,8 @@
-﻿namespace SkiaWmfRenderer;
+﻿namespace DotNetCampus.MediaConverter.SkiaWmfRenderer;
 
+/// <summary>
+/// 渲染的配置
+/// </summary>
 public class SkiaWmfRenderConfiguration
 {
     /// <summary>

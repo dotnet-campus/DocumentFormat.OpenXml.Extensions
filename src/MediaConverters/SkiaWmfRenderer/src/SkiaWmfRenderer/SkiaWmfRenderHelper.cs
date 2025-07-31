@@ -1,13 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
-
+using DotNetCampus.MediaConverter.SkiaWmfRenderer.Rendering;
 using Oxage.Wmf;
-
 using SkiaSharp;
+using SkiaWmfRenderer;
 
-using SkiaWmfRenderer.Rendering;
-
-namespace SkiaWmfRenderer;
+namespace DotNetCampus.MediaConverter.SkiaWmfRenderer;
 
 public static class SkiaWmfRenderHelper
 {

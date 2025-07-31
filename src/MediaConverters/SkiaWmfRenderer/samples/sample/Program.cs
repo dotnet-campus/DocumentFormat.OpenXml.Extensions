@@ -15,7 +15,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-
+using DotNetCampus.MediaConverter.SkiaWmfRenderer;
 using Buffer = HarfBuzzSharp.Buffer;
 
 var markdownText = new StringBuilder();

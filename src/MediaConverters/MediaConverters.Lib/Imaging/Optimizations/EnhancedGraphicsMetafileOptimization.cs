@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using DotNetCampus.MediaConverter.SkiaWmfRenderer;
 using SkiaWmfRenderer;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;

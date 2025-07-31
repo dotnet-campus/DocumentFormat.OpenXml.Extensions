@@ -1,11 +1,10 @@
-﻿using Oxage.Wmf;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using Oxage.Wmf;
 using Oxage.Wmf.Records;
 using SkiaSharp;
-using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
-namespace SkiaWmfRenderer.Rendering;
+namespace DotNetCampus.MediaConverter.SkiaWmfRenderer.Rendering;
 
 class WmfRenderer
 {

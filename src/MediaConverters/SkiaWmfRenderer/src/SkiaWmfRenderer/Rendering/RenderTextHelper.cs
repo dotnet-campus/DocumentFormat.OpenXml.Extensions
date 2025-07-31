@@ -1,12 +1,9 @@
 ﻿using System.Runtime.InteropServices;
-
 using HarfBuzzSharp;
-
 using SkiaSharp;
-
 using Buffer = HarfBuzzSharp.Buffer;
 
-namespace SkiaWmfRenderer.Rendering;
+namespace DotNetCampus.MediaConverter.SkiaWmfRenderer.Rendering;
 
 static class RenderTextHelper
 {

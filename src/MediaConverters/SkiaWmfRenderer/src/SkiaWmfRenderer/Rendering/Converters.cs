@@ -1,11 +1,9 @@
-﻿using Oxage.Wmf;
-
+﻿using System.Text;
+using Oxage.Wmf;
+using Oxage.Wmf.Primitive;
 using SkiaSharp;
 
-using System.Text;
-using Oxage.Wmf.Primitive;
-
-namespace SkiaWmfRenderer.Rendering;
+namespace DotNetCampus.MediaConverter.SkiaWmfRenderer.Rendering;
 
 static class Converters
 {
