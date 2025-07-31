@@ -185,6 +185,15 @@ public static class EnhancedGraphicsMetafileOptimization
         var wmf2svgFolder = Path.Join(AppContext.BaseDirectory, "Assets", RuntimeInformation.RuntimeIdentifier);
         var wmf2svgFile = Path.Join(wmf2svgFolder, "wmf2svg");
 
+        try
+        {
+            File.SetUnixFileMode(wmf2svgFile, UnixFileMode.UserExecute);
+        }
+        catch (Exception e)
+        {
+           context.LogMessage($"File.SetUnixFileMode +x Fail. wmf2svgFile='{wmf2svgFile}'. Exception: {e}");
+        }
+
         // ./wmf2svg -o 1.svg image.wmf
         var processStartInfo = new ProcessStartInfo(wmf2svgFile)
         {
