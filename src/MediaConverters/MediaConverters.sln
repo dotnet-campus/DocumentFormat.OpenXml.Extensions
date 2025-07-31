@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaConverters.Tests", "Me
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{208BA388-4CEE-2CBF-559C-5607C099C1F8}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\.github\workflows\MediaConverters.yml = ..\..\.github\workflows\MediaConverters.yml
-		..\..\.github\workflows\NuGet-tag-publish-MediaConverters.yml = ..\..\.github\workflows\NuGet-tag-publish-MediaConverters.yml
 		README.md = README.md
 		README.zh-cn.md = README.zh-cn.md
 	EndProjectSection

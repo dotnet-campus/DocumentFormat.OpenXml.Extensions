@@ -6,8 +6,6 @@ using HarfBuzzSharp;
 
 using SkiaSharp;
 
-using SkiaWmfRenderer;
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;

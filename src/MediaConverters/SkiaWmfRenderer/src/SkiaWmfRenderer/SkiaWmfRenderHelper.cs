@@ -3,7 +3,6 @@ using System.Text;
 using DotNetCampus.MediaConverter.SkiaWmfRenderer.Rendering;
 using Oxage.Wmf;
 using SkiaSharp;
-using SkiaWmfRenderer;
 
 namespace DotNetCampus.MediaConverter.SkiaWmfRenderer;
 

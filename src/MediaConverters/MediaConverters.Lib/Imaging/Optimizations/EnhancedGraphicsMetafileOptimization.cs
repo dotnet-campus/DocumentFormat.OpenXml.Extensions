@@ -6,8 +6,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+
 using DotNetCampus.MediaConverter.SkiaWmfRenderer;
-using SkiaWmfRenderer;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 
@@ -194,7 +194,7 @@ public static class EnhancedGraphicsMetafileOptimization
         }
         catch (Exception e)
         {
-           context.LogMessage($"File.SetUnixFileMode +x Fail. wmf2svgFile='{wmf2svgFile}'. Exception: {e}");
+            context.LogMessage($"File.SetUnixFileMode +x Fail. wmf2svgFile='{wmf2svgFile}'. Exception: {e}");
         }
 
         // ./wmf2svg -o 1.svg image.wmf
@@ -264,7 +264,7 @@ public static class EnhancedGraphicsMetafileOptimization
         var svgFile = Path.Join(workingFolder.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_{Path.GetRandomFileName()}.svg");
 
         context.LogMessage($"Start convert emf or wmf to png by Inkscape. File:'{file}'");
-        
+
         var processStartInfo = new ProcessStartInfo("inkscape")
         {
             ArgumentList =
@@ -305,7 +305,7 @@ public static class EnhancedGraphicsMetafileOptimization
             {
                 context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. We will continue use libwmf to convert the image. File:'{file}' Exception: {e}");
             }
-                
+
             return ImageFileOptimizationResult.FailException(e);
         }
 

@@ -16,8 +16,9 @@ namespace Oxage.Wmf
 		/// Sets the default layout to vertical.
 		/// </summary>
 		LAYOUT_VBH = 0x00000004,
+        /// <summary>
 		/// Disables any reflection (META_BITBLT and META_STRETCHBLT operations)
-		/// </summary>
-		LAYOUT_BITMAPORIENTATIONPRESERVED = 0x00000008
+        /// </summary>
+        LAYOUT_BITMAPORIENTATIONPRESERVED = 0x00000008
 	}
 }

@@ -13,6 +13,7 @@
   <!--以下为 NuGet 包的属性-->
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>The dotnet tools to assist in editing or reading the Office document files</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <EmbedAllSources Condition="'$(Configuration)' != 'Debug'">true</EmbedAllSources>
     <!-- 输出 pdb 文件 NuGet 包 -->
