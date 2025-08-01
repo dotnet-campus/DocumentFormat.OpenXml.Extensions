@@ -1,5 +1,215 @@
 ﻿# DotNetCampus.MediaConverters
 
+## Usage
+
+### Command Line
+
+Command line parameters:
+
+```shell
+--WorkingFolder: Working directory
+--InputFile: Path to the input file
+--OutputFile: Path to the output file
+--ConvertConfigurationFile: Path to the conversion configuration file
+```
+
+The `--ConvertConfigurationFile` parameter specifies a JSON-format configuration file, which contains the settings for the conversion tasks. The configuration follows the structure of a serialized `ImageConvertContext` object, defined as follows:
+
+- **MaxImageWidth**: Maximum image width limit. Optional; if omitted or empty, no limit is applied.
+- **MaxImageHeight**: Maximum image height limit. Optional; if omitted or empty, no limit is applied.
+- **UseAreaSizeLimit**: Whether to apply an area size limit. Optional; if omitted or empty, the default is to use an area size limit.
+- **ImageConvertTaskList**: List of conversion tasks. Optional; if omitted or empty, no conversion tasks will be performed. This should be an array of objects implementing the `IImageConvertTask` interface.
+
+Each task object must contain a `Type` property indicating the type of task. The available task types and their parameters are as follows:
+
+---
+
+#### SetSoftEdgeEffectTask
+
+Applies a soft edge effect to the image.
+
+- **Radius**: The radius of the soft edge in pixels. Optional.
+
+Example:
+
+```json
+{
+  "ImageConvertTaskList":
+  [
+    {
+      "Type": "SetSoftEdgeEffectTask",
+      "Radius": 20
+    }
+  ]
+}
+```
+
+---
+
+#### SetLuminanceEffectTask
+
+Applies a luminance (erosion) effect to the image.
+
+Example:
+
+```json
+{
+  "ImageConvertTaskList": 
+  [
+    {
+      "Type": "SetLuminanceEffectTask"
+    }
+  ]
+}
+```
+
+---
+
+#### SetGrayScaleEffectTask
+
+Converts the image to grayscale.
+
+Example:
+
+```json
+{
+  "ImageConvertTaskList": 
+  [
+    {
+      "Type": "SetGrayScaleEffectTask"
+    }
+  ]
+}
+```
+
+---
+
+#### SetContrastTask
+
+Adjusts the contrast of the current image.
+
+- **Percentage**: A value of 0 produces a completely gray image. A value of 1 leaves the input unchanged. Other values act as linear multipliers for contrast adjustment. Values greater than 1 are allowed for increased contrast.
+
+Example:
+
+```json
+{
+  "ImageConvertTaskList": 
+  [
+    {
+      "Type": "SetContrastTask",
+      "Percentage": 0.7
+    }
+  ]
+}
+```
+
+---
+
+#### SetBrightnessTask
+
+Adjusts the brightness of the current image.
+
+- **Percentage**: A value of 0 produces a completely black image. A value of 1 leaves the input unchanged. Other values act as linear multipliers for brightness adjustment. Values greater than 1 are allowed for increased brightness.
+
+Example:
+
+```json
+{
+  "ImageConvertTaskList": 
+  [
+    {
+      "Type": "SetBrightnessTask",
+      "Percentage": 0.7
+    }
+  ]
+}
+```
+
+---
+
+#### SetBlackWhiteEffectTask
+
+Converts the image to black and white.
+
+- **Threshold**: Threshold value for black-and-white conversion (optional).
+
+Example:
+
+```json
+{
+  "ImageConvertTaskList": 
+  [
+    {
+      "Type": "SetBlackWhiteEffectTask",
+      "Threshold": 0.7
+    }
+  ]
+}
+```
+
+---
+
+#### SetDuotoneEffectTask
+
+Applies a duotone effect using two specified colors.
+
+- **ArgbFormatColor1**: ARGB format string representing color 1.
+- **ArgbFormatColor2**: ARGB format string representing color 2.
+
+Example:
+
+```json
+{
+  "ImageConvertTaskList": 
+  [
+    {
+      "Type": "SetDuotoneEffectTask",
+      "ArgbFormatColor1": "#FFF1D7A6",
+      "ArgbFormatColor2": "#FFFFF2C8"
+    }
+  ]
+}
+```
+
+---
+
+#### ReplaceColorTask
+
+Replaces specific colors in the image with new ones.
+
+- **ReplaceColorInfoList**: A list containing color replacement information. Each entry includes:
+   - **OldColor**: ARGB format string for the color to be replaced.
+   - **NewColor**: ARGB format string for the replacement color.
+
+Example:
+
+```json
+{
+  "ImageConvertTaskList": 
+  [
+    {
+      "Type": "ReplaceColorTask",
+      "ReplaceColorInfoList": 
+      [
+        {
+          "OldColor": "#FFF1D7A6",
+          "NewColor": "#00FFFFFF"
+        },
+        {
+          "OldColor": "#FFFFF2C8",
+          "NewColor": "#00FFFFFF"
+        },
+        {
+          "OldColor": "#FFE3D8AB",
+          "NewColor": "#00FFFFFF"
+        }
+      ]
+    }
+  ]
+}
+```
+
 ## Copyright Notice
 
 If you use MediaConverters.Lib as a direct dependency, you must comply with the [Six Labors Split License, Version 1.0](ThirdPartyNotices/SixLabors.LICENSE.txt). This is because this project uses Six Labors' ImageSharp library as its infrastructure.
