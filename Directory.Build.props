@@ -1,5 +1,7 @@
 <Project>
+
   <Import Project="build\Version.props" />
+
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <PackageOutputPath>$(MSBuildThisFileDirectory)bin\$(Configuration)</PackageOutputPath>
@@ -14,4 +16,9 @@
     <Copyright>Copyright © 2020-$([System.DateTime]::Now.ToString(`yyyy`)) dotnet campus, All Rights Reserved.</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <SourceRoot Include="$(MSBuildThisFileDirectory)"/>
+  </ItemGroup>
+
 </Project>

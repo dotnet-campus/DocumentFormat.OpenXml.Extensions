@@ -11,7 +11,7 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest1()
     {
         var file = TestFileProvider.GetTestFile(TestFileProvider.DefaultTestImageName);
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory, 100, null);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory, 100));
 
         Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
     }
@@ -20,7 +20,7 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest2()
     {
         var file = new FileInfo("The Not Exists Image File.png");
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory, 100, null);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory, 100, null));
 
         Assert.AreEqual(false, imageFileOptimizationResult.IsSuccess);
         Assert.AreEqual(ImageFileOptimizationFailureReason.FileNotFound, imageFileOptimizationResult.FailureReason);
@@ -30,7 +30,7 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest_LimitSize1()
     {
         var file = TestFileProvider.GetTestFile(TestFileProvider.DefaultTestImageName);
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory, 100, 100);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory, 100, 100));
         // 预期此时通过面积限制，依然宽度高度超过了限制的最大宽度高度
         Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
         ImageInfo imageInfo = await Image.IdentifyAsync(imageFileOptimizationResult.OptimizedImageFile!.FullName);
@@ -42,7 +42,7 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest_LimitSize2()
     {
         var file = TestFileProvider.GetTestFile(TestFileProvider.DefaultTestImageName);
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory, 100, 100, useAreaSizeLimit: false);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory, 100, 100), useAreaSizeLimit: false);
         // 不通过面积限制，宽度高度绝对都不超过限制的最大宽度高度
         Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
         ImageInfo imageInfo = await Image.IdentifyAsync(imageFileOptimizationResult.OptimizedImageFile!.FullName);
@@ -54,7 +54,7 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest_LimitSize3()
     {
         var file = TestFileProvider.GetTestFile(TestFileProvider.DefaultTestImageName);
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory, 600, 20, useAreaSizeLimit: false);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory, 600, 20), useAreaSizeLimit: false);
 
         Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
         ImageInfo imageInfo = await Image.IdentifyAsync(imageFileOptimizationResult.OptimizedImageFile!.FullName);
@@ -66,7 +66,7 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest_FormatTiff()
     {
         var file = TestFileProvider.GetTestFile("file_example_TIFF_1MB.tiff");
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory));
         Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
         TestHelper.OpenFileInExplorer(imageFileOptimizationResult.OptimizedImageFile!);
     }
@@ -75,7 +75,7 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest_FormatWebp()
     {
         var file = TestFileProvider.GetTestFile("file_example_WEBP_50kB.webp");
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory));
         Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
         TestHelper.OpenFileInExplorer(imageFileOptimizationResult.OptimizedImageFile!);
     }
@@ -84,7 +84,7 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest_FormatTga()
     {
         var file = TestFileProvider.GetTestFile("sample_640×426.tga");
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory));
         Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
         TestHelper.OpenFileInExplorer(imageFileOptimizationResult.OptimizedImageFile!);
     }
@@ -93,9 +93,9 @@ public class ImageFileOptimizationTests
     public async Task OptimizeImageFileAsyncTest_FormatWmf()
     {
         var file = TestFileProvider.GetTestFile("sample.wmf");
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory);
-        Assert.AreEqual(false, imageFileOptimizationResult.IsSuccess);
-        Assert.AreEqual(ImageFileOptimizationFailureReason.UnknownImageFormat, imageFileOptimizationResult.FailureReason);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory));
+        Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
+        Assert.AreEqual(ImageFileOptimizationFailureReason.Ok, imageFileOptimizationResult.FailureReason);
     }
 
     [TestMethod()]
@@ -105,7 +105,7 @@ public class ImageFileOptimizationTests
         // https://www.impulseadventure.com/photo/exif-orientation.html
         // http://sylvana.net/jpegcrop/exif_orientation.html
         var file = TestFileProvider.GetTestFile("EXIF Orientation.png");
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(file, TestHelper.WorkingDirectory);
+        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory));
         Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
         TestHelper.OpenFileInExplorer(imageFileOptimizationResult.OptimizedImageFile!);
     }

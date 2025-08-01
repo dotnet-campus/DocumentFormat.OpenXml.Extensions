@@ -15,4 +15,7 @@ public class Options
 
     [Option]
     public required string ConvertConfigurationFile { get; init; }
+
+    public bool? ShouldLogToConsole { get; init; }
+    public bool? ShouldLogToFile { get; init; }
 }
