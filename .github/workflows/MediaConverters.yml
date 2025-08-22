@@ -3,18 +3,6 @@
 on: [push]
 
 jobs:
-  BuildOnWindows:
-
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v1
-  
-    - name: Build with dotnet
-      run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
-
-    - name: Test
-      run: dotnet test --configuration Release --no-build src\MediaConverters\MediaConverters.Tests\MediaConverters.Tests.csproj
 
   BuildOnLinux:
 
@@ -28,9 +16,14 @@ jobs:
         dotnet-version: |
           9.0.x
 
-    - name: Build with dotnet
-      run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
+    - name: Publish and Pack linux-x64
+      run: |
+        dotnet publish -c Release -r linux-x64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
+        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-x64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj
+    
+    - uses: actions/upload-artifact@v4
+      name: UploadArtifact
+      path: bin/Release/
+      retention-days: 1
 
-    - name: Test
-      run: dotnet test --configuration Release --no-build src/MediaConverters/MediaConverters.Tests/MediaConverters.Tests.csproj
-      
+   # dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
