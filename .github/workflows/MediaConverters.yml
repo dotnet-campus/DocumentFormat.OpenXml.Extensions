@@ -3,36 +3,24 @@
 on: [push]
 
 jobs:
+  BuildOnWindows:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+  
+    - name: Build with dotnet
+      run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build src\MediaConverters\MediaConverters.Tests\MediaConverters.Tests.csproj
 
   BuildOnLinux:
 
     runs-on: ubuntu-latest
-    container:
-      image: debian:buster-slim
 
     steps:
-      # 由于 Debian 10 (buster) 停止维护了，需要换成 archive.debian.org 源头
-    - name: UpdateSource
-      run: |
-          rm /etc/apt/sources.list
-          echo 'deb http://archive.debian.org/debian buster main contrib non-free'  >> /etc/apt/sources.list
-          echo 'deb http://archive.debian.org/debian buster-updates main contrib non-free'  >> /etc/apt/sources.list
-          echo 'deb http://archive.debian.org/debian-security buster/updates main contrib non-free'  >> /etc/apt/sources.list
-    - name: InstallTool
-      run: |
-          dpkg --add-architecture arm64
-          apt-get clean
-          apt-get update
-          apt-get install libicu-dev -y
-          apt-get install libssl-dev -y
-          apt-get install wget -y
-          apt-get install curl -y
-          apt-get install clang llvm -y
-          apt-get install gcc-aarch64-linux-gnu -y
-          apt-get install binutils-aarch64-linux-gnu -y
-          apt-get install zlib1g-dev -y
-          apt-get install zlib1g-dev:arm64 -y
-
     - uses: actions/checkout@v1
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
@@ -40,14 +28,8 @@ jobs:
         dotnet-version: | 
           9.0.x
 
-    - name: Publish and Pack linux-arm64
-      run: |
-        dotnet publish -c Release -r linux-arm64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=linux-arm64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj
-    
-    - uses: actions/upload-artifact@v4
-      name: UploadArtifact
-      with:
-        name: linux-arm64
-        path: bin/Release/
-        retention-days: 1
+    - name: Build with dotnet
+      run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build src/MediaConverters/MediaConverters.Tests/MediaConverters.Tests.csproj
