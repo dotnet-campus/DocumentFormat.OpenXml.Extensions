@@ -47,9 +47,6 @@ jobs:
     - name: Install dotnet tool
       run: dotnet tool install -g dotnetCampus.TagToVersion
 
-    - name: Export tool
-      run: export PATH="$PATH:/github/home/.dotnet/tools"  
-
     - name: Set tag to version  
       run: dotnet-TagToVersion -t ${{ github.ref }}
  
@@ -110,9 +107,6 @@ jobs:
  
     - name: Install dotnet tool
       run: dotnet tool install -g dotnetCampus.TagToVersion
-
-    - name: Export tool
-      run: export PATH="$PATH:/github/home/.dotnet/tools"  
 
     - name: Set tag to version  
       run: dotnet-TagToVersion -t ${{ github.ref }}
