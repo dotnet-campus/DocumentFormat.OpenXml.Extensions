@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaConverters.Tests", "Me
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{208BA388-4CEE-2CBF-559C-5607C099C1F8}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\.github\workflows\MediaConverters.yml = ..\..\.github\workflows\MediaConverters.yml
-		..\..\.github\workflows\NuGet-tag-publish-MediaConverters.yml = ..\..\.github\workflows\NuGet-tag-publish-MediaConverters.yml
 		README.md = README.md
 		README.zh-cn.md = README.zh-cn.md
 	EndProjectSection
@@ -26,6 +24,25 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pack", "Pack", "{78453166-59D3-F6E5-1AF7-6BAE5D72A388}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaConverters.Tool.ContextNuGet", "MediaConverters.Tool.ContextNuGet\MediaConverters.Tool.ContextNuGet.csproj", "{29495CDD-F1BF-57AF-D2D0-C464FDC5506B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SkiaWmfRenderer", "SkiaWmfRenderer", "{7ADEA89B-E7C9-BB74-8262-22C28E372E1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{E59E3FFC-5A3D-EAF4-4C42-36ACFBE6CA32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "SkiaWmfRenderer\samples\sample\Sample.csproj", "{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BCE75840-8C2D-FF3B-4008-C39CE2693A70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkiaWmfRenderer", "SkiaWmfRenderer\src\SkiaWmfRenderer\SkiaWmfRenderer.csproj", "{F954FBBA-DAA9-0C2C-D456-946E60951601}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Action", "GitHub Action", "{FEBFC370-5A97-2074-5438-C062271FB6E1}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.github\workflows\dotnet-format.yml = ..\..\.github\workflows\dotnet-format.yml
+		..\..\.github\workflows\dotnetcore.yml = ..\..\.github\workflows\dotnetcore.yml
+		..\..\.github\workflows\MediaConverters.yml = ..\..\.github\workflows\MediaConverters.yml
+		..\..\.github\workflows\NuGet-tag-publish-MediaConverters.yml = ..\..\.github\workflows\NuGet-tag-publish-MediaConverters.yml
+		..\..\.github\workflows\NuGet-tag-publish.yml = ..\..\.github\workflows\NuGet-tag-publish.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +126,30 @@ Global
 		{29495CDD-F1BF-57AF-D2D0-C464FDC5506B}.Release|x64.Build.0 = Release|Any CPU
 		{29495CDD-F1BF-57AF-D2D0-C464FDC5506B}.Release|x86.ActiveCfg = Release|Any CPU
 		{29495CDD-F1BF-57AF-D2D0-C464FDC5506B}.Release|x86.Build.0 = Release|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Debug|x64.Build.0 = Debug|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Debug|x86.Build.0 = Debug|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Release|x64.ActiveCfg = Release|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Release|x64.Build.0 = Release|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Release|x86.ActiveCfg = Release|Any CPU
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D}.Release|x86.Build.0 = Release|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Debug|x64.Build.0 = Debug|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Debug|x86.Build.0 = Debug|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Release|x64.ActiveCfg = Release|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Release|x64.Build.0 = Release|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Release|x86.ActiveCfg = Release|Any CPU
+		{F954FBBA-DAA9-0C2C-D456-946E60951601}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +159,10 @@ Global
 		{3F0E99D4-F28E-349C-D16D-7517B102104A} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{7A0978A5-B0CF-60E5-2E81-4B78AB3815B3} = {78453166-59D3-F6E5-1AF7-6BAE5D72A388}
 		{29495CDD-F1BF-57AF-D2D0-C464FDC5506B} = {78453166-59D3-F6E5-1AF7-6BAE5D72A388}
+		{E59E3FFC-5A3D-EAF4-4C42-36ACFBE6CA32} = {7ADEA89B-E7C9-BB74-8262-22C28E372E1A}
+		{13B65A58-C0A5-DBF6-7B95-BD2B9B95F44D} = {E59E3FFC-5A3D-EAF4-4C42-36ACFBE6CA32}
+		{BCE75840-8C2D-FF3B-4008-C39CE2693A70} = {7ADEA89B-E7C9-BB74-8262-22C28E372E1A}
+		{F954FBBA-DAA9-0C2C-D456-946E60951601} = {BCE75840-8C2D-FF3B-4008-C39CE2693A70}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDD047F3-A4C1-40F8-B7E1-F22E77C16B4D}

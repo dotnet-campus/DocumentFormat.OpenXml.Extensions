@@ -1,0 +1,1 @@
+﻿Copy from https://cn.archive.ubuntu.com/ubuntu/pool/universe/g/gsfonts/gsfonts_8.11%2Burwcyr1.0.7~pre44-4.5_all.deb

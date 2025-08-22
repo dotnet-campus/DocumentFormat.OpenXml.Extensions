@@ -25,6 +25,9 @@ jobs:
     - name: Pack MediaConverters.Tool.ContextNuGet
       run: dotnet pack --no-build true --configuration Release src\MediaConverters\MediaConverters.Tool.ContextNuGet\MediaConverters.Tool.ContextNuGet.csproj
 
+    - name: Pack DotNetCampus.MediaConverter.SkiaWmfRenderer
+      run: dotnet pack --no-build true --configuration Release src\MediaConverters\SkiaWmfRenderer\src\SkiaWmfRenderer\SkiaWmfRenderer.csproj
+
     - name: Publish and Pack win-x86
       run: |
         dotnet publish -c Release -r win-x86 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
@@ -69,16 +72,34 @@ jobs:
   PackOnLinuxX64:
 
     runs-on: ubuntu-latest
+    container:
+      image: debian:buster-slim
 
     steps:
+      # 由于 Debian 10 (buster) 停止维护了，需要换成 archive.debian.org 源头
+    - name: UpdateSource
+      run: |
+          rm /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian buster main contrib non-free'  >> /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian buster-updates main contrib non-free'  >> /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian-security buster/updates main contrib non-free'  >> /etc/apt/sources.list
+    - name: InstallTool
+      run: |
+          dpkg --add-architecture arm64
+          apt-get clean
+          apt-get update
+          apt-get install libicu-dev -y
+          apt-get install libssl-dev -y
+          apt-get install wget -y
+          apt-get install curl -y
+          apt-get install clang llvm -y
+          apt-get install gcc-aarch64-linux-gnu -y
+          apt-get install binutils-aarch64-linux-gnu -y
+          apt-get install zlib1g-dev -y
+          apt-get install zlib1g-dev:arm64 -y
+
     - uses: actions/checkout@v4
  
-    - name: Install dotnet tool
-      run: dotnet tool install -g dotnetCampus.TagToVersion
-
-    - name: Set tag to version  
-      run: dotnet TagToVersion -t ${{ github.ref }}
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -87,6 +108,15 @@ jobs:
           5.0.x
           6.0.x
           9.0.x
+ 
+    - name: Add .NET global tools to PATH
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+    - name: Install dotnet tool
+      run: dotnet tool install -g dotnetCampus.TagToVersion
+
+    - name: Set tag to version  
+      run: dotnet-TagToVersion -t ${{ github.ref }}
  
     - name: Build with dotnet
       run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
@@ -104,15 +134,33 @@ jobs:
   PackOnLinuxArm64:
 
     runs-on: ubuntu-24.04-arm
+    container:
+      image: debian:buster-slim
 
     steps:
-    - uses: actions/checkout@v4
- 
-    - name: Install dotnet tool
-      run: dotnet tool install -g dotnetCampus.TagToVersion
+      # 由于 Debian 10 (buster) 停止维护了，需要换成 archive.debian.org 源头
+    - name: UpdateSource
+      run: |
+          rm /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian buster main contrib non-free'  >> /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian buster-updates main contrib non-free'  >> /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian-security buster/updates main contrib non-free'  >> /etc/apt/sources.list
+    - name: InstallTool
+      run: |
+          dpkg --add-architecture arm64
+          apt-get clean
+          apt-get update
+          apt-get install libicu-dev -y
+          apt-get install libssl-dev -y
+          apt-get install wget -y
+          apt-get install curl -y
+          apt-get install clang llvm -y
+          apt-get install gcc-aarch64-linux-gnu -y
+          apt-get install binutils-aarch64-linux-gnu -y
+          apt-get install zlib1g-dev -y
+          apt-get install zlib1g-dev:arm64 -y
 
-    - name: Set tag to version  
-      run: dotnet TagToVersion -t ${{ github.ref }}
+    - uses: actions/checkout@v4
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
@@ -122,6 +170,15 @@ jobs:
           5.0.x
           6.0.x
           9.0.x
+ 
+    - name: Add .NET global tools to PATH
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+    - name: Install dotnet tool
+      run: dotnet tool install -g dotnetCampus.TagToVersion
+
+    - name: Set tag to version  
+      run: dotnet-TagToVersion -t ${{ github.ref }}
  
     - name: Build with dotnet
       run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln

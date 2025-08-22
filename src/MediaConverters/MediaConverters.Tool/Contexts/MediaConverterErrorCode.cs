@@ -38,6 +38,10 @@ public readonly record struct MediaConverterErrorCode
     /// </summary>
     public static readonly ErrorCode NotSupported = new(1004, "Not supported operation");
 
+    public static readonly ErrorCode GdiException = new(1005, "Gdi exception");
+
+    public static readonly ErrorCode UnknownException = new(1006, "Unknown exception");
+
     /// <summary>
     /// 错误代码
     /// </summary>
@@ -47,6 +51,7 @@ public readonly record struct MediaConverterErrorCode
     /// 错误信息
     /// </summary>
     public string Message { get; init; }
+
 
     public MediaConverterErrorCode(int code, string message)
     {
