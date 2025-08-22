@@ -8,7 +8,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: debian:buster-slim
+      image: debian:buster
 
     steps:
     - uses: actions/checkout@v1
