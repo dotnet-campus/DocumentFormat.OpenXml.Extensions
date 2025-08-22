@@ -7,6 +7,8 @@ jobs:
   BuildOnLinux:
 
     runs-on: ubuntu-latest
+    container:
+      image: debian:buster-slim
 
     steps:
     - uses: actions/checkout@v1
