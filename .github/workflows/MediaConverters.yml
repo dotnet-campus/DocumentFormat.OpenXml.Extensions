@@ -37,7 +37,7 @@ jobs:
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: |
+        dotnet-version: | 
           9.0.x
 
     - name: Publish and Pack linux-arm64
@@ -51,5 +51,3 @@ jobs:
         name: linux-arm64
         path: bin/Release/
         retention-days: 1
-
-   # dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
