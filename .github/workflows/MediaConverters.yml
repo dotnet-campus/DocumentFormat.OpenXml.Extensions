@@ -23,7 +23,8 @@ jobs:
     
     - uses: actions/upload-artifact@v4
       name: UploadArtifact
-      path: bin/Release/
-      retention-days: 1
+      with:
+        path: bin/Release/
+        retention-days: 1
 
    # dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
