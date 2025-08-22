@@ -20,6 +20,7 @@ jobs:
     - name: InstallTool
       run: |
           dpkg --add-architecture arm64
+          apt-get clean
           apt-get update
           apt-get install libicu-dev -y
           apt-get install libssl-dev -y
