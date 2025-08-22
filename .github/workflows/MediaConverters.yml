@@ -8,9 +8,23 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: debian:buster
+      image: debian:buster-slim
 
     steps:
+    - name: InstallTool
+      run: |
+          dpkg --add-architecture arm64
+          apt update
+          apt-get install libicu-dev -y
+          apt-get install libssl-dev -y
+          apt-get install wget -y
+          apt-get install curl -y
+          apt-get install clang llvm -y
+          apt-get install gcc-aarch64-linux-gnu -y
+          apt-get install binutils-aarch64-linux-gnu -y
+          apt-get install zlib1g-dev -y
+          apt-get install zlib1g-dev:arm64 -y
+
     - uses: actions/checkout@v1
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
