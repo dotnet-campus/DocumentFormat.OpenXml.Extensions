@@ -72,8 +72,32 @@ jobs:
   PackOnLinuxX64:
 
     runs-on: ubuntu-latest
+    container:
+      image: debian:buster-slim
 
     steps:
+      # 由于 Debian 10 (buster) 停止维护了，需要换成 archive.debian.org 源头
+    - name: UpdateSource
+      run: |
+          rm /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian buster main contrib non-free'  >> /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian buster-updates main contrib non-free'  >> /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian-security buster/updates main contrib non-free'  >> /etc/apt/sources.list
+    - name: InstallTool
+      run: |
+          dpkg --add-architecture arm64
+          apt-get clean
+          apt-get update
+          apt-get install libicu-dev -y
+          apt-get install libssl-dev -y
+          apt-get install wget -y
+          apt-get install curl -y
+          apt-get install clang llvm -y
+          apt-get install gcc-aarch64-linux-gnu -y
+          apt-get install binutils-aarch64-linux-gnu -y
+          apt-get install zlib1g-dev -y
+          apt-get install zlib1g-dev:arm64 -y
+
     - uses: actions/checkout@v4
  
     - name: Install dotnet tool
@@ -107,8 +131,32 @@ jobs:
   PackOnLinuxArm64:
 
     runs-on: ubuntu-24.04-arm
+    container:
+      image: debian:buster-slim
 
     steps:
+      # 由于 Debian 10 (buster) 停止维护了，需要换成 archive.debian.org 源头
+    - name: UpdateSource
+      run: |
+          rm /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian buster main contrib non-free'  >> /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian buster-updates main contrib non-free'  >> /etc/apt/sources.list
+          echo 'deb http://archive.debian.org/debian-security buster/updates main contrib non-free'  >> /etc/apt/sources.list
+    - name: InstallTool
+      run: |
+          dpkg --add-architecture arm64
+          apt-get clean
+          apt-get update
+          apt-get install libicu-dev -y
+          apt-get install libssl-dev -y
+          apt-get install wget -y
+          apt-get install curl -y
+          apt-get install clang llvm -y
+          apt-get install gcc-aarch64-linux-gnu -y
+          apt-get install binutils-aarch64-linux-gnu -y
+          apt-get install zlib1g-dev -y
+          apt-get install zlib1g-dev:arm64 -y
+
     - uses: actions/checkout@v4
  
     - name: Install dotnet tool
