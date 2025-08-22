@@ -24,6 +24,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       name: UploadArtifact
       with:
+        name: linux-x64
         path: bin/Release/
         retention-days: 1
 
