@@ -100,12 +100,6 @@ jobs:
 
     - uses: actions/checkout@v4
  
-    - name: Install dotnet tool
-      run: dotnet tool install -g dotnetCampus.TagToVersion
-
-    - name: Set tag to version  
-      run: dotnet TagToVersion -t ${{ github.ref }}
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -114,6 +108,15 @@ jobs:
           5.0.x
           6.0.x
           9.0.x
+ 
+    - name: Add .NET global tools to PATH
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+    - name: Install dotnet tool
+      run: dotnet tool install -g dotnetCampus.TagToVersion
+
+    - name: Set tag to version  
+      run: dotnet-TagToVersion -t ${{ github.ref }}
  
     - name: Build with dotnet
       run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
@@ -158,12 +161,6 @@ jobs:
           apt-get install zlib1g-dev:arm64 -y
 
     - uses: actions/checkout@v4
- 
-    - name: Install dotnet tool
-      run: dotnet tool install -g dotnetCampus.TagToVersion
-
-    - name: Set tag to version  
-      run: dotnet TagToVersion -t ${{ github.ref }}
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
@@ -173,6 +170,15 @@ jobs:
           5.0.x
           6.0.x
           9.0.x
+ 
+    - name: Add .NET global tools to PATH
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+    - name: Install dotnet tool
+      run: dotnet tool install -g dotnetCampus.TagToVersion
+
+    - name: Set tag to version  
+      run: dotnet-TagToVersion -t ${{ github.ref }}
  
     - name: Build with dotnet
       run: dotnet build --configuration Release src/MediaConverters/MediaConverters.sln
