@@ -1,74 +1,9 @@
 ﻿name: Publish MediaConverters NuGet
 
-on: 
-  push:
-    tags:
-    - '*'
+on: [push]
 
 jobs:
-  PackOnWindows:
-
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v4
  
-    - name: Install dotnet tool
-      run: dotnet tool install -g dotnetCampus.TagToVersion
-
-    - name: Set tag to version  
-      run: dotnet TagToVersion -t ${{ github.ref }}
-
-    - name: Build with dotnet
-      run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
-
-    - name: Pack MediaConverters.Tool.ContextNuGet
-      run: dotnet pack --no-build true --configuration Release src\MediaConverters\MediaConverters.Tool.ContextNuGet\MediaConverters.Tool.ContextNuGet.csproj
-
-    - name: Pack DotNetCampus.MediaConverter.SkiaWmfRenderer
-      run: dotnet pack --no-build true --configuration Release src\MediaConverters\SkiaWmfRenderer\src\SkiaWmfRenderer\SkiaWmfRenderer.csproj
-
-    - name: Publish and Pack win-x86
-      run: |
-        dotnet publish -c Release -r win-x86 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x86 src\MediaConverters\MediaConverters.Tool.RuntimeNuGet\MediaConverters.Tool.RuntimeNuGet.csproj
-
-    - name: Publish and Pack win-x64
-      run: |
-        dotnet publish -c Release -r win-x64 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=win-x64 src\MediaConverters\MediaConverters.Tool.RuntimeNuGet\MediaConverters.Tool.RuntimeNuGet.csproj
-
-    - name: Push generated package to NuGet 
-      run: |
-        dotnet nuget push .\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
-        dotnet nuget push .\bin\Release\*.nupkg -s https://nuget.pkg.github.com/${{ github.repository_owner }} --api-key ${{ secrets.GITHUB_TOKEN }} --timeout 3000
-
-  PackOnWindowsArm64:
-
-    runs-on: windows-11-arm
-
-    steps:
-    - uses: actions/checkout@v4
- 
-    - name: Install dotnet tool
-      run: dotnet tool install -g dotnetCampus.TagToVersion
-
-    - name: Set tag to version  
-      run: dotnet TagToVersion -t ${{ github.ref }}
-
-    - name: Build with dotnet
-      run: dotnet build --configuration Release src\MediaConverters\MediaConverters.sln
-
-    - name: Publish and Pack win-arm64
-      run: |
-        dotnet publish -c Release -r win-arm64 src\MediaConverters\MediaConverters.Tool\MediaConverters.Tool.csproj
-        dotnet pack --configuration Release /p:RuntimeIdentifier=win-arm64 src\MediaConverters\MediaConverters.Tool.RuntimeNuGet\MediaConverters.Tool.RuntimeNuGet.csproj        
-
-    - name: Push generated package to NuGet 
-      run: |
-        dotnet nuget push .\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
-        dotnet nuget push .\bin\Release\*.nupkg -s https://nuget.pkg.github.com/${{ github.repository_owner }} --api-key ${{ secrets.GITHUB_TOKEN }} --timeout 3000
-
   PackOnLinuxX64:
 
     runs-on: ubuntu-latest
@@ -123,10 +58,12 @@ jobs:
         dotnet publish -c Release -r linux-x64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
         dotnet pack --configuration Release /p:RuntimeIdentifier=linux-x64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj
 
-    - name: Push generated package to NuGet 
-      run: |
-        dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
-        dotnet nuget push ./bin/Release/*.nupkg -s https://nuget.pkg.github.com/${{ github.repository_owner }} --api-key ${{ secrets.GITHUB_TOKEN }} --timeout 3000
+    - uses: actions/upload-artifact@v4
+      name: UploadArtifact
+      with:
+        name: linux-x64
+        path: bin/Release/
+        retention-days: 1
 
   PackOnLinuxArm64:
 
@@ -182,7 +119,9 @@ jobs:
         dotnet publish -c Release -r linux-arm64 src/MediaConverters/MediaConverters.Tool/MediaConverters.Tool.csproj
         dotnet pack --configuration Release /p:RuntimeIdentifier=linux-arm64 src/MediaConverters/MediaConverters.Tool.RuntimeNuGet/MediaConverters.Tool.RuntimeNuGet.csproj        
 
-    - name: Push generated package to NuGet 
-      run: |
-        dotnet nuget push ./bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NugetKey }}
-        dotnet nuget push ./bin/Release/*.nupkg -s https://nuget.pkg.github.com/${{ github.repository_owner }} --api-key ${{ secrets.GITHUB_TOKEN }} --timeout 3000
+    - uses: actions/upload-artifact@v4
+      name: UploadArtifact
+      with:
+        name: linux-arm64
+        path: bin/Release/
+        retention-days: 1
