@@ -25,7 +25,7 @@ jobs:
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: | 
+        dotnet-version: |
           9.0.x
 
     - name: Build with dotnet
@@ -33,3 +33,4 @@ jobs:
 
     - name: Test
       run: dotnet test --configuration Release --no-build src/MediaConverters/MediaConverters.Tests/MediaConverters.Tests.csproj
+      
