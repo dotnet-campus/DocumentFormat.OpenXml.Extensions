@@ -1,8 +1,11 @@
-﻿using DotNetCampus.Cli.Compiler;
+﻿using System.Threading.Tasks;
+using DotNetCampus.Cli;
+using DotNetCampus.Cli.Compiler;
 
-namespace DotNetCampus.MediaConverters.Contexts;
+namespace DotNetCampus.MediaConverters.CommandLineHandlers;
 
-public class Options
+[Verb("convert")]
+public class ConvertHandler : ICommandHandler
 {
     [Option]
     public required string WorkingFolder { get; init; }
@@ -18,4 +21,8 @@ public class Options
 
     public bool? ShouldLogToConsole { get; init; }
     public bool? ShouldLogToFile { get; init; }
+    public async Task<int> RunAsync()
+    {
+        return await Program.RunAsync(this);
+    }
 }

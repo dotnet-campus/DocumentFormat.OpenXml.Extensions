@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DotNetCampus.Cli;
+using DotNetCampus.MediaConverters.CommandLineHandlers;
 using SixLabors.ImageSharp.Formats.Png;
 using ErrorCode = DotNetCampus.MediaConverters.Contexts.MediaConverterErrorCode;
 
@@ -42,7 +44,7 @@ class Program
             await File.WriteAllTextAsync(configurationFile, jsonText);
             var outputFile = Path.Join(testFolder.FullName, "1.png");
 
-            return await RunAsync(new Options()
+            return await RunAsync(new ConvertHandler()
             {
                 InputFile = inputFile,
                 ConvertConfigurationFile = configurationFile,
@@ -54,16 +56,17 @@ class Program
             });
         }
 
-        var options = DotNetCampus.Cli.CommandLine.Parse(args).As<Options>();
-
-        return await RunAsync(options);
+        return await DotNetCampus.Cli.CommandLine.Parse(args)
+                .AddHandler<ConvertHandler>()
+                .RunAsync()
+            ;
     }
 
-    internal static async Task<ErrorCode> RunAsync(Options options)
+    internal static async Task<ErrorCode> RunAsync(ConvertHandler convertHandler)
     {
         var stopwatch = Stopwatch.StartNew();
 
-        var jsonText = await File.ReadAllTextAsync(options.ConvertConfigurationFile);
+        var jsonText = await File.ReadAllTextAsync(convertHandler.ConvertConfigurationFile);
 
         var imageConvertContext = ImageConvertContext.FromJsonText(jsonText);
 
@@ -73,9 +76,9 @@ class Program
             return ErrorCode.UnknownError;
         }
 
-        var inputFile = new FileInfo(options.InputFile);
+        var inputFile = new FileInfo(convertHandler.InputFile);
 
-        var workingFolder = Directory.CreateDirectory(options.WorkingFolder);
+        var workingFolder = Directory.CreateDirectory(convertHandler.WorkingFolder);
 
         var useAreaSizeLimit = imageConvertContext.UseAreaSizeLimit ?? true;
         var copyNewFile = imageConvertContext.ShouldCopyNewFile ?? true;
@@ -83,8 +86,8 @@ class Program
         var context = new ImageFileOptimizationContext(inputFile, workingFolder, imageConvertContext.MaxImageWidth,
             imageConvertContext.MaxImageHeight)
         {
-            ShouldLogToConsole = options.ShouldLogToConsole ?? false,
-            ShouldLogToFile = options.ShouldLogToFile ?? false,
+            ShouldLogToConsole = convertHandler.ShouldLogToConsole ?? false,
+            ShouldLogToFile = convertHandler.ShouldLogToFile ?? false,
         };
         using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(context, useAreaSizeLimit, copyNewFile);
 
@@ -134,7 +137,7 @@ class Program
                 workerProvider.Run(image, imageConvertTask);
             }
 
-            await image.SaveAsPngAsync(options.OutputFile, new PngEncoder()
+            await image.SaveAsPngAsync(convertHandler.OutputFile, new PngEncoder()
             {
                 ColorType = PngColorType.RgbWithAlpha,
                 BitDepth = PngBitDepth.Bit8,
@@ -142,11 +145,11 @@ class Program
         }
         else
         {
-            optimizedImageFile.CopyTo(options.OutputFile, overwrite: true);
+            optimizedImageFile.CopyTo(convertHandler.OutputFile, overwrite: true);
         }
 
         stopwatch.Stop();
-        context.LogMessage($"Success converted image. Cost {stopwatch.ElapsedMilliseconds}ms. OutputFile:'{options.OutputFile}'");
+        context.LogMessage($"Success converted image. Cost {stopwatch.ElapsedMilliseconds}ms. OutputFile:'{convertHandler.OutputFile}'");
 
         return ErrorCode.Success;
     }
