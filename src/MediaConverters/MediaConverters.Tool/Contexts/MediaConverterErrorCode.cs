@@ -42,6 +42,8 @@ public readonly record struct MediaConverterErrorCode
 
     public static readonly ErrorCode UnknownException = new(1006, "Unknown exception");
 
+    public static readonly ErrorCode InvalidIpcRequestArgument = new(1007, "Ipc argument error");
+
     /// <summary>
     /// 错误代码
     /// </summary>

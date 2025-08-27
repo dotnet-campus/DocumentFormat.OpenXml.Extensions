@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using DotNetCampus.MediaConverters.Contexts.IpcContexts;
+
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DotNetCampus.MediaConverters.Contexts;
@@ -15,6 +17,11 @@ namespace DotNetCampus.MediaConverters.Contexts;
 [JsonSerializable(typeof(SetSoftEdgeEffectTask))]
 [JsonSerializable(typeof(ImageConvertContext))]
 [JsonSerializable(typeof(IImageConvertTask))]
+// IPC 相关
+[JsonSerializable(typeof(IpcExitRequest))]
+[JsonSerializable(typeof(IpcExitResponse))]
+[JsonSerializable(typeof(IpcConvertImageRequest))]
+[JsonSerializable(typeof(IpcConvertImageResponse))]
 public partial class MediaConverterJsonSerializerSourceGenerationContext : JsonSerializerContext
 {
 }

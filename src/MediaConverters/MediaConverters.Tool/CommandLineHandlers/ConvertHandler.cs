@@ -19,8 +19,12 @@ public class ConvertHandler : ICommandHandler
     [Option]
     public required string ConvertConfigurationFile { get; init; }
 
+    [Option]
     public bool? ShouldLogToConsole { get; init; }
+
+    [Option]
     public bool? ShouldLogToFile { get; init; }
+
     public async Task<int> RunAsync()
     {
         return await Program.RunAsync(this);

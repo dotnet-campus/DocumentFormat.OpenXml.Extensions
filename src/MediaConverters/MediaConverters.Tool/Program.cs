@@ -9,7 +9,6 @@ using SixLabors.ImageSharp;
 
 using System.Diagnostics;
 using System.IO;
-using System.Text.Json;
 using System.Threading.Tasks;
 using DotNetCampus.Cli;
 using DotNetCampus.MediaConverters.CommandLineHandlers;
@@ -58,6 +57,7 @@ class Program
 
         return await DotNetCampus.Cli.CommandLine.Parse(args)
                 .AddHandler<ConvertHandler>()
+                .AddHandler<IpcHandler>()
                 .RunAsync()
             ;
     }
