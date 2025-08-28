@@ -152,6 +152,11 @@ class Program
             {
                 ColorType = PngColorType.RgbWithAlpha,
                 BitDepth = PngBitDepth.Bit8,
+                // 压缩等级 1-9，数值越大压缩率越高但速度越慢，默认值为 6。在 1-9 范围外的值会被视为默认值
+                CompressionLevel = imageConvertContext.PngCompressionLevel is >= 1 and <= 9
+                    ? (PngCompressionLevel)imageConvertContext.PngCompressionLevel
+                    // 范围外，使用默认值
+                    : PngCompressionLevel.DefaultCompression
             });
 
             context.LogMessage($"[Performance] SaveAsPngAsync cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
