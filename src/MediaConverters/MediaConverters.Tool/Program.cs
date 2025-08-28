@@ -152,6 +152,7 @@ class Program
             {
                 ColorType = PngColorType.RgbWithAlpha,
                 BitDepth = PngBitDepth.Bit8,
+                CompressionLevel = PngCompressionLevel.BestSpeed,
             });
 
             context.LogMessage($"[Performance] SaveAsPngAsync cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
