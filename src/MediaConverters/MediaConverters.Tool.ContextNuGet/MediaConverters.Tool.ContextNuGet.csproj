@@ -14,12 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\MediaConverters.Tool\Contexts\*.cs" />
+    <Compile Include="..\MediaConverters.Tool\Contexts\**\*.cs" />
     <None Include="..\README.md" Link="README.md" Pack="True" PackagePath="\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="..\MediaConverters.Tool\Contexts\Options.cs" />
   </ItemGroup>
 
 </Project>

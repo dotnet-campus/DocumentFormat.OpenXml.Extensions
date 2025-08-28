@@ -2,7 +2,9 @@
 
 ## Usage
 
-### Command Line
+### Command Line - Convert
+
+Verb: `convert`
 
 Command line parameters:
 

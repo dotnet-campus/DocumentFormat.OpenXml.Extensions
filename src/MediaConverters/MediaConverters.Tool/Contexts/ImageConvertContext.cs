@@ -12,6 +12,11 @@ public class ImageConvertContext
     public bool? UseAreaSizeLimit { get; init; }
 
     /// <summary>
+    /// 压缩 PNG 图片时使用的压缩等级，1-9，数值越大压缩率越高但速度越慢，默认值为 6。在 1-9 之外的值会被视为默认值。
+    /// </summary>
+    public int PngCompressionLevel { get; init; }
+
+    /// <summary>
     /// 是否先行拷贝新的文件，再进行处理，避免图片占用
     /// </summary>
     public bool? ShouldCopyNewFile { get; init; }
