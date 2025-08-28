@@ -64,7 +64,8 @@ class Program
 
     internal static async Task<ErrorCode> RunAsync(ConvertHandler convertHandler)
     {
-        var stopwatch = Stopwatch.StartNew();
+        var stepStopwatch = Stopwatch.StartNew();
+        var totalStopwatch = Stopwatch.StartNew();
 
         var jsonText = await File.ReadAllTextAsync(convertHandler.ConvertConfigurationFile);
 
@@ -89,7 +90,14 @@ class Program
             ShouldLogToConsole = convertHandler.ShouldLogToConsole ?? false,
             ShouldLogToFile = convertHandler.ShouldLogToFile ?? false,
         };
+
+        context.LogMessage($"[Performance] FromJsonText cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
+        stepStopwatch.Restart();
+
         using var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(context, useAreaSizeLimit, copyNewFile);
+
+        context.LogMessage($"[Performance] OptimizeImageFileAsync cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
+        stepStopwatch.Restart();
 
         if (!imageFileOptimizationResult.IsSuccess)
         {
@@ -137,19 +145,26 @@ class Program
                 workerProvider.Run(image, imageConvertTask);
             }
 
+            context.LogMessage($"[Performance] RunWorkerProvider cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
+            stepStopwatch.Restart();
+
             await image.SaveAsPngAsync(convertHandler.OutputFile, new PngEncoder()
             {
                 ColorType = PngColorType.RgbWithAlpha,
                 BitDepth = PngBitDepth.Bit8,
             });
+
+            context.LogMessage($"[Performance] SaveAsPngAsync cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
         }
         else
         {
             optimizedImageFile.CopyTo(convertHandler.OutputFile, overwrite: true);
+
+            context.LogMessage($"[Performance] CopyTo cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
         }
 
-        stopwatch.Stop();
-        context.LogMessage($"Success converted image. Cost {stopwatch.ElapsedMilliseconds}ms. OutputFile:'{convertHandler.OutputFile}'");
+        totalStopwatch.Stop();
+        context.LogMessage($"Success converted image. Cost {totalStopwatch.ElapsedMilliseconds}ms. OutputFile:'{convertHandler.OutputFile}'");
 
         return ErrorCode.Success;
     }
