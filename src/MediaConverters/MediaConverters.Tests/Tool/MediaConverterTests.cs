@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-
+using DotNetCampus.MediaConverters.CommandLineHandlers;
 using DotNetCampus.MediaConverters.Contexts;
 using DotNetCampus.MediaConverters.Imaging.Effects;
 using DotNetCampus.MediaConverters.Imaging.Effects.Colors;
@@ -253,9 +253,9 @@ public class MediaConverterTests
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
-    private void AssertReplaceColor(Options options)
+    private void AssertReplaceColor(ConvertHandler convertHandler)
     {
-        var inputFile = options.InputFile;
+        var inputFile = convertHandler.InputFile;
         using var image = Image.Load<Rgba32>(inputFile);
 
         var list = image.GetColorCountList();
@@ -270,14 +270,14 @@ public class MediaConverterTests
 
         image.ReplaceColor(replaceList);
 
-        var tempFile = Path.Join(options.WorkingFolder, $"Assert_{Path.GetRandomFileName()}.png");
+        var tempFile = Path.Join(convertHandler.WorkingFolder, $"Assert_{Path.GetRandomFileName()}.png");
         image.SaveAsPng(tempFile, new PngEncoder()
         {
             ColorType = PngColorType.RgbWithAlpha
         });
 
         var visionComparer = new VisionComparer();
-        var visionCompareResult = visionComparer.Compare(new FileInfo(tempFile), new FileInfo(options.OutputFile));
+        var visionCompareResult = visionComparer.Compare(new FileInfo(tempFile), new FileInfo(convertHandler.OutputFile));
         Assert.IsTrue(visionCompareResult.IsSimilar());
     }
 
@@ -336,7 +336,7 @@ public class MediaConverterTests
         TestHelper.OpenFileInExplorer(new FileInfo(options.OutputFile));
     }
 
-    private Options ToOptions(string fileName, ImageConvertContext imageConvertContext)
+    private ConvertHandler ToOptions(string fileName, ImageConvertContext imageConvertContext)
     {
         var testFolder = Path.Join(TestHelper.WorkingDirectory.FullName, Path.GetRandomFileName());
         Directory.CreateDirectory(testFolder);
@@ -353,7 +353,7 @@ public class MediaConverterTests
             });
         File.WriteAllText(configFile, jsonText);
 
-        return new Options()
+        return new ConvertHandler()
         {
             WorkingFolder = workingFolder,
             InputFile = inputFile.FullName,
@@ -380,7 +380,7 @@ public class MediaConverterTests
         var workingFolder = Path.Join(testFolder, "Working");
         var outputFile = Path.Join(testFolder, "Output.png");
 
-        var options = new Options()
+        var options = new ConvertHandler()
         {
             WorkingFolder = workingFolder,
             InputFile = imageFile,
