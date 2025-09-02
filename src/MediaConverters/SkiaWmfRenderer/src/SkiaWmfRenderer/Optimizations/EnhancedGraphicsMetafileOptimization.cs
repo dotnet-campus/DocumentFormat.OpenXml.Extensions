@@ -7,14 +7,92 @@ using Svg.Skia;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Xml.Linq;
+using ImageFileOptimizationContext = DotNetCampus.MediaConverters.Imaging.Optimizations.EnhancedGraphicsMetafileOptimizationContext;
+using ImageFileOptimizationResult = DotNetCampus.MediaConverters.Imaging.Optimizations.EnhancedGraphicsMetafileOptimizationResult;
 
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
+
+/// <summary>
+/// 图片文件优化上下文信息
+/// </summary>
+public readonly record struct EnhancedGraphicsMetafileOptimizationContext()
+{
+    public string TraceId { get; init; } = Guid.NewGuid().ToString("N");
+
+    public required FileInfo ImageFile { get; init; }
+    public required DirectoryInfo WorkingFolder { get; init; }
+    public required int? MaxImageWidth { get; init; }
+    public required int? MaxImageHeight { get; init; } = null;
+
+    public bool ShouldLogToConsole { get; init; } = false;
+
+    public bool ShouldLogToFile { get; init; } = false;
+
+    public string LogFileName { get; init; } = "Log.txt";
+
+    public void LogMessage(string message)
+    {
+        if (!ShouldLogToConsole && !ShouldLogToFile)
+        {
+            return;
+        }
+
+        if (ShouldLogToConsole)
+        {
+            Console.WriteLine(message);
+        }
+
+        if (ShouldLogToFile)
+        {
+            var logMessage = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss,fff}][{TraceId}] {message}";
+
+            var logFile = Path.Join(WorkingFolder.FullName, LogFileName ?? "Log.txt");
+
+            File.AppendAllLines(logFile, [logMessage]);
+        }
+    }
+}
+
+/// <summary>
+/// 图片文件优化结果
+/// </summary>
+public readonly record struct EnhancedGraphicsMetafileOptimizationResult()
+{
+    [MemberNotNullWhen(returnValue: true)]
+    public bool IsSuccess => OptimizedImageFile is not null;
+
+    /// <summary>
+    /// 优化后的图片文件
+    /// </summary>
+    public FileInfo? OptimizedImageFile { get; init; }
+
+    public bool IsNotSupport { get; init; }
+
+    public Exception? Exception { get; init; }
+
+    public static ImageFileOptimizationResult NotSupported()
+    {
+        return new EnhancedGraphicsMetafileOptimizationResult()
+        {
+            IsNotSupport = true,
+        };
+    }
+
+    public static ImageFileOptimizationResult FailException(Exception exception)
+    {
+        return new EnhancedGraphicsMetafileOptimizationResult()
+        {
+            Exception = exception,
+        };
+    }
+}
 
 /// <summary>
 /// 增强图元优化方法，用于优化 emf 和 wmf 图片
@@ -44,11 +122,7 @@ public static class EnhancedGraphicsMetafileOptimization
             }
         }
 
-        return new ImageFileOptimizationResult()
-        {
-            OptimizedImageFile = null,
-            FailureReason = ImageFileOptimizationFailureReason.NotSupported
-        };
+        return ImageFileOptimizationResult.NotSupported();
     }
 
     [SupportedOSPlatform("linux")]
@@ -76,11 +150,7 @@ public static class EnhancedGraphicsMetafileOptimization
         {
             context.LogMessage($"Convert emf to png is not supported with libwmf. File:'{context.ImageFile.FullName}'");
 
-            return new ImageFileOptimizationResult()
-            {
-                OptimizedImageFile = null,
-                FailureReason = ImageFileOptimizationFailureReason.NotSupported
-            };
+            return ImageFileOptimizationResult.NotSupported();
         }
 
         // 使用 SkiaWmfRenderer 进行转换
@@ -111,7 +181,7 @@ public static class EnhancedGraphicsMetafileOptimization
         {
             try
             {
-                var convertSvgToPngFile = ImageFileOptimization.ConvertSvgToPngFile(context with
+                var convertSvgToPngFile = SvgFileOptimization.ConvertSvgToPngFile(context with
                 {
                     ImageFile = svgImageFile
                 });
@@ -124,11 +194,7 @@ public static class EnhancedGraphicsMetafileOptimization
                 }
                 else
                 {
-                    return new ImageFileOptimizationResult()
-                    {
-                        OptimizedImageFile = null,
-                        FailureReason = ImageFileOptimizationFailureReason.NotSupported
-                    };
+                    return ImageFileOptimizationResult.NotSupported();
                 }
             }
             catch (Exception e)
@@ -173,11 +239,7 @@ public static class EnhancedGraphicsMetafileOptimization
         }
 
         context.LogMessage($"Fail convert wmf to png by SkiaWmfRenderer. File:'{file}'");
-        return new ImageFileOptimizationResult()
-        {
-            OptimizedImageFile = null,
-            FailureReason = ImageFileOptimizationFailureReason.NotSupported
-        };
+        return ImageFileOptimizationResult.NotSupported();
     }
 
     [SupportedOSPlatform("linux")]
@@ -193,6 +255,7 @@ public static class EnhancedGraphicsMetafileOptimization
 
         context.LogMessage($"Start convert wmf to svg by libwmf. File:'{file}' wmf2svg='{wmf2svgFile}'");
 
+#if NET7_0_OR_GREATER
         try
         {
             File.SetUnixFileMode(wmf2svgFile, UnixFileMode.UserExecute);
@@ -201,6 +264,7 @@ public static class EnhancedGraphicsMetafileOptimization
         {
             context.LogMessage($"File.SetUnixFileMode +x Fail. wmf2svgFile='{wmf2svgFile}'. Exception: {e}");
         }
+#endif
 
         // ./wmf2svg -o 1.svg image.wmf
         var processStartInfo = new ProcessStartInfo(wmf2svgFile)
@@ -226,12 +290,12 @@ public static class EnhancedGraphicsMetafileOptimization
         try
         {
             using var process = Process.Start(processStartInfo);
-            process?.WaitForExit(TimeSpan.FromSeconds(5));
+            process?.WaitForExit(5000);
             if (process?.ExitCode == 0 && File.Exists(svgFile))
             {
                 // 转换成功，再次执行 SVG 转 PNG 的转换
                 // 由于可能存在 SVG 文件中包含无效字符的问题，因此需要修复一下
-                var convertedFile = ImageFileOptimization.FixSvgInvalidCharacter(context with
+                var convertedFile = SvgFileOptimization.FixSvgInvalidCharacter(context with
                 {
                     ImageFile = new FileInfo(svgFile)
                 });
@@ -253,11 +317,7 @@ public static class EnhancedGraphicsMetafileOptimization
             return ImageFileOptimizationResult.FailException(e);
         }
 
-        return new ImageFileOptimizationResult()
-        {
-            OptimizedImageFile = null,
-            FailureReason = ImageFileOptimizationFailureReason.NotSupported,
-        };
+        return ImageFileOptimizationResult.NotSupported();
     }
 
     [SupportedOSPlatform("linux")]
@@ -282,7 +342,7 @@ public static class EnhancedGraphicsMetafileOptimization
         try
         {
             using var process = Process.Start(processStartInfo);
-            process?.WaitForExit(TimeSpan.FromSeconds(5));
+            process?.WaitForExit(5000);
             if (process?.ExitCode == 0 && File.Exists(svgFile))
             {
                 // 转换成功，再次执行 SVG 转 PNG 的转换
@@ -314,11 +374,7 @@ public static class EnhancedGraphicsMetafileOptimization
             return ImageFileOptimizationResult.FailException(e);
         }
 
-        return new ImageFileOptimizationResult()
-        {
-            OptimizedImageFile = null,
-            FailureReason = ImageFileOptimizationFailureReason.NotSupported,
-        };
+        return ImageFileOptimizationResult.NotSupported();
     }
 
     [SupportedOSPlatform("windows6.1")]
@@ -346,12 +402,7 @@ public static class EnhancedGraphicsMetafileOptimization
         {
             context.LogMessage($"Fail convert emf or wmf to png by GDI. File:'{file}' Exception:{e}");
 
-            return new ImageFileOptimizationResult
-            {
-                OptimizedImageFile = null,
-                Exception = e,
-                FailureReason = ImageFileOptimizationFailureReason.GdiException
-            };
+            return ImageFileOptimizationResult.FailException(e);
         }
     }
 }
