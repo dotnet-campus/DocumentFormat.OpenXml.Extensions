@@ -25,7 +25,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="README.md" Pack="True" PackagePath="\" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Condition="'$(GITHUB_ACTIONS)' == 'true'"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Condition="'$(GITHUB_ACTIONS)' == 'true'" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,7 +38,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="SkiaSharp" Version="3.119.0" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.0" />
+
+    <PackageReference Include="Svg.Skia" Version="3.0.4" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.7" />
     
     <PackageReference Include="HarfBuzzSharp" Version="8.3.1.1" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.1.1" />

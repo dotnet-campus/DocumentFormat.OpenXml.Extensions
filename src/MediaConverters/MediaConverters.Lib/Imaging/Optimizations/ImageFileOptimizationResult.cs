@@ -39,4 +39,13 @@ public readonly record struct ImageFileOptimizationResult() : IDisposable
             FailureReason = ImageFileOptimizationFailureReason.Exception
         };
     }
+
+    public static ImageFileOptimizationResult NotSupported()
+    {
+        return new ImageFileOptimizationResult()
+        {
+            OptimizedImageFile = null,
+            FailureReason = ImageFileOptimizationFailureReason.NotSupported
+        };
+    }
 }
