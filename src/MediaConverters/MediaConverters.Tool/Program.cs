@@ -57,7 +57,6 @@ class Program
 
         return await DotNetCampus.Cli.CommandLine.Parse(args)
                 .AddHandler<ConvertHandler>()
-                .AddHandler<IpcHandler>()
                 .RunAsync()
             ;
     }
