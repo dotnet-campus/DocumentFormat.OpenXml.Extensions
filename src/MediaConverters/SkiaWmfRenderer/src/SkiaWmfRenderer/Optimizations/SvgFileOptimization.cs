@@ -9,62 +9,12 @@ namespace DotNetCampus.MediaConverter.SkiaWmfRenderer.Optimizations;
 /// </summary>
 public static class SvgFileOptimization
 {
-    /*
-     if (IsExtension(".svg"))
-       {
-           // 如果是 svg 那就直接转换了，因为后续叠加特效等逻辑都不能支持 SVG 格式
-           try
-           {
-               var outputFilePath = ConvertSvgToPngFile(context);
-               if (outputFilePath is null)
-               {
-                   return new ImageFileOptimizationResult()
-                   {
-                       OptimizedImageFile = null,
-                       FailureReason = ImageFileOptimizationFailureReason.NotSupported
-                   };
-               }
-               else
-               {
-                   context.LogMessage($"Success ConvertSvgToPngFile. Update current image file to '{outputFilePath.FullName}'");
-                   context = context with
-                   {
-                       ImageFile = outputFilePath
-                   };
-               }
-           }
-           catch (Exception e)
-           {
-               context.LogMessage($"Convert SVG to PNG failed: {e}");
-
-               return ImageFileOptimizationResult.FailException(e);
-           }
-       }
-       else if (IsExtension(".wmf") ||
-                IsExtension(".emf"))
-       {
-           var result = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(context);
-           if (result.OptimizedImageFile is not null)
-           {
-               context.LogMessage($"Success ConvertWmfOrEmfToPngFile. Update current image file to '{result.OptimizedImageFile}'");
-               context = context with
-               {
-                   ImageFile = result.OptimizedImageFile
-               };
-           }
-           else
-           {
-               return result;
-           }
-       }
-     */
-
     /// <summary>
     /// 将指定上下文中的 SVG 文件渲染并保存为 PNG 文件。
     /// </summary>
     /// <param name="context">包含 SVG 文件和工作目录等信息的上下文。</param>
     /// <returns>成功时返回生成的 PNG 文件信息；失败时返回 null。</returns>
-    public static FileInfo? ConvertSvgToPngFile(EnhancedGraphicsMetafileOptimizationContext context)
+    public static FileInfo? ConvertSvgToPngFile(in EnhancedGraphicsMetafileOptimizationContext context)
     {
         var imageFile = context.ImageFile;
         var workingFolder = context.WorkingFolder;

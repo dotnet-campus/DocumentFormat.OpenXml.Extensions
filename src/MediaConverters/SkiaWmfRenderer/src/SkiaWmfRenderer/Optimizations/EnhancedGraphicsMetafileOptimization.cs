@@ -14,16 +14,62 @@ namespace DotNetCampus.MediaConverter.SkiaWmfRenderer.Optimizations;
 public static class EnhancedGraphicsMetafileOptimization
 {
     /// <summary>
+    /// 尝试将矢量图文件（SVG/WMF/EMF）转换为 PNG 文件
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    public static bool TryOptimizeSvgOrWmf(EnhancedGraphicsMetafileOptimizationContext context,
+        out EnhancedGraphicsMetafileOptimizationResult result)
+    {
+        if (IsExtension(".svg"))
+        {
+            // 如果是 svg 那就直接转换了，因为后续叠加特效等逻辑都不能支持 SVG 格式
+            try
+            {
+                var outputFilePath = SvgFileOptimization.ConvertSvgToPngFile(in context);
+                result = new EnhancedGraphicsMetafileOptimizationResult()
+                {
+                    OptimizedImageFile = outputFilePath,
+                };
+            }
+            catch (Exception e)
+            {
+                context.LogMessage($"Convert SVG to PNG failed: {e}");
+
+                result = EnhancedGraphicsMetafileOptimizationResult.FailException(e);
+            }
+
+            return true;
+        }
+        else if (IsExtension(".wmf") ||
+                 IsExtension(".emf"))
+        {
+            result = ConvertWmfOrEmfToPngFile(in context);
+
+            return true;
+        }
+
+        result = default;
+        return false;
+
+        bool IsExtension(string extension)
+        {
+            return string.Equals(context.ImageFile.Extension, extension, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    /// <summary>
     /// 将 WMF 或 EMF 文件转换为 PNG 文件。根据当前运行平台选择合适的转换实现。
     /// </summary>
     /// <param name="context">包含要转换文件和工作目录等设置的上下文。</param>
     /// <returns>转换操作的结果，包含生成的文件或错误信息。</returns>
-    public static EnhancedGraphicsMetafileOptimizationResult ConvertWmfOrEmfToPngFile(EnhancedGraphicsMetafileOptimizationContext context)
+    public static EnhancedGraphicsMetafileOptimizationResult ConvertWmfOrEmfToPngFile(in EnhancedGraphicsMetafileOptimizationContext context)
     {
         // 在 Windows 上，直接使用 GDI+ 将 WMF 或 EMF 文件转换为 PNG 文件
         if (OperatingSystem.IsWindowsVersionAtLeast(6, 1))
         {
-            return ConvertInWindows(context);
+            return ConvertInWindows(in context);
         }
 
         if (OperatingSystem.IsLinux())
@@ -73,7 +119,7 @@ public static class EnhancedGraphicsMetafileOptimization
         }
 
         // 使用 SkiaWmfRenderer 进行转换
-        result = ConvertWithSkiaWmfRenderer(context);
+        result = ConvertWithSkiaWmfRenderer(in context);
         if (result.IsSuccess)
         {
             return result;
@@ -86,7 +132,7 @@ public static class EnhancedGraphicsMetafileOptimization
 
         // 使用 libwmf 进行转换
 
-        result = ConvertWithLibWmf(context);
+        result = ConvertWithLibWmf(in context);
         if (result.OptimizedImageFile is { } svgLibWmfFile)
         {
             return ConvertSvgToPngFile(svgLibWmfFile);
@@ -130,7 +176,7 @@ public static class EnhancedGraphicsMetafileOptimization
     /// </summary>
     /// <param name="context">包含输入文件、输出目录和尺寸限制等信息的上下文。</param>
     /// <returns>如果转换成功则返回包含输出 PNG 文件的结果，否则返回不支持或失败的结果。</returns>
-    private static EnhancedGraphicsMetafileOptimizationResult ConvertWithSkiaWmfRenderer(EnhancedGraphicsMetafileOptimizationContext context)
+    private static EnhancedGraphicsMetafileOptimizationResult ConvertWithSkiaWmfRenderer(in EnhancedGraphicsMetafileOptimizationContext context)
     {
         int requestWidth = context.MaxImageWidth ?? 0;
         int requestHeight = context.MaxImageHeight ?? 0;
@@ -162,7 +208,7 @@ public static class EnhancedGraphicsMetafileOptimization
     }
 
     [SupportedOSPlatform("linux")]
-    private static EnhancedGraphicsMetafileOptimizationResult ConvertWithLibWmf(EnhancedGraphicsMetafileOptimizationContext context)
+    private static EnhancedGraphicsMetafileOptimizationResult ConvertWithLibWmf(in EnhancedGraphicsMetafileOptimizationContext context)
     {
         var file = context.ImageFile;
         var workingFolder = context.WorkingFolder;
@@ -297,7 +343,7 @@ public static class EnhancedGraphicsMetafileOptimization
     }
 
     [SupportedOSPlatform("windows6.1")]
-    private static EnhancedGraphicsMetafileOptimizationResult ConvertInWindows(EnhancedGraphicsMetafileOptimizationContext context)
+    private static EnhancedGraphicsMetafileOptimizationResult ConvertInWindows(in EnhancedGraphicsMetafileOptimizationContext context)
     {
         var file = context.ImageFile;
         var workingFolder = context.WorkingFolder;
