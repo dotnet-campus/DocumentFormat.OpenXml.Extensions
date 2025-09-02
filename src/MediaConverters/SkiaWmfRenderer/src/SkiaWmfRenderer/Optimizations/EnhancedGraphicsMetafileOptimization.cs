@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Threading;
 using System.Xml.Linq;
 using ImageFileOptimizationContext = DotNetCampus.MediaConverters.Imaging.Optimizations.EnhancedGraphicsMetafileOptimizationContext;
 using ImageFileOptimizationResult = DotNetCampus.MediaConverters.Imaging.Optimizations.EnhancedGraphicsMetafileOptimizationResult;
@@ -20,23 +21,54 @@ using ImageFileOptimizationResult = DotNetCampus.MediaConverters.Imaging.Optimiz
 namespace DotNetCampus.MediaConverters.Imaging.Optimizations;
 
 /// <summary>
-/// 图片文件优化上下文信息
+/// 包含用于增强图元（EMF/WMF）优化操作的上下文信息。
 /// </summary>
 public readonly record struct EnhancedGraphicsMetafileOptimizationContext()
 {
+    /// <summary>
+    /// 跟踪标识符，用于日志定位。
+    /// </summary>
     public string TraceId { get; init; } = Guid.NewGuid().ToString("N");
 
+    /// <summary>
+    /// 要优化的图像文件信息。
+    /// </summary>
     public required FileInfo ImageFile { get; init; }
+
+    /// <summary>
+    /// 工作目录，临时输出文件将写入此目录。
+    /// </summary>
     public required DirectoryInfo WorkingFolder { get; init; }
+
+    /// <summary>
+    /// 请求的最大图像宽度（像素）。null 表示不限制。
+    /// </summary>
     public required int? MaxImageWidth { get; init; }
+
+    /// <summary>
+    /// 请求的最大图像高度（像素）。null 表示不限制。
+    /// </summary>
     public required int? MaxImageHeight { get; init; } = null;
 
+    /// <summary>
+    /// 是否将日志输出到控制台。
+    /// </summary>
     public bool ShouldLogToConsole { get; init; } = false;
 
+    /// <summary>
+    /// 是否将日志写入文件。
+    /// </summary>
     public bool ShouldLogToFile { get; init; } = false;
 
+    /// <summary>
+    /// 日志文件名（相对于 <see cref="WorkingFolder"/>）。
+    /// </summary>
     public string LogFileName { get; init; } = "Log.txt";
 
+    /// <summary>
+    /// 将一条日志消息输出到控制台或工作目录中的日志文件（取决于配置）。
+    /// </summary>
+    /// <param name="message">要记录的消息内容。</param>
     public void LogMessage(string message)
     {
         if (!ShouldLogToConsole && !ShouldLogToFile)
@@ -61,22 +93,35 @@ public readonly record struct EnhancedGraphicsMetafileOptimizationContext()
 }
 
 /// <summary>
-/// 图片文件优化结果
+/// 表示增强图元优化操作的结果。
 /// </summary>
 public readonly record struct EnhancedGraphicsMetafileOptimizationResult()
 {
+    /// <summary>
+    /// 如果优化过程成功并产生了输出文件，则为 true。
+    /// </summary>
     [MemberNotNullWhen(returnValue: true)]
     public bool IsSuccess => OptimizedImageFile is not null;
 
     /// <summary>
-    /// 优化后的图片文件
+    /// 优化后生成的图像文件（如果成功）。
     /// </summary>
     public FileInfo? OptimizedImageFile { get; init; }
 
+    /// <summary>
+    /// 表示该操作不被支持（例如平台或格式不支持）。
+    /// </summary>
     public bool IsNotSupport { get; init; }
 
+    /// <summary>
+    /// 如果发生异常则包含异常对象，否则为 null。
+    /// </summary>
     public Exception? Exception { get; init; }
 
+    /// <summary>
+    /// 创建一个表示不支持的结果实例。
+    /// </summary>
+    /// <returns>标识操作不被支持的结果。</returns>
     public static ImageFileOptimizationResult NotSupported()
     {
         return new EnhancedGraphicsMetafileOptimizationResult()
@@ -85,6 +130,11 @@ public readonly record struct EnhancedGraphicsMetafileOptimizationResult()
         };
     }
 
+    /// <summary>
+    /// 创建一个包含异常信息的失败结果实例。
+    /// </summary>
+    /// <param name="exception">导致失败的异常。</param>
+    /// <returns>包含异常的失败结果。</returns>
     public static ImageFileOptimizationResult FailException(Exception exception)
     {
         return new EnhancedGraphicsMetafileOptimizationResult()
@@ -95,10 +145,16 @@ public readonly record struct EnhancedGraphicsMetafileOptimizationResult()
 }
 
 /// <summary>
-/// 增强图元优化方法，用于优化 emf 和 wmf 图片
+/// 提供用于将增强型图元（WMF/EMF）转换为 PNG 或 SVG 的工具方法。
+/// 此类会根据运行时平台选择合适的实现（Windows 使用 GDI+，Linux 使用 Inkscape/Skia/libwmf 等）。
 /// </summary>
 public static class EnhancedGraphicsMetafileOptimization
 {
+    /// <summary>
+    /// 将 WMF 或 EMF 文件转换为 PNG 文件。根据当前运行平台选择合适的转换实现。
+    /// </summary>
+    /// <param name="context">包含要转换文件和工作目录等设置的上下文。</param>
+    /// <returns>转换操作的结果，包含生成的文件或错误信息。</returns>
     public static ImageFileOptimizationResult ConvertWmfOrEmfToPngFile(ImageFileOptimizationContext context)
     {
         // 在 Windows 上，直接使用 GDI+ 将 WMF 或 EMF 文件转换为 PNG 文件
@@ -207,10 +263,10 @@ public static class EnhancedGraphicsMetafileOptimization
     }
 
     /// <summary>
-    /// 使用自己写的基于 Oxage.Wmf 的 SkiaWmfRenderer 进行转换，可以比较好处理公式内容
+    /// 使用基于 Oxage.Wmf 的 SkiaWmfRenderer 将 WMF/EMF 转换为 PNG。该方法适用于需要更好文本/公式支持的场景。
     /// </summary>
-    /// <param name="context"></param>
-    /// <returns></returns>
+    /// <param name="context">包含输入文件、输出目录和尺寸限制等信息的上下文。</param>
+    /// <returns>如果转换成功则返回包含输出 PNG 文件的结果，否则返回不支持或失败的结果。</returns>
     private static ImageFileOptimizationResult ConvertWithSkiaWmfRenderer(ImageFileOptimizationContext context)
     {
         int requestWidth = context.MaxImageWidth ?? 0;
@@ -407,62 +463,66 @@ public static class EnhancedGraphicsMetafileOptimization
     }
 }
 
+/// <summary>
+/// 提供 SVG 文件相关的优化与修复方法，例如将 SVG 转换为 PNG，或修复 SVG 中的无效字符。
+/// </summary>
 public static class SvgFileOptimization
 {
-/*
- if (IsExtension(".svg"))
-   {
-       // 如果是 svg 那就直接转换了，因为后续叠加特效等逻辑都不能支持 SVG 格式
-       try
+    /*
+     if (IsExtension(".svg"))
        {
-           var outputFilePath = ConvertSvgToPngFile(context);
-           if (outputFilePath is null)
+           // 如果是 svg 那就直接转换了，因为后续叠加特效等逻辑都不能支持 SVG 格式
+           try
            {
-               return new ImageFileOptimizationResult()
+               var outputFilePath = ConvertSvgToPngFile(context);
+               if (outputFilePath is null)
                {
-                   OptimizedImageFile = null,
-                   FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                   return new ImageFileOptimizationResult()
+                   {
+                       OptimizedImageFile = null,
+                       FailureReason = ImageFileOptimizationFailureReason.NotSupported
+                   };
+               }
+               else
+               {
+                   context.LogMessage($"Success ConvertSvgToPngFile. Update current image file to '{outputFilePath.FullName}'");
+                   context = context with
+                   {
+                       ImageFile = outputFilePath
+                   };
+               }
+           }
+           catch (Exception e)
+           {
+               context.LogMessage($"Convert SVG to PNG failed: {e}");
+
+               return ImageFileOptimizationResult.FailException(e);
+           }
+       }
+       else if (IsExtension(".wmf") ||
+                IsExtension(".emf"))
+       {
+           var result = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(context);
+           if (result.OptimizedImageFile is not null)
+           {
+               context.LogMessage($"Success ConvertWmfOrEmfToPngFile. Update current image file to '{result.OptimizedImageFile}'");
+               context = context with
+               {
+                   ImageFile = result.OptimizedImageFile
                };
            }
            else
            {
-               context.LogMessage($"Success ConvertSvgToPngFile. Update current image file to '{outputFilePath.FullName}'");
-               context = context with
-               {
-                   ImageFile = outputFilePath
-               };
+               return result;
            }
        }
-       catch (Exception e)
-       {
-           context.LogMessage($"Convert SVG to PNG failed: {e}");
-
-           return ImageFileOptimizationResult.FailException(e);
-       }
-   }
-   else if (IsExtension(".wmf") ||
-            IsExtension(".emf"))
-   {
-       var result = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(context);
-       if (result.OptimizedImageFile is not null)
-       {
-           context.LogMessage($"Success ConvertWmfOrEmfToPngFile. Update current image file to '{result.OptimizedImageFile}'");
-           context = context with
-           {
-               ImageFile = result.OptimizedImageFile
-           };
-       }
-       else
-       {
-           return result;
-       }
-   }
- */
+     */
 
     /// <summary>
-    /// 转换 svg 文件为 png 文件
+    /// 将指定上下文中的 SVG 文件渲染并保存为 PNG 文件。
     /// </summary>
-    /// <returns></returns>
+    /// <param name="context">包含 SVG 文件和工作目录等信息的上下文。</param>
+    /// <returns>成功时返回生成的 PNG 文件信息；失败时返回 null。</returns>
     public static FileInfo? ConvertSvgToPngFile(ImageFileOptimizationContext context)
     {
         var imageFile = context.ImageFile;
@@ -482,6 +542,12 @@ public static class SvgFileOptimization
         return null;
     }
 
+    /// <summary>
+    /// 异步修复 SVG 文件中可能包含的无效字符（例如替换或删除不可见占位符），并在需要时将修复后的文件写入工作目录。
+    /// </summary>
+    /// <param name="svgFile">要修复的 SVG 文件。</param>
+    /// <param name="workingFolder">修复后文件写入的工作目录。</param>
+    /// <returns>修复后文件的 <see cref="FileInfo"/>；如果未作修改则返回原始文件实例。</returns>
     public static async Task<FileInfo> FixSvgInvalidCharacterAsync(FileInfo svgFile,
         DirectoryInfo workingFolder)
     {
@@ -516,6 +582,11 @@ public static class SvgFileOptimization
         return svgFile;
     }
 
+    /// <summary>
+    /// 同步修复 SVG 文件中可能包含的无效字符（例如替换或删除不可见占位符），并在需要时将修复后的文件写入工作目录。
+    /// </summary>
+    /// <param name="context">包含 SVG 文件和工作目录等信息的上下文。</param>
+    /// <returns>修复后文件的 <see cref="FileInfo"/>；如果未作修改则返回原始文件实例。</returns>
     public static FileInfo FixSvgInvalidCharacter(ImageFileOptimizationContext context)
     {
         FileInfo svgFile = context.ImageFile;
