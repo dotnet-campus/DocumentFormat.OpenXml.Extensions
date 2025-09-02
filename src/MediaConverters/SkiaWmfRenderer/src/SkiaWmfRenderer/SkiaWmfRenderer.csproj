@@ -10,6 +10,12 @@
     <RootNamespace>DotNetCampus.MediaConverter.SkiaWmfRenderer</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!--以下为 NuGet 包的属性-->
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
