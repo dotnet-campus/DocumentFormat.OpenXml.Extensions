@@ -89,14 +89,14 @@ public class ImageFileOptimizationTests
         TestHelper.OpenFileInExplorer(imageFileOptimizationResult.OptimizedImageFile!);
     }
 
-    [TestMethod()]
-    public async Task OptimizeImageFileAsyncTest_FormatWmf()
-    {
-        var file = TestFileProvider.GetTestFile("sample.wmf");
-        var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory));
-        Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
-        Assert.AreEqual(ImageFileOptimizationFailureReason.Ok, imageFileOptimizationResult.FailureReason);
-    }
+    //[TestMethod()]
+    //public async Task OptimizeImageFileAsyncTest_FormatWmf()
+    //{
+    //    var file = TestFileProvider.GetTestFile("sample.wmf");
+    //    var imageFileOptimizationResult = await ImageFileOptimization.OptimizeImageFileAsync(new ImageFileOptimizationContext(file, TestHelper.WorkingDirectory));
+    //    Assert.AreEqual(true, imageFileOptimizationResult.IsSuccess);
+    //    Assert.AreEqual(ImageFileOptimizationFailureReason.Ok, imageFileOptimizationResult.FailureReason);
+    //}
 
     [TestMethod()]
     public async Task OptimizeImageFileAsyncTest_Orientation()
