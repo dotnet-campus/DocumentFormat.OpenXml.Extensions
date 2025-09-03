@@ -11,7 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\$(RuntimeIdentifier)\" />
+    <None Include="Assets\linux-x64\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\linux-x64\" />
+    <None Include="Assets\linux-arm64\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\linux-arm64\" />
+    <None Include="Assets\linux-loongarch64\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\linux-loongarch64\" />
     <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\gsfonts\" />
     <None Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\Fonts\" />
 
