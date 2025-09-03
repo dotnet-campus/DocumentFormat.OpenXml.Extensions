@@ -11,10 +11,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\$(RuntimeIdentifier)\"/>
-    <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\gsfonts\"/>
-    <None Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\Fonts\"/>
+    <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\$(RuntimeIdentifier)\" />
+    <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\gsfonts\" />
+    <None Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\Fonts\" />
+
+    <None Include="Assets\Build\Package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
+    <None Include="Assets\Build\Package.props" Pack="True" PackagePath="\build\$(PackageId).props" />
+    <None Include="Assets\Build\Core.props" Pack="True" PackagePath="\build\Core.props" />
+
+    <None Include="Assets\BuildTransitive\Package.targets" Pack="True" PackagePath="\buildTransitive\$(PackageId).targets" />
+    <None Include="Assets\BuildTransitive\Package.props" Pack="True" PackagePath="\buildTransitive\$(PackageId).props" />
   </ItemGroup>
+
 
   <!--以下为 NuGet 包的属性-->
   <PropertyGroup>

@@ -1,0 +1,7 @@
+﻿<Project>
+    <ItemGroup>
+      <None Include="$(MSBuildThisFileDirectory)..\Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest"/>
+      <None Include="$(MSBuildThisFileDirectory)..\Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest"/>
+      <None Include="$(MSBuildThisFileDirectory)..\Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+</Project>
