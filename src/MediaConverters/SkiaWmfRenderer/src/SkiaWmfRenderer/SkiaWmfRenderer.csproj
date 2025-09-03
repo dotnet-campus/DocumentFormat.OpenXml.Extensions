@@ -11,9 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Assets\$(RuntimeIdentifier)\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\$(RuntimeIdentifier)\"/>
+    <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\gsfonts\"/>
+    <None Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\Fonts\"/>
   </ItemGroup>
 
   <!--以下为 NuGet 包的属性-->
@@ -50,7 +50,8 @@
     
     <PackageReference Include="HarfBuzzSharp" Version="8.3.1.1" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.1.1" />
-
+    
+    <!-- System.Text.Encoding.CodePages 库被用在 Encoding.RegisterProvider 处理大量特殊编码 -->
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.7" />
 
     <PackageReference Include="dotnetCampus.Telescope.SourceGeneratorAnalyzers" Version="0.10.7-alpha21">
