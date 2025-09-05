@@ -24,7 +24,7 @@ class Program
         if (args.Length == 0 || args.Length == 1)
         {
             // 调试模式
-            var inputFile = "image.wmf";
+            var inputFile = "image.png";
             if (args.Length == 1)
             {
                 inputFile = args[0];
