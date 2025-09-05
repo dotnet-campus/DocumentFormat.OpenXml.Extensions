@@ -105,7 +105,9 @@ class Program
         context.LogMessage($"[Performance] OptimizeImageFileAsync cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
         stepStopwatch.Restart();
 
-        if (!imageFileOptimizationResult.IsSuccess)
+        var image = imageFileOptimizationResult.Image;
+
+        if (!imageFileOptimizationResult.IsSuccess || image is null)
         {
             var errorMessage = $"Failed to convert image file '{inputFile.FullName}'. Reason: {imageFileOptimizationResult.FailureReason}";
             if (imageFileOptimizationResult.Exception is { } exception)
@@ -138,10 +140,8 @@ class Program
 
             return ErrorCode.UnknownError;
         }
-        
-        var image = imageFileOptimizationResult.Image;
 
-        if (image is not null && imageConvertContext.ImageConvertTaskList is { } list)
+        if (imageConvertContext.ImageConvertTaskList is { } list)
         {
             var workerProvider = new WorkerProvider();
 
