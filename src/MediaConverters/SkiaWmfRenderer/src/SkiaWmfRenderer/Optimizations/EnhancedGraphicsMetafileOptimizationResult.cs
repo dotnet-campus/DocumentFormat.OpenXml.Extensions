@@ -10,7 +10,7 @@ public readonly record struct EnhancedGraphicsMetafileOptimizationResult()
     /// <summary>
     /// 如果优化过程成功并产生了输出文件，则为 true。
     /// </summary>
-    [MemberNotNullWhen(returnValue: true)]
+    [MemberNotNullWhen(returnValue: true, nameof(OptimizedImageFile))]
     public bool IsSuccess => OptimizedImageFile is not null;
 
     /// <summary>
