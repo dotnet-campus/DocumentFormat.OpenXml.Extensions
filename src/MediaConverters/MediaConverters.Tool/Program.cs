@@ -87,6 +87,7 @@ class Program
         var context = new ImageFileOptimizationContext(inputFile, workingFolder, imageConvertContext.MaxImageWidth,
             imageConvertContext.MaxImageHeight)
         {
+            PngCompressionLevel = imageConvertContext.PngCompressionLevel,
             ShouldLogToConsole = convertHandler.ShouldLogToConsole ?? false,
             ShouldLogToFile = convertHandler.ShouldLogToFile ?? false,
         };

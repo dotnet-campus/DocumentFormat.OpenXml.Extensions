@@ -131,6 +131,7 @@ public static class ImageFileOptimization
             {
                 ColorType = PngColorType.RgbWithAlpha,
                 BitDepth = PngBitDepth.Bit8,
+                CompressionLevel = ((PngCompressionLevel?) context.PngCompressionLevel) ?? PngCompressionLevel.DefaultCompression
             });
 
             return new ImageFileOptimizationResult()

@@ -20,6 +20,7 @@ public readonly record struct ImageFileOptimizationContext(FileInfo ImageFile,
     public bool ShouldLogToFile { get; init; } = false;
 
     public string? LogFileName { get; init; }
+    public int? PngCompressionLevel { get; init; }
 
     public void LogMessage(string message)
     {
