@@ -55,7 +55,7 @@ class Program
             });
         }
 
-        return await DotNetCampus.Cli.CommandLine.Parse(args)
+        return await DotNetCampus.Cli.CommandLine.Parse(args, CommandLineParsingOptions.PowerShell)
                 .AddHandler<ConvertHandler>()
                 .AddHandler<IpcHandler>()
                 .RunAsync()

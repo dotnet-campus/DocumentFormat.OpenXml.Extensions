@@ -9,13 +9,13 @@ Verb: `convert`
 Command line parameters:
 
 ```shell
---WorkingFolder: Working directory
---InputFile: Path to the input file
---OutputFile: Path to the output file
---ConvertConfigurationFile: Path to the conversion configuration file
+-WorkingFolder: Working directory
+-InputFile: Path to the input file
+-OutputFile: Path to the output file
+-ConvertConfigurationFile: Path to the conversion configuration file
 ```
 
-The `--ConvertConfigurationFile` parameter specifies a JSON-format configuration file, which contains the settings for the conversion tasks. The configuration follows the structure of a serialized `ImageConvertContext` object, defined as follows:
+The `-ConvertConfigurationFile` parameter specifies a JSON-format configuration file, which contains the settings for the conversion tasks. The configuration follows the structure of a serialized `ImageConvertContext` object, defined as follows:
 
 - **MaxImageWidth**: Maximum image width limit. Optional; if omitted or empty, no limit is applied.
 - **MaxImageHeight**: Maximum image height limit. Optional; if omitted or empty, no limit is applied.
