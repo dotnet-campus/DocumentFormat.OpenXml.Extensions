@@ -95,9 +95,9 @@ public class MediaConverterIpcTests
             Assert.AreEqual(MediaConverterErrorCode.Success.Code, response.Code);
         });
 
-        await ipcHandler.RunAsync();
+        await ipcHandler.RunAsync().WaitAsync(TimeSpan.FromMinutes(15));
 
-        await task;
+        await task.WaitAsync(TimeSpan.FromMinutes(15));
     }
 
     private static string ToConfigurationFile(ImageConvertContext imageConvertContext,string testFolder)
