@@ -125,14 +125,17 @@ public static class ImageFileOptimization
 
             OptimizeImage(image, maxImageWidth, maxImageHeight, useAreaSizeLimit);
 
-            // 重新保存即可
             var outputImageFilePath = Path.Join(workingFolder.FullName, $"{Path.GetRandomFileName()}.png");
-            await image.SaveAsPngAsync(outputImageFilePath, new PngEncoder()
+            if (context.ShouldSaveToPngFile)
             {
-                ColorType = PngColorType.RgbWithAlpha,
-                BitDepth = PngBitDepth.Bit8,
-                CompressionLevel = ((PngCompressionLevel?) context.PngCompressionLevel) ?? PngCompressionLevel.DefaultCompression
-            });
+                // 重新保存即可，保存就等于解决了各种格式问题，输出为标准的格式
+                await image.SaveAsPngAsync(outputImageFilePath, new PngEncoder()
+                {
+                    ColorType = PngColorType.RgbWithAlpha,
+                    BitDepth = PngBitDepth.Bit8,
+                    CompressionLevel = ((PngCompressionLevel?) context.PngCompressionLevel) ?? PngCompressionLevel.DefaultCompression
+                });
+            }
 
             return new ImageFileOptimizationResult()
             {

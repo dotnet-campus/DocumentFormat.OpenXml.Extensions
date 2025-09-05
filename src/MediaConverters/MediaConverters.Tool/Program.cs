@@ -87,9 +87,14 @@ class Program
         var context = new ImageFileOptimizationContext(inputFile, workingFolder, imageConvertContext.MaxImageWidth,
             imageConvertContext.MaxImageHeight)
         {
-            PngCompressionLevel = imageConvertContext.PngCompressionLevel,
+            // 由于不准备在此步骤保存为文件，所以不需要设置保存等级
+            //PngCompressionLevel = imageConvertContext.PngCompressionLevel,
+
             ShouldLogToConsole = convertHandler.ShouldLogToConsole ?? false,
             ShouldLogToFile = convertHandler.ShouldLogToFile ?? false,
+
+            // 不要在优化图片步骤时保存为文件，因为后续可能还会进行转换任务。统一一个逻辑执行保存即可
+            ShouldSaveToPngFile = false,
         };
 
         context.LogMessage($"[Performance] FromJsonText cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
@@ -133,8 +138,7 @@ class Program
 
             return ErrorCode.UnknownError;
         }
-
-        FileInfo optimizedImageFile = imageFileOptimizationResult.OptimizedImageFile;
+        
         var image = imageFileOptimizationResult.Image;
 
         if (image is not null && imageConvertContext.ImageConvertTaskList is { } list)
@@ -148,26 +152,24 @@ class Program
 
             context.LogMessage($"[Performance] RunWorkerProvider cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
             stepStopwatch.Restart();
-
-            await image.SaveAsPngAsync(convertHandler.OutputFile, new PngEncoder()
-            {
-                ColorType = PngColorType.RgbWithAlpha,
-                BitDepth = PngBitDepth.Bit8,
-                // 压缩等级 1-9，数值越大压缩率越高但速度越慢，默认值为 6。在 1-9 范围外的值会被视为默认值
-                CompressionLevel = imageConvertContext.PngCompressionLevel is >= 1 and <= 9
-                    ? (PngCompressionLevel)imageConvertContext.PngCompressionLevel
-                    // 范围外，使用默认值
-                    : PngCompressionLevel.DefaultCompression
-            });
-
-            context.LogMessage($"[Performance] SaveAsPngAsync cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
         }
         else
         {
-            optimizedImageFile.CopyTo(convertHandler.OutputFile, overwrite: true);
-
-            context.LogMessage($"[Performance] CopyTo cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
+            // 没有任何转换任务，啥都不干
         }
+
+        await image.SaveAsPngAsync(convertHandler.OutputFile, new PngEncoder()
+        {
+            ColorType = PngColorType.RgbWithAlpha,
+            BitDepth = PngBitDepth.Bit8,
+            // 压缩等级 1-9，数值越大压缩率越高但速度越慢，默认值为 6。在 1-9 范围外的值会被视为默认值
+            CompressionLevel = imageConvertContext.PngCompressionLevel is >= 1 and <= 9
+                ? (PngCompressionLevel) imageConvertContext.PngCompressionLevel
+                // 范围外，使用默认值
+                : PngCompressionLevel.DefaultCompression
+        });
+
+        context.LogMessage($"[Performance] SaveAsPngAsync cost {stepStopwatch.ElapsedMilliseconds}ms Total {totalStopwatch.ElapsedMilliseconds}ms");
 
         totalStopwatch.Stop();
         context.LogMessage($"Success converted image. Cost {totalStopwatch.ElapsedMilliseconds}ms. OutputFile:'{convertHandler.OutputFile}'");
