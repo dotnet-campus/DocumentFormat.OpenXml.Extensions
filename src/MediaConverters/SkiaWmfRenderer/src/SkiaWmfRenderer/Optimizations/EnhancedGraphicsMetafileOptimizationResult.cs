@@ -24,6 +24,11 @@ public readonly record struct EnhancedGraphicsMetafileOptimizationResult()
     public bool IsNotSupport { get; init; }
 
     /// <summary>
+    /// 无需转换优化，原始文件已满足要求
+    /// </summary>
+    public bool NotNeedOptimize { get; init; }
+
+    /// <summary>
     /// 如果发生异常则包含异常对象，否则为 null。
     /// </summary>
     public Exception? Exception { get; init; }

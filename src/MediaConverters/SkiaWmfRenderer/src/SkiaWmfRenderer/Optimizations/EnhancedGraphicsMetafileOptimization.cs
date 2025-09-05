@@ -49,9 +49,15 @@ public static class EnhancedGraphicsMetafileOptimization
 
             return true;
         }
-
-        result = default;
-        return false;
+        else
+        {
+            result = new EnhancedGraphicsMetafileOptimizationResult()
+            {
+                // 无需转换
+                NotNeedOptimize = true,
+            };
+            return false;
+        }
 
         bool IsExtension(string extension)
         {
