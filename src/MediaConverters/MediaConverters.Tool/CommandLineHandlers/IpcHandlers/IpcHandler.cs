@@ -45,7 +45,7 @@ public class IpcHandler : ICommandHandler
             SharedArrayPool = new SharedArrayPool(ArrayPool<byte>.Shared),
             IpcTaskScheduling = IpcTaskScheduling.GlobalConcurrent,
         };
-        ipcConfiguration.UseSystemJsonIpcObjectSerializer(MediaConverterJsonSerializerSourceGenerationContext.Default);
+        ipcConfiguration.UseSystemTextJsonIpcObjectSerializer(MediaConverterJsonSerializerSourceGenerationContext.Default);
 
         var ipcProvider = new IpcProvider(IpcName, ipcConfiguration);
 
