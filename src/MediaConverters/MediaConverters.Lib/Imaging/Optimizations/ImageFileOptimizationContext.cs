@@ -19,7 +19,13 @@ public readonly record struct ImageFileOptimizationContext(FileInfo ImageFile,
 
     public bool ShouldLogToFile { get; init; } = false;
 
+    /// <summary>
+    /// 是否应该保存为 PNG 文件。为 false 则只存放到内存，不存放到文件
+    /// </summary>
+    public bool ShouldSaveToPngFile { get; init; } = true;
+
     public string? LogFileName { get; init; }
+    public int? PngCompressionLevel { get; init; }
 
     public void LogMessage(string message)
     {

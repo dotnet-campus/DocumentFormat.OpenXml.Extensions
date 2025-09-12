@@ -9,13 +9,13 @@ Verb: `convert`
 命令行参数：
 
 ```shell
---WorkingFolder: 工作目录
---InputFile: 输入文件路径
---OutputFile: 输出文件路径
---ConvertConfigurationFile: 转换配置文件路径
+-WorkingFolder: 工作目录
+-InputFile: 输入文件路径
+-OutputFile: 输出文件路径
+-ConvertConfigurationFile: 转换配置文件路径
 ```
 
-其中 `--ConvertConfigurationFile` 转换配置文件是一个 Json 格式的文件，里面包含转换的任务的配置内容。配置内容格式为 ImageConvertContext 类型的序列化内容，具体定义如下：
+其中 `-ConvertConfigurationFile` 转换配置文件是一个 Json 格式的文件，里面包含转换的任务的配置内容。配置内容格式为 ImageConvertContext 类型的序列化内容，具体定义如下：
 
 - MaxImageWidth: 最大图片宽度限制。可不填或为空，表示不限制
 - MaxImageHeight: 最大图片高度限制。可不填或为空，表示不限制

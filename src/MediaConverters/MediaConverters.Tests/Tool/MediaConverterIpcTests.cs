@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using dotnetCampus.Ipc.Context;
 using dotnetCampus.Ipc.IpcRouteds.DirectRouteds;
 using DotNetCampus.MediaConverters.CommandLineHandlers;
 using DotNetCampus.MediaConverters.Contexts;
@@ -26,7 +27,8 @@ public class MediaConverterIpcTests
 
         var task = Task.Run(async () =>
         {
-            var provider = new JsonIpcDirectRoutedProvider();
+            var provider = new JsonIpcDirectRoutedProvider(ipcConfiguration: new IpcConfiguration()
+                .UseSystemTextJsonIpcObjectSerializer(MediaConverterJsonSerializerSourceGenerationContext.Default));
             var clientProxy = await provider.GetAndConnectClientAsync(ipcHandler.IpcName);
 
             var response = await clientProxy.GetResponseAsync<IpcConvertImageResponse>(IpcPaths.RequestConvertImage, new IpcConvertImageRequest()
@@ -95,9 +97,9 @@ public class MediaConverterIpcTests
             Assert.AreEqual(MediaConverterErrorCode.Success.Code, response.Code);
         });
 
-        await ipcHandler.RunAsync();
+        await ipcHandler.RunAsync().WaitAsync(TimeSpan.FromMinutes(15));
 
-        await task;
+        await task.WaitAsync(TimeSpan.FromMinutes(15));
     }
 
     private static string ToConfigurationFile(ImageConvertContext imageConvertContext,string testFolder)

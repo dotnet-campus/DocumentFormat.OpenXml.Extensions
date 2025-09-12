@@ -10,6 +10,22 @@
     <RootNamespace>DotNetCampus.MediaConverter.SkiaWmfRenderer</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="Assets\linux-x64\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\linux-x64\" />
+    <None Include="Assets\linux-arm64\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\linux-arm64\" />
+    <None Include="Assets\linux-loongarch64\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\linux-loongarch64\" />
+    <None Include="Assets\gsfonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\gsfonts\" />
+    <None Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="Assets\Fonts\" />
+
+    <None Include="Assets\Build\Package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
+    <None Include="Assets\Build\Package.props" Pack="True" PackagePath="\build\$(PackageId).props" />
+    <None Include="Assets\Build\Core.props" Pack="True" PackagePath="\build\Core.props" />
+
+    <None Include="Assets\BuildTransitive\Package.targets" Pack="True" PackagePath="\buildTransitive\$(PackageId).targets" />
+    <None Include="Assets\BuildTransitive\Package.props" Pack="True" PackagePath="\buildTransitive\$(PackageId).props" />
+  </ItemGroup>
+
+
   <!--以下为 NuGet 包的属性-->
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -25,7 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="README.md" Pack="True" PackagePath="\" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Condition="'$(GITHUB_ACTIONS)' == 'true'"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Condition="'$(GITHUB_ACTIONS)' == 'true'" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,11 +54,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="SkiaSharp" Version="3.119.0" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.0" />
+
+    <PackageReference Include="Svg.Skia" Version="3.0.4" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.7" />
     
     <PackageReference Include="HarfBuzzSharp" Version="8.3.1.1" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.1.1" />
-
+    
+    <!-- System.Text.Encoding.CodePages 库被用在 Encoding.RegisterProvider 处理大量特殊编码 -->
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.7" />
 
     <PackageReference Include="dotnetCampus.Telescope.SourceGeneratorAnalyzers" Version="0.10.7-alpha21">

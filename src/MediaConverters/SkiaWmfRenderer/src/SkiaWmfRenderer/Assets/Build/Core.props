@@ -1,0 +1,10 @@
+﻿<Project>
+  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
+    <None Include="$(MSBuildThisFileDirectory)..\Assets\$(RuntimeIdentifier)\**" LinkBase="Assets\$(RuntimeIdentifier)"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(MSBuildThisFileDirectory)..\Assets\gsfonts\**" LinkBase="Assets\gsfonts"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(MSBuildThisFileDirectory)..\Assets\Fonts\**" LinkBase="Assets\Fonts"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
