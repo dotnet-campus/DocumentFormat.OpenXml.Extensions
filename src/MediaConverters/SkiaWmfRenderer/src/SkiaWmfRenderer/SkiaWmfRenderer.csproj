@@ -59,7 +59,6 @@
     <PackageReference Include="System.Drawing.Common" Version="9.0.7" />
     
     <PackageReference Include="HarfBuzzSharp" Version="8.3.1.1" />
-    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.1.1" />
     
     <!-- System.Text.Encoding.CodePages 库被用在 Encoding.RegisterProvider 处理大量特殊编码 -->
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.7" />
