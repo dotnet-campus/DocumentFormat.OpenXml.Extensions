@@ -19,6 +19,10 @@
     <PackageReference Include="DotNetCampus.CommandLine" Version="4.0.1-alpha.1" />
     <PackageReference Include="dotnetCampus.Ipc" Version="2.0.0-alpha423" />
     <PackageReference Include="VC-LTL" Version="5.2.2" />
+
+    <PackageReference Include="SkiaSharp" Version="3.119.0"/>
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.0"/>
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.LoongArch64" Version="7.3.0.2" />
   </ItemGroup>
 
   <ItemGroup>
