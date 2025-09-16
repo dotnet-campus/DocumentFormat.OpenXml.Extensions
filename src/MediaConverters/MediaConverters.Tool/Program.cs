@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using DotNetCampus.Cli;
+using DotNetCampus.MediaConverter.SkiaWmfRenderer.Optimizations;
 using DotNetCampus.MediaConverters.CommandLineHandlers;
 using SixLabors.ImageSharp.Formats.Png;
 using ErrorCode = DotNetCampus.MediaConverters.Contexts.MediaConverterErrorCode;
@@ -25,9 +26,52 @@ class Program
         {
             // 调试模式
             var inputFile = "image.png";
+
+            if (!File.Exists(inputFile))
+            {
+                inputFile = "image.wmf";
+            }
+
             if (args.Length == 1)
             {
                 inputFile = args[0];
+            }
+
+            if (!File.Exists(inputFile))
+            {
+                Console.WriteLine($"Input file not found. '{Path.GetFullPath(inputFile)}'");
+                return -1;
+            }
+
+            var testFolder =
+                Directory.CreateDirectory(Path.Join(AppContext.BaseDirectory, $"Test_{Path.GetRandomFileName()}"));
+
+            if (string.Equals(Path.GetExtension(inputFile),".wmf"))
+            {
+                Console.WriteLine($"Input File is wmf file");
+
+                var wmfWorkingFolder = Path.Join(testFolder.FullName,"WMF");
+
+                var optimizationContext = new EnhancedGraphicsMetafileOptimizationContext()
+                {
+                    ImageFile = new FileInfo(inputFile),
+                    WorkingFolder = Directory.CreateDirectory(wmfWorkingFolder),
+                    MaxImageWidth = null,
+                    MaxImageHeight = null,
+                    ShouldLogToFile = true,
+                    ShouldLogToConsole = true,
+                };
+                EnhancedGraphicsMetafileOptimizationResult optimizationResult = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(optimizationContext);
+                Console.WriteLine($"Finish convert to png file.{optimizationResult}");
+
+                if (optimizationResult.IsSuccess)
+                {
+                    inputFile = optimizationResult.OptimizedImageFile.FullName;
+                }
+                else
+                {
+                    return -1;
+                }
             }
 
             var imageConvertContext = new ImageConvertContext()
@@ -35,9 +79,7 @@ class Program
                 MaxImageWidth = 1000,
                 MaxImageHeight = 1000,
             };
-
-            var testFolder =
-                Directory.CreateDirectory(Path.Join(AppContext.BaseDirectory, $"Test_{Path.GetRandomFileName()}"));
+           
             var jsonText = imageConvertContext.ToJsonText();
             var configurationFile = Path.Join(testFolder.FullName, "image-convert.json");
             await File.WriteAllTextAsync(configurationFile, jsonText);
