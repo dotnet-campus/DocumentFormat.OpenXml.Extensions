@@ -291,6 +291,12 @@ public static class EnhancedGraphicsMetafileOptimization
         return EnhancedGraphicsMetafileOptimizationResult.NotSupported();
     }
 
+    /// <summary>
+    /// 是否 Inkscape 应用程序未安装
+    /// </summary>
+    /// 先不考虑后续 Inkscape 可能安装的问题。可在业务端设置为 false 继续尝试
+    public static bool IsInkscapeNotBeInstalled { get; set; }
+
     [SupportedOSPlatform("linux")]
     private static EnhancedGraphicsMetafileOptimizationResult ConvertWithInkscape(EnhancedGraphicsMetafileOptimizationContext context)
     {
@@ -300,6 +306,13 @@ public static class EnhancedGraphicsMetafileOptimization
         var svgFile = Path.Join(workingFolder.FullName, $"{Path.GetFileNameWithoutExtension(file.Name)}_{Path.GetRandomFileName()}.svg");
 
         context.LogMessage($"Start convert emf or wmf to png by Inkscape. File:'{file}'");
+
+        if (IsInkscapeNotBeInstalled)
+        {
+            // 转换失败，因为缓存的属性明确表示 Inkscape 应用程序不存在
+            context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. Because cache property indicate Inkscape application not be installed. {nameof(IsInkscapeNotBeInstalled)}=true. We will continue use libwmf to convert the image.");
+            return EnhancedGraphicsMetafileOptimizationResult.NotSupported();
+        }
 
         var processStartInfo = new ProcessStartInfo("inkscape")
         {
@@ -336,6 +349,9 @@ public static class EnhancedGraphicsMetafileOptimization
                 // 明确不存在，那就不记录错误信息了
                 // 大概耗时 17 毫秒
                 context.LogMessage($"Convert emf or wmf to svg by Inkscape failed. Because not found Inkscape application. Please make sure Inkscape be installed. We will continue use libwmf to convert the image.");
+
+                // 设置为 true 缓存，避免下次继续尝试
+                IsInkscapeNotBeInstalled = true;
             }
             else
             {
