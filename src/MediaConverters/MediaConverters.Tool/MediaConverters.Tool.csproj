@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MediaConverters.Lib\MediaConverters.Lib.csproj" />
+    <ProjectReference Include="..\SkiaWmfRenderer\src\SkiaWmfRenderer\SkiaWmfRenderer.csproj" />
   </ItemGroup>
 
 </Project>
