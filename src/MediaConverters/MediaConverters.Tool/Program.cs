@@ -64,6 +64,8 @@ class Program
                 EnhancedGraphicsMetafileOptimizationResult optimizationResult = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(optimizationContext);
                 Console.WriteLine($"Finish convert to png file.{optimizationResult}");
 
+                optimizationResult = EnhancedGraphicsMetafileOptimization.ConvertWmfOrEmfToPngFile(optimizationContext);
+
                 if (optimizationResult.IsSuccess)
                 {
                     inputFile = optimizationResult.OptimizedImageFile.FullName;
