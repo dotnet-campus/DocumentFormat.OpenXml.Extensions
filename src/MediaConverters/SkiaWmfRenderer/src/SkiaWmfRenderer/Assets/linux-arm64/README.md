@@ -1,1 +1,0 @@
-﻿Copy from libwmf-bin 0.2.8.4-14 arm64
