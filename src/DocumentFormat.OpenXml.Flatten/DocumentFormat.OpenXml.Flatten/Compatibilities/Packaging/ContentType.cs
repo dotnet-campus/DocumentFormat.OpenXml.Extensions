@@ -436,9 +436,9 @@ partial class CompatiblePackage
                 if (quotedText[i] <= ' ' || quotedText[i] >= 0xFF)
                     throw new ArgumentException(quotedText[i].ToString());
                 else
-                if (quotedText[i] == '"' &&
-                    (i == 0 || quotedText[i - 1] != '\\'))
-                    throw new ArgumentException(quotedText[i].ToString());
+                    if (quotedText[i] == '"' &&
+                        (i == 0 || quotedText[i - 1] != '\\'))
+                        throw new ArgumentException(quotedText[i].ToString());
             }
         }
 
